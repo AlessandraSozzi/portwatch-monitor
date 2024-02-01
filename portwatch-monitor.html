@@ -23,7 +23,7 @@
 <div class="card text-center">
     <div class="card-header">
       <div class="form-check form-switch" style="float: right;">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <input class="form-check-input" type="checkbox" id="switch">
         <label class="form-check-label" for="flexSwitchCheckDefault">Show Growth Rates Only</label>
       </div>
       <ul class="nav nav-tabs card-header-tabs">
@@ -40,7 +40,7 @@
     </div>
     <div class="card-body">
         <figure class="highcharts-figure">
-            <div id="container-001"></div>
+            <div id="container-100"></div>
         </figure>
 
         <div class="row">
@@ -96,6 +96,48 @@ Highcharts.SVGRenderer.prototype.symbols.download = function (x, y, w, h) {
 };
 
 const shift = 365;
+
+var optionsGrowthRate = {
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: 'Growth Rates by Region',
+            align: 'center'
+        },
+        subtitle: {
+            text: 'Percent Change Y/Y, 30-day Rolling Sum',
+            align: 'center'
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+              enabled: false,
+            }
+        },
+        legend: {
+            enabled: true,
+            layout: 'horizontal',
+            align: 'center',
+            width: "100%",
+            itemWidth:300,
+            verticalAlign: 'bottom'
+        },
+        plotOptions: {},
+        exporting: {
+            enabled: true,
+            buttons: {
+                contextButton: {
+                    symbol: 'download',
+                    text: 'Export Data'
+                }
+            }
+        },
+
+        series: []
+    }
 
 var options = {
     
@@ -164,6 +206,27 @@ var seriesOptions = {
   }
 }
 
+var grSeries = {
+  portcalls: [],
+  import: [],
+  export: []
+}
+
+const colors = {
+  '100': '#17becf',
+  '110': '#bcbd22',
+  '200': '#7f7f7f',
+  '163': '#e377c2',
+  '505': '#8c564b',
+  '119': '#9467bd',
+  '903': '#d62728',
+  '123': '#2ca02c',
+  '205': '#ff7f0e',
+  '998': '#1f77b4',
+  '400': '#2ca02c',
+  '510': '#ff7f0e',
+  '603': '#1f77b4',
+}
 
 
 
@@ -171,14 +234,14 @@ $(document).ready(function() {
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const regionid = '110'
-    console.log(regionid);
+
 
     var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Regional_Data/FeatureServer/0"
 
     require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
       const layer = new FeatureLayer({ url: baseUrl });
-      const regionid = '110';
+
+      const regionid = '100';
 
       let query = layer.createQuery();
       query.where = "regionid = '"+regionid+"'";
@@ -189,6 +252,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
@@ -197,125 +263,23 @@ $(document).ready(function() {
           const selected = $(this).attr('id');
           createTsChart(data, selected, region, regionid);
         }); 
+
+        $('#switch').on('change', function() {
+            const status = $(this).is(':checked');
+            if (status) {
+              var currentTab = $('.nav.nav-tabs.card-header-tabs > li#portcalls > a').hasClass('active') ? "portcalls" : $('.nav.nav-tabs.card-header-tabs > li#import > a').hasClass('active') ? "import" : "export";
+              console.log(currentTab);
+              $("#container-100").empty();
+              createGrChart(currentTab);
+
+            }
+            
+        });
+      
       });
+
     });
     
-    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
-      const layer = new FeatureLayer({ url: baseUrl });
-      const regionid = '200';
-
-      let query = layer.createQuery();
-      query.where = "regionid = '"+regionid+"'";
-      query.maxRecordCountFactor = 4; 
-      query.cacheHint = true;
-
-      layer.queryFeatures(query).then(function(results){
-        var features = results.features;        
-        const region = features[0].attributes.region;      
-        var data = generateData(features);
-        createTsChart(data, "portcalls", region, regionid);
-        $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-          $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-          $(this).children().addClass('active');
-          const selected = $(this).attr('id');
-          createTsChart(data, selected, region, regionid);
-        }); 
-      });
-    });
-
-    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
-      const layer = new FeatureLayer({ url: baseUrl });
-      const regionid = '163';
-
-      let query = layer.createQuery();
-      query.where = "regionid = '"+regionid+"'";
-      query.maxRecordCountFactor = 4; 
-      query.cacheHint = true;
-
-      layer.queryFeatures(query).then(function(results){
-        var features = results.features;        
-        const region = features[0].attributes.region;      
-        var data = generateData(features);
-        createTsChart(data, "portcalls", region, regionid);
-        $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-          $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-          $(this).children().addClass('active');
-          const selected = $(this).attr('id');
-          createTsChart(data, selected, region, regionid);
-        }); 
-      });
-    });
-
-    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
-      const layer = new FeatureLayer({ url: baseUrl });
-      const regionid = '505';
-
-      let query = layer.createQuery();
-      query.where = "regionid = '"+regionid+"'";
-      query.maxRecordCountFactor = 4; 
-      query.cacheHint = true;
-
-      layer.queryFeatures(query).then(function(results){
-        var features = results.features;        
-        const region = features[0].attributes.region;      
-        var data = generateData(features);
-        createTsChart(data, "portcalls", region, regionid);
-        $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-          $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-          $(this).children().addClass('active');
-          const selected = $(this).attr('id');
-          createTsChart(data, selected, region, regionid);
-        }); 
-      });
-    });
-
-    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
-      const layer = new FeatureLayer({ url: baseUrl });
-      const regionid = '119';
-
-      let query = layer.createQuery();
-      query.where = "regionid = '"+regionid+"'";
-      query.maxRecordCountFactor = 4; 
-      query.cacheHint = true;
-
-      layer.queryFeatures(query).then(function(results){
-        var features = results.features;        
-        const region = features[0].attributes.region;      
-        var data = generateData(features);
-        createTsChart(data, "portcalls", region, regionid);
-        $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-          $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-          $(this).children().addClass('active');
-          const selected = $(this).attr('id');
-          createTsChart(data, selected, region, regionid);
-        }); 
-      });
-    });
-
-    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
-      const layer = new FeatureLayer({ url: baseUrl });
-      const regionid = '903';
-
-      let query = layer.createQuery();
-      query.where = "regionid = '"+regionid+"'";
-      query.maxRecordCountFactor = 4; 
-      query.cacheHint = true;
-
-      layer.queryFeatures(query).then(function(results){
-        var features = results.features;        
-        const region = features[0].attributes.region;      
-        var data = generateData(features);
-        createTsChart(data, "portcalls", region, regionid);
-        $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-          $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-          $(this).children().addClass('active');
-          const selected = $(this).attr('id');
-          createTsChart(data, selected, region, regionid);
-        }); 
-      });
-    });
-
-
     require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
       const layer = new FeatureLayer({ url: baseUrl });
       const regionid = '110';
@@ -329,16 +293,22 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
+        
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
           $(this).children().addClass('active');
           const selected = $(this).attr('id');
           createTsChart(data, selected, region, regionid);
-        }); 
+        });
+
       });
     });
-    
+
+
     require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
       const layer = new FeatureLayer({ url: baseUrl });
       const regionid = '200';
@@ -352,6 +322,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+        
+        createGrSeries(data, region, regionid);
+        
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -375,6 +348,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -398,6 +374,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -421,6 +400,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -444,6 +426,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -467,7 +452,11 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
+
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
           $(this).children().addClass('active');
@@ -490,6 +479,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -513,6 +505,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -536,6 +531,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -559,6 +557,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -582,6 +583,9 @@ $(document).ready(function() {
         var features = results.features;        
         const region = features[0].attributes.region;      
         var data = generateData(features);
+        
+        createGrSeries(data, region, regionid);
+
         createTsChart(data, "portcalls", region, regionid);
         $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
@@ -617,6 +621,10 @@ function generateData(features) {
   var export7MA = movingAvg(series.map(x => x.export), 7, 0);
   var portcalls7MA = movingAvg(series.map(x => x.portcalls), 7, 0);
 
+  var importGR = growthRate(series.map(x => x.import), shift, 0);
+  var exportGR = growthRate(series.map(x => x.export), shift, 0);
+  var portcallsGR = growthRate(series.map(x => x.portcalls), shift, 0);
+
   series = series.map(function(feature, i) {
     feature['import7MA'] = import7MA[i];
     feature['export7MA'] = export7MA[i];
@@ -625,13 +633,65 @@ function generateData(features) {
       feature['import7MAshifted'] = import7MA[i-shift];
       feature['export7MAshifted'] = export7MA[i-shift];
       feature['portcalls7MAshifted'] = portcalls7MA[i-shift];
+      feature['importGR'] = importGR[i];
+      feature['exportGR'] = exportGR[i];
+      feature['portcallsGR'] = portcallsGR[i];
     }
     return feature;
   });
 
-  console.log(series);
+  //console.log(series);
+
+  // Corrections
+  series = series.map(function(x, i) {
+      if ([1683763200000, 1683676800000, 1683849600000,
+            1676332800000, 1676419200000,
+            1652227200000, 1652313600000, 1652400000000,
+            1588032000000].includes(x.date)) {
+        x.portcallsGR = series[i-7].portcallsGR;
+        x.importGR = series[i-7].importGR;
+        x.exportGR = series[i-7].exportGR;
+      }
+      return x;
+  });
 
   return series;
+
+}
+
+
+function createGrSeries(data, region, regionid) {
+  ['portcalls', 'import', 'export'].forEach(name => {
+    grSeries[name].push({ 
+      name: region,
+      data: data.filter(x => x.date > 1577836800000).map(x => [x.date, x[name+"GR"]]),
+      type: 'line',
+      marker: {
+        enabled: false, // auto
+        lineWidth: 1,
+      },
+      color: colors[regionid],
+      tooltip: {
+            valueDecimals: 0,
+        },
+      showInLegend: true          
+    });
+  });
+
+
+
+
+
+
+}
+
+
+function createGrChart(name) {
+
+  optionsGrowthRate.series = grSeries[name];
+
+  var grchart = new Highcharts.stockChart('container-100', optionsGrowthRate);
+
 
 }
 
@@ -723,6 +783,17 @@ function movingAvg(array, countBefore, countAfter) {
     const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
     const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
     result.push(avg);
+  }
+  return result;
+}
+
+function growthRate(array, countBefore, countAfter) {
+  if (countAfter == undefined) countAfter = 0;
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
+    const growth = (subArr[subArr.length-1]/subArr[0]-1)*100;
+    result.push(growth);
   }
   return result;
 }
