@@ -17,15 +17,11 @@
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
   crossorigin="anonymous"></script>
 
-<!-- <link rel="stylesheet" type="text/css" href="Highcharts-IMF.css"/> -->
-
 <style>
-
+ /*
   .not-show {
-    display: none;
-  }
-
-
+   display: none; 
+  }*/
 
 </style>
 
@@ -127,7 +123,7 @@ $(document).ready(function() {
       });
 
       const query = new Query({
-        where: "1=1",
+        where: "regionid IN ('100', '110', '200', '163', '505', '119', '903', '123', '205', '998', '400', '510', '603')",
         returnGeometry: false,
         outFields: "*",
         start: 0,
@@ -151,9 +147,9 @@ $(document).ready(function() {
 
                 var series = allFeatures.map((feature) => {
                     datapoint = {
-                      region: feature.attributes.region,
+                      region: feature.attributes.country,
                       regionid: feature.attributes.regionid,
-                      date: feature.attributes.date, 
+                      date: Date.parse(feature.attributes.date), 
                       cargo: parseInt(feature.attributes.portcalls_cargo),
                       tanker: parseInt(feature.attributes.portcalls_tanker),
                       portcalls: parseInt(feature.attributes.portcalls),
@@ -173,16 +169,21 @@ $(document).ready(function() {
                 console.log(allRegions);
 
                 regions.forEach(function(regionName) {
+                  console.log(regionName);
                   const regionDF = allRegions.filter(x => x.region == regionName);
                   const regionid = regionDF[0].regionid;
+                  console.log(regionName, regionid);
                   createTsChart(regionDF, "portcalls", regionName, regionid);
+                  //createGrSeries(regionDF, "portcalls", regionName, regionid);
 
                   $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
                     $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
                     $(this).children().addClass('active');
                     const selected = $(this).attr('id');
                     createTsChart(regionDF, selected, regionName, regionid);
+                    
                   }); 
+
 
                 });
  
@@ -202,6 +203,80 @@ $(document).ready(function() {
 
     
 });
+
+
+const colors = {
+  '100': '#17becf',
+  '110': '#bcbd22',
+  '200': '#7f7f7f',
+  '163': '#e377c2',
+  '505': '#8c564b',
+  '119': '#9467bd',
+  '903': '#d62728',
+  '123': '#2ca02c',
+  '205': '#ff7f0e',
+  '998': '#1f77b4',
+  '400': '#2ca02c',
+  '510': '#ff7f0e',
+  '603': '#1f77b4',
+}
+
+
+var optionsGrowthRate = {
+    chart: {
+        zoomType: 'x'
+    },
+    title: {
+        text: 'Growth Rates by Region',
+        align: 'center'
+    },
+    subtitle: {
+        text: 'Percent Change Y/Y, 30-day Rolling Sum',
+        align: 'center'
+    },
+    xAxis: {
+        type: 'datetime'
+    },
+    yAxis: {
+        title: {
+          enabled: false,
+        }
+    },
+    legend: {
+        enabled: true,
+        layout: 'horizontal',
+        align: 'center',
+        width: "100%",
+        itemWidth:300,
+        verticalAlign: 'bottom'
+    },
+    plotOptions: {},
+    exporting: {
+        enabled: false
+    },
+
+    series: []
+}
+
+function createGrSeries(data, name, region, regionid) {
+  optionsGrowthRate.series = [{ 
+      name: region,
+      data: data.filter(x => x.date > 1577836800000).map(x => [x.date, x[name+"GR"]]),
+      type: 'line',
+      marker: {
+        enabled: false, // auto
+        lineWidth: 1,
+      },
+      color: colors[regionid],
+      tooltip: {
+            valueDecimals: 0,
+        },
+      showInLegend: true          
+    }];
+
+    var chart = new Highcharts.Chart('container-'+regionid+'gr', optionsGrowthRate);
+
+}
 
 
 var options = {
@@ -345,7 +420,9 @@ function createTsChart(data, name, region, regionid, shift=365) {
 
   options['title'] = { text: region };
 
+  console.log('container-'+regionid);
   console.log(options.series);
+  
 
   var chart = new Highcharts.stockChart('container-'+regionid, options);
 
