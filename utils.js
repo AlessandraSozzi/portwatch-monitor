@@ -42,13 +42,13 @@ var generateData = function(features, ma=3, gr=12) {
         datapoint = {
           region: feature.attributes.region,
           ISO3: feature.attributes.ISO3,
-          date: feature.attributes.date, 
+          date: Date.parse(feature.attributes.date), 
           portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
           portcalls_general_cargo: parseInt(feature.attributes.portcalls_general_cargo),
           portcalls_dry_bulk: parseInt(feature.attributes.portcalls_dry_bulk),
           portcalls_roro: parseInt(feature.attributes.portcalls_roro),
           portcalls_container: parseInt(feature.attributes.portcalls_container),
-          portcalls: parseInt(feature.attributes.portcalls),
+          //portcalls: parseInt(feature.attributes.portcalls),
           import_volume: parseFloat(feature.attributes.volume_import),
           export_volume: parseFloat(feature.attributes.volume_export),
           import_value: parseFloat(feature.attributes.value_import_total),
@@ -59,11 +59,19 @@ var generateData = function(features, ma=3, gr=12) {
   
     series.sort((a, b) => a.date - b.date);
 
-    series['import_value_MA'] = movingAvg(series.map(x => x.import_value), ma, 0);
-    series['export_value_MA'] = movingAvg(series.map(x => x.export_value), ma, 0);
-    series['import_volume_MA'] = movingAvg(series.map(x => x.import_volume), ma, 0);
-    series['export_volume_MA'] = movingAvg(series.map(x => x.export_volume), ma, 0);
-    series['portcalls_MA'] = movingAvg(series.map(x => x.portcalls), ma, 0);
+    import_value_MA = movingAvg(series.map(x => x.import_value), ma, 0);
+    export_value_MA = movingAvg(series.map(x => x.export_value), ma, 0);
+    import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
+    export_volume_MA = movingAvg(series.map(x => x.export_volume), ma, 0);
+//    portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
+
+    series = series.map(function(feature, i) {
+      feature['import_value_MA'] = import_value_MA[i];
+      feature['export_value_MA'] = export_value_MA[i];
+      feature['import_volume_MA'] = import_volume_MA[i];
+      feature['export_volume_MA'] = export_volume_MA[i];
+      return feature;
+    });
 
     console.log(series);
     return series;
