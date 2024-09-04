@@ -197,6 +197,8 @@ var createChart = function(data, chartType="portcalls") {
     
   
     console.log(options);
+
+    var chart = new Highcharts.stockChart('container-'+regionid, options);
   
     return options;
   
