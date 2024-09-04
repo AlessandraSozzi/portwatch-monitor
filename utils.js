@@ -151,7 +151,10 @@ var createChart = function(data, regionid, chartType="portcalls") {
         series: []
     };
     
-    const region = data[0].region;      
+    const region = data[0].region;   
+    
+    console.log(chartType);
+    console.log(labels);
     
     options['title'] = {
       text: region + ": " + labels[chartType].title
