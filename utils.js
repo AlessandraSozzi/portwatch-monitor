@@ -43,17 +43,16 @@ var generateData = function(features, ma=3, gr=12) {
           region: feature.attributes.region,
           ISO3: feature.attributes.ISO3,
           date: feature.attributes.date, 
-          portcalls_cargo: parseInt(feature.attributes.portcalls_cargo),
           portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
-          portcalls_general_cargo: parseInt(feature.attributes.portcalls_cargo),
+          portcalls_general_cargo: parseInt(feature.attributes.portcalls_general_cargo),
           portcalls_dry_bulk: parseInt(feature.attributes.portcalls_dry_bulk),
           portcalls_roro: parseInt(feature.attributes.portcalls_roro),
           portcalls_container: parseInt(feature.attributes.portcalls_container),
           portcalls: parseInt(feature.attributes.portcalls),
-          import_volume: parseFloat(feature.attributes.import_volume),
-          export_volume: parseFloat(feature.attributes.export_volume),
-          import_value: parseFloat(feature.attributes.import_value),
-          export_value: parseFloat(feature.attributes.export_value)
+          import_volume: parseFloat(feature.attributes.volume_import),
+          export_volume: parseFloat(feature.attributes.volume_export),
+          import_value: parseFloat(feature.attributes.value_import_total),
+          export_value: parseFloat(feature.attributes.value_export_total)
         }
         return datapoint;
     });
