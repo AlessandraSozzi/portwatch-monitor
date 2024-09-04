@@ -166,6 +166,10 @@ var createChart = function(data, regionid, chartType="portcalls") {
       },
       opposite: false
     }
+
+    options['xAxis'] = {
+      type: 'datetime'
+    }
   
     if (chartType == "portcalls") {
   
@@ -210,7 +214,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
   
     console.log(options);
 
-    var chart = new Highcharts.stockChart('container-'+regionid, options);
+    var chart = new Highcharts.Chart('container-'+regionid, options);
   
     return options;
   
