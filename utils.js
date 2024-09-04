@@ -99,7 +99,7 @@ var labels = {
 };
 
 
-var createChart = function(data, chartType="portcalls") {
+var createChart = function(data, regionid, chartType="portcalls") {
 
     var options = {
     
