@@ -127,7 +127,7 @@ var queryAndChartData = function(regionid) {
 
       var series = generateData(result.features);
 
-      createChart(series, "portcalls");
+      createChart(series, regionid, "portcalls");
 
       $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
