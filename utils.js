@@ -187,6 +187,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
         showInLegend: true}];
   
     } else {
+      console.log(chartType);
       options.series = [{ name: chartType.replace("_", " ")+' Index',
                             data: data.map(x => [x.date, x[chartType+"_MA"]]),
                             type: 'line',
