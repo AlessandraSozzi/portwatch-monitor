@@ -133,7 +133,7 @@ var queryAndChartData = function(regionid) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
         $(this).children().addClass('active');
         const selected = $(this).attr('id');
-        createChart(series, selected);
+        createChart(series, regionid, selected);
       }); 
     });
   });
