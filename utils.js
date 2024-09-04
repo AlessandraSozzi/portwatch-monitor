@@ -160,7 +160,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
   
       options.series = [
         { name: "Number of Cargo Ships",
-          data: data.map(x => [x.date, x['portcalls_cargo']]),
+          data: data.map(x => [x.date, x['portcalls_dry_bulk']+x['portcalls_container']+x['portcalls_roro']+x['portcalls_general_cargo']]),
           type: 'column',
           stack: 1,
           tooltip: {
