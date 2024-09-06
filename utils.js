@@ -81,6 +81,7 @@ var generateData = function(features, ma=3, gr=12) {
     import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
     export_volume_MA = movingAvg(series.map(x => x.export_volume), ma, 0);
     portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
+    portcalls_GR = growthRate(series.map(x => x.portcalls), gr, 0);
     import_value_GR = growthRate(series.map(x => x.import_value), gr, 0);
     export_value_GR = growthRate(series.map(x => x.export_value), gr, 0);
     import_volume_GR = growthRate(series.map(x => x.import_volume), gr, 0);
@@ -93,6 +94,7 @@ var generateData = function(features, ma=3, gr=12) {
       feature['import_volume_MA'] = import_volume_MA[i];
       feature['export_volume_MA'] = export_volume_MA[i];
       if (i > gr) {
+        feature['portcalls_GR'] = portcalls_GR[i];
         feature['import_value_GR'] = import_value_GR[i];
         feature['export_value_GR'] = export_value_GR[i];
         feature['import_volume_GR'] = import_volume_GR[i];
@@ -131,6 +133,9 @@ var labels = {
       yAxis: "Index [2019 Avg. = 100]",
       title: "Monthly Export Value",
       name: 'Export Volume'
+    },
+    growth_rate: {
+      yAxis: "Percentage Change",
     }
 };
 
@@ -219,7 +224,19 @@ var createChart = function(data, regionid, chartType="portcalls") {
           valueDecimals: 0,
         },
         color: '#004c97',
-        showInLegend: true}];
+        showInLegend: true},
+      { name: "Total 3-month ma",
+          data: data.map(x => [x.date, x['portcalls_MA']]),
+          type: 'line',
+          marker: {
+            enabled: false, // auto
+            lineWidth: 1,
+          },
+          color: '#f3ab0a',
+          tooltip: {
+                valueDecimals: 2,
+            },
+          showInLegend: true}];
   
     } else {
       console.log(chartType);
@@ -246,6 +263,88 @@ var createChart = function(data, regionid, chartType="portcalls") {
   
     return options;
   
+};
+
+var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
+
+  var options = {
+  
+      chart: {
+        backgroundColor: '#fff',
+      },
+  
+      credits: {
+          enabled: false
+      },
+  
+      legend: {
+        enabled: true
+  
+      },
+  
+      plotOptions: {
+        series: {
+            dataGrouping: {
+              enabled: false
+            },
+        },
+        column: {
+          stacking: 'normal'
+        }
+      },
+  
+      xAxis: {
+          plotBands: []
+      },
+  
+      exporting: {
+          enabled: true,
+          buttons: {
+              contextButton: {
+                  symbol: 'download',
+                  text: ''
+              }
+          }
+      },
+      series: []
+  };
+  
+  const region = data[0].region;   
+  
+  console.log(chartType);
+  
+  options['title'] = {
+    text: region 
+  };
+  
+  options['yAxis'] = {
+    title: {
+      text: labels['growth_rate'].yAxis
+    },
+    opposite: false
+  }
+
+  options['xAxis'] = {
+    type: 'datetime'
+  }
+
+  options.series = [
+      { name: "Percentage Change",
+        data: data.map(x => [x.date, x[chartType+'_GR']]),
+        type: 'column',
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: '#004c97',
+        showInLegend: true}];
+
+  console.log(options);
+
+  var chart = new Highcharts.Chart('container-'+regionid, options);
+
+  return options;
+
 };
 
 
