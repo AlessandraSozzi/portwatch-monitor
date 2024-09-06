@@ -37,12 +37,14 @@ var indexed = function(series, column, base=2019) {
   return series.map(x => x[column]) / avg2019 * 100;
 };
 
-function growthRate(array, countBefore, countAfter) {
-  if (countAfter == undefined) countAfter = 0;
+function growthRate(array, countBefore) {
   const result = [];
   for (let i = 0; i < array.length; i++) {
-    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
-    const growth = (subArr[subArr.length-1]/subArr[0]-1)*100;
+    if (i < countBefore) {
+      result.push(null);
+      continue;
+    }
+    const growth = (array[i]/array[i-countBefore]-1)*100;
     result.push(growth);
   }
   return result;
@@ -83,11 +85,11 @@ var generateData = function(features) {
     import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
     export_volume_MA = movingAvg(series.map(x => x.export_volume), ma, 0);
     portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
-    portcalls_GR = growthRate(series.map(x => x.portcalls), gr, 0);
-    import_value_GR = growthRate(series.map(x => x.import_value), gr, 0);
-    export_value_GR = growthRate(series.map(x => x.export_value), gr, 0);
-    import_volume_GR = growthRate(series.map(x => x.import_volume), gr, 0);
-    export_volume_GR = growthRate(series.map(x => x.export_volume), gr, 0);
+    portcalls_GR = growthRate(series.map(x => x.portcalls), gr);
+    import_value_GR = growthRate(series.map(x => x.import_value), gr);
+    export_value_GR = growthRate(series.map(x => x.export_value), gr);
+    import_volume_GR = growthRate(series.map(x => x.import_volume), gr);
+    export_volume_GR = growthRate(series.map(x => x.export_volume), gr);
 
     series = series.map(function(feature, i) {
       feature['portcalls_MA'] = portcalls_MA[i];
@@ -95,7 +97,7 @@ var generateData = function(features) {
       feature['export_value_MA'] = export_value_MA[i];
       feature['import_volume_MA'] = import_volume_MA[i];
       feature['export_volume_MA'] = export_volume_MA[i];
-      if (i > gr) {
+      if (i >= gr) {
         feature['portcalls_GR'] = portcalls_GR[i];
         feature['import_value_GR'] = import_value_GR[i];
         feature['export_value_GR'] = export_value_GR[i];
@@ -291,8 +293,11 @@ var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
             },
         },
         column: {
-          stacking: 'normal'
+          stacking: 'normal',
+          negativeColor: '#d84439',
+          threshold: 0
         }
+        
       },
   
       xAxis: {
@@ -312,9 +317,7 @@ var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
   };
   
   const region = data[0].region;   
-  
-  console.log(chartType);
-  
+    
   options['title'] = {
     text: region 
   };
@@ -338,8 +341,8 @@ var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
         tooltip: {
           valueDecimals: 0,
         },
-        color: '#004c97',
-        showInLegend: true}];
+        color: '#2d65a2',
+        showInLegend: false}];
 
   console.log(options);
 
@@ -356,6 +359,6 @@ console.log(labels);
 
 console.log(movingAvg([1,2,3,1,1,1], 2));
 
-console.log(growthRate([1,2,3,1,1,1], 2));
+console.log(growthRate([1,2,3,1,1,1], 3));
 
 

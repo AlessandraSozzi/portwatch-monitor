@@ -135,7 +135,6 @@ var queryAndChartData = function(regionid) {
         $(this).children().addClass('active');
         const selected = $(this).attr('id');
         const growth = $('#switch').is(':checked');
-        console.log("Current selections: ", selected, growth);
         growth == true ? createGrowthRateChart(series, regionid, selected) : createChart(series, regionid, selected);
       }); 
 
@@ -143,7 +142,6 @@ var queryAndChartData = function(regionid) {
       $('#switch').on('change', function(e) {
         const selected = $('.nav.nav-tabs.card-header-tabs > li').attr('id');
         const growth = $('#switch').is(':checked');
-        console.log("Current selections: ", selected, growth);
         growth == true ? createGrowthRateChart(series, regionid, selected) : createChart(series, regionid, selected);
       }); 
 
