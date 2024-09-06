@@ -172,7 +172,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
             buttons: {
                 contextButton: {
                     symbol: 'download',
-                    text: 'Export Data'
+                    text: ''
                 }
             }
         },
@@ -185,7 +185,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
     console.log(labels);
     
     options['title'] = {
-      text: region + ": " + labels[chartType].title
+      text: region 
     };
     
     options['yAxis'] = {
