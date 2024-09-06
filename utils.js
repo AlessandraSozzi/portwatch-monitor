@@ -1,4 +1,6 @@
 const shift = 12; // Changed from 52*7: 52*7days - to keep comparing mondays with mondays, tuesdays with tuesdays, etc
+const ma = 3;
+const gr = 12;
 
 var downloadSymbol = function(x, y, w, h) {
     const path = [
@@ -47,7 +49,7 @@ function growthRate(array, countBefore, countAfter) {
 }
 
 
-var generateData = function(features, ma=3, gr=12) {
+var generateData = function(features) {
 
     var series = features.map((feature) => {
         datapoint = {
@@ -330,7 +332,7 @@ var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
 
   options.series = [
       { name: "Percentage Change",
-        data: data.map(x => [x.date, x[chartType+'_GR']]),
+        data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR']]),
         type: 'column',
         stack: 1,
         tooltip: {
