@@ -107,7 +107,7 @@ var generateData = function(features) {
       return feature;
     });
 
-    console.log(series);
+    //console.log(series);
     return series;
 
 };
@@ -190,8 +190,8 @@ var createChart = function(data, regionid, chartType="portcalls") {
     
     const region = data[0].region;   
     
-    console.log(chartType);
-    console.log(labels);
+    //console.log(chartType);
+    //console.log(labels);
     
     options['title'] = {
       text: region 
@@ -243,9 +243,9 @@ var createChart = function(data, regionid, chartType="portcalls") {
           showInLegend: true}];
   
     } else {
-      console.log(chartType);
+      //console.log(chartType);
       options.series = [{ name: chartType.replace("_", " ")+' Index',
-                            data: data.map(x => [x.date, x[chartType+"_MA"]]),
+                            data: data.map(x => [x.date, x[chartType]]),
                             type: 'line',
                             marker: {
                               enabled: false, // auto
@@ -261,7 +261,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
   
     
   
-    console.log(options);
+    //console.log(options);
 
     var chart = new Highcharts.Chart('container-'+regionid, options);
   
@@ -344,7 +344,7 @@ var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
         color: '#2d65a2',
         showInLegend: false}];
 
-  console.log(options);
+  //console.log(options);
 
   var chart = new Highcharts.Chart('container-'+regionid, options);
 
