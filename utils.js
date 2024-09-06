@@ -35,6 +35,17 @@ var indexed = function(series, column, base=2019) {
   return series.map(x => x[column]) / avg2019 * 100;
 };
 
+function growthRate(array, countBefore, countAfter) {
+  if (countAfter == undefined) countAfter = 0;
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
+    const growth = (subArr[subArr.length-1]/subArr[0]-1)*100;
+    result.push(growth);
+  }
+  return result;
+}
+
 
 var generateData = function(features, ma=3, gr=12) {
 
@@ -48,12 +59,18 @@ var generateData = function(features, ma=3, gr=12) {
           portcalls_dry_bulk: parseInt(feature.attributes.portcalls_dry_bulk),
           portcalls_roro: parseInt(feature.attributes.portcalls_roro),
           portcalls_container: parseInt(feature.attributes.portcalls_container),
-          //portcalls: parseInt(feature.attributes.portcalls),
           import_volume: parseFloat(feature.attributes.volume_import),
           export_volume: parseFloat(feature.attributes.volume_export),
           import_value: parseFloat(feature.attributes.value_import_total),
           export_value: parseFloat(feature.attributes.value_export_total)
         }
+
+        datapoint['portcalls'] = (datapoint['portcalls_tanker']+
+                                  datapoint['portcalls_general_cargo']+
+                                  datapoint['portcalls_dry_bulk']+
+                                  datapoint['portcalls_roro']+
+                                  datapoint['portcalls_container'])
+
         return datapoint;
     });
   
@@ -63,13 +80,24 @@ var generateData = function(features, ma=3, gr=12) {
     export_value_MA = movingAvg(series.map(x => x.export_value), ma, 0);
     import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
     export_volume_MA = movingAvg(series.map(x => x.export_volume), ma, 0);
-//    portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
+    portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
+    import_value_GR = growthRate(series.map(x => x.import_value), gr, 0);
+    export_value_GR = growthRate(series.map(x => x.export_value), gr, 0);
+    import_volume_GR = growthRate(series.map(x => x.import_volume), gr, 0);
+    export_volume_GR = growthRate(series.map(x => x.export_volume), gr, 0);
 
     series = series.map(function(feature, i) {
+      feature['portcalls_MA'] = portcalls_MA[i];
       feature['import_value_MA'] = import_value_MA[i];
       feature['export_value_MA'] = export_value_MA[i];
       feature['import_volume_MA'] = import_volume_MA[i];
       feature['export_volume_MA'] = export_volume_MA[i];
+      if (i > gr) {
+        feature['import_value_GR'] = import_value_GR[i];
+        feature['export_value_GR'] = export_value_GR[i];
+        feature['import_volume_GR'] = import_volume_GR[i];
+        feature['export_volume_GR'] = export_volume_GR[i];
+      }
       return feature;
     });
 
@@ -226,4 +254,7 @@ var createChart = function(data, regionid, chartType="portcalls") {
 console.log(labels);
 
 console.log(movingAvg([1,2,3,1,1,1], 2));
+
+console.log(growthRate([1,2,3,1,1,1], 2));
+
 
