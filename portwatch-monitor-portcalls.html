@@ -1,0 +1,150 @@
+<!-- /* Author CSF */ -->
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://js.arcgis.com/4.28/"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="portwatch-monitor.css">
+
+<script src="utils.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+<style>
+ /*
+  .not-show {
+   display: none; 
+  }*/
+
+</style>
+
+
+<div class="card text-center">
+  <div class="card-header">
+    <div class="form-check form-switch" style="float: right;">
+      <input class="form-check-input" type="checkbox" id="switch">
+      <label class="form-check-label" for="flexSwitchCheckDefault" style="color: white;">Y-o-Y Change</label>
+    </div>
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" id="portcalls">Port Calls</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+      <div class="row" class="ts">
+        <figure class="highcharts-figure">
+            <div id="container-WLD"></div>
+        </figure>
+      </div>
+      <div class="row" class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-110"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-200"></div></figure></div>
+      </div>
+      <div class="row"  class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-163"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-505"></div></figure></div>
+      </div>
+      <div class="row" class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-119"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-903"></div></figure></div>
+      </div>
+      <div class="row" class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-123"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-205"></div></figure></div>
+      </div>
+      <div class="row" class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-998"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-400"></div></figure></div>
+      </div>
+      <div class="row" class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-510"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-603"></div></figure></div>
+      </div>
+  </div>
+</div>
+
+<script>
+
+var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0"
+
+Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol; 
+
+
+$(document).ready(function() {
+
+  queryAndChartData('WLD');
+  queryAndChartData('110');
+  queryAndChartData('200');
+  queryAndChartData('163');
+  queryAndChartData('505');
+  queryAndChartData('119');
+  queryAndChartData('903');
+  queryAndChartData('123');
+  queryAndChartData('205');
+  queryAndChartData('998');
+  queryAndChartData('400');
+  queryAndChartData('510');
+  queryAndChartData('603'); 
+    
+});
+
+
+var queryAndChartData = function(regionid) {
+  require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
+      const layer = new FeatureLayer({
+        url: baseUrl
+      });
+
+    const query = new Query({
+      where: "ISO3='"+regionid+"'",
+      returnGeometry: false,
+      outFields: "*",
+      maxRecordCountFactor: 5
+    });
+
+    layer.queryFeatures(query).then((result) => {
+
+      if (document.location.href.endsWith("#YoYchange")) {
+        $('#switch').prop('checked', true);
+      } 
+      const is_growth_checked = $('#switch').is(':checked'); 
+
+      var series = generateData(result.features);
+      is_growth_checked == true ? createGrowthRateChart(series, regionid, "portcalls") : createChart(series, regionid, "portcalls");
+
+      $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
+        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
+        $(this).children().addClass('active');
+        const selected = $('a.nav-link.active').attr('id');
+        const growth = $('#switch').is(':checked');
+        growth == true ? createGrowthRateChart(series, regionid, selected) : createChart(series, regionid, selected);
+      }); 
+
+
+      $('#switch').on('change', function(e) {
+        const selected = $('a.nav-link.active').attr('id');
+        const growth = $('#switch').is(':checked'); 
+        console.log("Selected: ", selected, growth);
+        growth == true ? createGrowthRateChart(series, regionid, selected) : createChart(series, regionid, selected);
+      }); 
+
+
+
+
+
+    });
+  });
+};
+
+
+</script>
