@@ -144,7 +144,7 @@ var labels = {
 };
 
 
-var createChart = function(data, regionid, chartType="portcalls") {
+var createChart = function(data, regionid, containerID, chartType="portcalls") {
 
     var options = {
     
@@ -263,13 +263,13 @@ var createChart = function(data, regionid, chartType="portcalls") {
   
     //console.log(options);
 
-    var chart = new Highcharts.Chart('container-'+regionid, options);
+    var chart = new Highcharts.Chart(containerID, options);
   
     return options;
   
 };
 
-var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
+var createGrowthRateChart = function(data, regionid, containerID, chartType="portcalls") {
 
   var options = {
   
@@ -346,7 +346,7 @@ var createGrowthRateChart = function(data, regionid, chartType="portcalls") {
 
   //console.log(options);
 
-  var chart = new Highcharts.Chart('container-'+regionid, options);
+  var chart = new Highcharts.Chart(containerID, options);
 
   return options;
 
