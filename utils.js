@@ -91,6 +91,13 @@ var generateData = function(features) {
     import_volume_GR = growthRate(series.map(x => x.import_volume), gr);
     export_volume_GR = growthRate(series.map(x => x.export_volume), gr);
 
+    portcalls_GR_MA = movingAvg(portcalls_GR, ma, 0);
+    import_value_GR_MA = movingAvg(import_value_GR, ma, 0);
+    export_value_GR_MA = movingAvg(export_value_GR, ma, 0);
+    import_volume_GR_MA = movingAvg(import_volume_GR, ma, 0);
+    export_volume_GR_MA = movingAvg(export_volume_GR, ma, 0);
+
+
     series = series.map(function(feature, i) {
       feature['portcalls_MA'] = portcalls_MA[i];
       feature['import_value_MA'] = import_value_MA[i];
@@ -103,6 +110,12 @@ var generateData = function(features) {
         feature['export_value_GR'] = export_value_GR[i];
         feature['import_volume_GR'] = import_volume_GR[i];
         feature['export_volume_GR'] = export_volume_GR[i];
+        // Moving Average of growth rates
+        feature['portcalls_GR_MA'] = portcalls_GR_MA[i];
+        feature['import_value_GR_MA'] = import_value_GR_MA[i];
+        feature['export_value_GR_MA'] = export_value_GR_MA[i];
+        feature['import_volume_GR_MA'] = import_volume_GR_MA[i];
+        feature['export_volume_GR_MA'] = export_volume_GR_MA[i];
       }
       return feature;
     });
@@ -342,7 +355,16 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
           valueDecimals: 0,
         },
         color: '#2d65a2',
-        showInLegend: false}];
+        showInLegend: true},
+        { name: "Percentage Change 3-month MA",
+          data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
+          type: 'spline',
+          tooltip: {
+            valueDecimals: 0,
+          },
+          color: '#000000',
+          dashStyle: 'LongDash',
+          showInLegend: true}];
 
   //console.log(options);
 
