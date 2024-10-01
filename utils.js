@@ -356,7 +356,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         },
         color: '#2d65a2',
         showInLegend: true},
-        { name: "Percentage Change 3-month MA",
+        { name: "3-month MA",
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
           type: 'spline',
           tooltip: {
