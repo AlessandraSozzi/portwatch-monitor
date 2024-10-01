@@ -358,7 +358,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         showInLegend: true},
         { name: "3-month MA",
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
-          type: 'sline',
+          type: 'spline',
           tooltip: {
             valueDecimals: 0,
           },
