@@ -24,6 +24,10 @@ var movingAvg = function(array, countBefore, countAfter) {
     if (countAfter == undefined) countAfter = 0;
     const result = [];
     for (let i = 0; i < array.length; i++) {
+      if (i < countBefore) {
+        result.push(null);
+        continue;
+      }
       const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
       const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
       result.push(avg);
@@ -352,7 +356,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         type: 'column',
         stack: 1,
         tooltip: {
-          valueDecimals: 0,
+          valueDecimals: 1,
         },
         color: '#2d65a2',
         showInLegend: true},
@@ -360,7 +364,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
           type: 'spline',
           tooltip: {
-            valueDecimals: 0,
+            valueDecimals: 1,
           },
           marker: {
             enabled: false
