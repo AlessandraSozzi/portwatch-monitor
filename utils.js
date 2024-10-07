@@ -110,17 +110,17 @@ var generateData = function(features) {
       feature['import_volume_MA'] = import_volume_MA[i];
       feature['export_volume_MA'] = export_volume_MA[i];
       if (i >= gr) {
-        feature['portcalls_GR'] = portcalls_GR[i];
-        feature['import_value_GR'] = import_value_GR[i];
-        feature['export_value_GR'] = export_value_GR[i];
-        feature['import_volume_GR'] = import_volume_GR[i];
-        feature['export_volume_GR'] = export_volume_GR[i];
+        feature['portcalls_GR'] = portcalls_GR[i-gr];
+        feature['import_value_GR'] = import_value_GR[i-gr];
+        feature['export_value_GR'] = export_value_GR[i-gr];
+        feature['import_volume_GR'] = import_volume_GR[i-gr];
+        feature['export_volume_GR'] = export_volume_GR[i-gr];
         // Moving Average of growth rates
-        feature['portcalls_GR_MA'] = portcalls_GR_MA[i];
-        feature['import_value_GR_MA'] = import_value_GR_MA[i];
-        feature['export_value_GR_MA'] = export_value_GR_MA[i];
-        feature['import_volume_GR_MA'] = import_volume_GR_MA[i];
-        feature['export_volume_GR_MA'] = export_volume_GR_MA[i];
+        feature['portcalls_GR_MA'] = portcalls_GR_MA[i-gr];
+        feature['import_value_GR_MA'] = import_value_GR_MA[i-gr];
+        feature['export_value_GR_MA'] = export_value_GR_MA[i-gr];
+        feature['import_volume_GR_MA'] = import_volume_GR_MA[i-gr];
+        feature['export_volume_GR_MA'] = export_volume_GR_MA[i-gr];
       }
       return feature;
     });
