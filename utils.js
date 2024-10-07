@@ -24,7 +24,7 @@ var movingAvg = function(array, countBefore, countAfter) {
     if (countAfter == undefined) countAfter = 0;
     const result = [];
     for (let i = 0; i < array.length; i++) {
-      if (i < countBefore) {
+      if (i < (countBefore-1)) {
         result.push(null);
         continue;
       }
