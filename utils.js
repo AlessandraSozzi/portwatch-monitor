@@ -89,11 +89,12 @@ var generateData = function(features) {
     import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
     export_volume_MA = movingAvg(series.map(x => x.export_volume), ma, 0);
     portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
-    portcalls_GR = growthRate(series.map(x => x.portcalls), gr);
-    import_value_GR = growthRate(series.map(x => x.import_value), gr);
-    export_value_GR = growthRate(series.map(x => x.export_value), gr);
-    import_volume_GR = growthRate(series.map(x => x.import_volume), gr);
-    export_volume_GR = growthRate(series.map(x => x.export_volume), gr);
+
+    portcalls_GR = growthRate(series.map(x => x.portcalls), gr).slice(gr, series.length);
+    import_value_GR = growthRate(series.map(x => x.import_value), gr).slice(gr, series.length);
+    export_value_GR = growthRate(series.map(x => x.export_value), gr).slice(gr, series.length);
+    import_volume_GR = growthRate(series.map(x => x.import_volume), gr).slice(gr, series.length);
+    export_volume_GR = growthRate(series.map(x => x.export_volume), gr).slice(gr, series.length);
 
     portcalls_GR_MA = movingAvg(portcalls_GR, ma, 0);
     import_value_GR_MA = movingAvg(import_value_GR, ma, 0);
