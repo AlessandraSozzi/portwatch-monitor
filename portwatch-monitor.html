@@ -32,7 +32,7 @@
   <div class="card-header">
     <div class="form-check form-switch" style="float: right;">
       <input class="form-check-input" type="checkbox" id="switch">
-      <label class="form-check-label" for="flexSwitchCheckDefault" style="color: white;">Y-o-Y Change</label>
+      <label class="form-check-label" for="flexSwitchCheckDefault" style="color: white;">Index</label>
     </div>
     <ul class="nav nav-tabs card-header-tabs">
       <li class="nav-item">
@@ -53,6 +53,9 @@
     </ul>
   </div>
   <div class="card-body">
+    <div class="row" class="ts">
+      <span id="sentence"></span>
+    </div> 
       <div class="row" class="ts">
         <figure class="highcharts-figure">
             <div id="container-WLD"></div>
@@ -132,29 +135,29 @@ var queryAndChartData = function(regionid) {
 
     layer.queryFeatures(query).then((result) => {
 
-      if (document.location.href.endsWith("#YoYchange")) {
+      if (document.location.href.endsWith("#index")) {
         $('#switch').prop('checked', true);
       } 
-      const is_growth_checked = $('#switch').is(':checked'); 
+      var is_index_checked = $('#switch').is(':checked'); 
 
       var series = generateData(result.features);
-      is_growth_checked == true ? createGrowthRateChart(series, regionid, "container-"+regionid, "portcalls") : createChart(series, regionid, "container-"+regionid, "portcalls");
+      is_index_checked == true ?  createChart(series, regionid, "container-"+regionid, "portcalls") : createGrowthRateChart(series, regionid, "container-"+regionid, "portcalls");
+
 
       $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
         $(this).children().addClass('active');
         const selected = $('a.nav-link.active').attr('id');
-        const growth = $('#switch').is(':checked');
-        growth == true ? createGrowthRateChart(series, regionid, "container-"+regionid, selected) : createChart(series, regionid, "container-"+regionid, selected);
+        is_index_checked = $('#switch').is(':checked');
+        is_index_checked == true ?  createChart(series, regionid, "container-"+regionid, selected): createGrowthRateChart(series, regionid, "container-"+regionid, selected);
       }); 
 
 
       $('#switch').on('change', function(e) {
         const selected = $('a.nav-link.active').attr('id');
-        const growth = $('#switch').is(':checked'); 
-        console.log("Selected: ", selected, growth);
-        growth == true ? createGrowthRateChart(series, regionid, "container-"+regionid, selected) : createChart(series, regionid, "container-"+regionid, selected);
-      }); 
+        is_index_checked = $('#switch').is(':checked'); 
+        console.log("Selected: ", selected, is_index_checked);
+        is_index_checked == true ?  createChart(series, regionid, "container-"+regionid, selected): createGrowthRateChart(series, regionid, "container-"+regionid, selected);      }); 
 
 
 
