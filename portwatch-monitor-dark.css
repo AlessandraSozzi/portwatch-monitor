@@ -1,5 +1,5 @@
 body {
-background-color: #0a1a30;     
+    background-color: #0a1a30;     
 }
 
 #container {
@@ -8,39 +8,41 @@ background-color: #0a1a30;
 }
 
 .highcharts-background {
-fill: #0a1a30; }
+    fill: #0a1a30; 
+}
 
 .highcharts-plot-background {
-fill: #0a1a30; }
+    fill: #0a1a30; 
+}
 
 .card {
-background-color: #0a1a30;  
-color: #fff;
+    background-color: #0a1a30;  
+    color: #fff;
 }
 
 .card-header {
-background-color: #0a1a30;
-border-bottom: none;
+    background-color: #0a1a30;
+    border-bottom: none;
 }
 
 .card.text-center {
-border: none;
+    border: none;
 }
 
 .nav-link {
-color: #52bdec;
+    color: #52bdec;
 }
 
-.nav-link.active{
-color: white;
-background-color: #0a1a30; 
-border-color: none;
-border-bottom: 3px solid white;
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #0a1a30; 
+    border-color: #0a1a30;
+    border-bottom: 3px solid white;
 }
 
 #source {
-font-size: small;
-font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .highcharts-grid-line {
