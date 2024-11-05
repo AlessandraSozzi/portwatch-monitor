@@ -53,15 +53,15 @@
     </div>-->
   </div>
   <div class="card-body">
-    <div class="row" class="ts">
-      <span id="sentence"></span>
+    <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
+      <span id='sentence-text'></span>
     </div> 
-      <div class="row" class="ts">
+      <div class="row" class="ts" id="div-WLD-value">
         <figure class="highcharts-figure">
             <div id="container-WLD-value"></div>
         </figure>
       </div>
-      <div class="row" class="ts">
+      <div class="row" class="ts" id="div-WLD-volume">
         <figure class="highcharts-figure">
             <div id="container-WLD-volume"></div>
         </figure>
@@ -153,8 +153,12 @@ var queryAndChartData = function(regionid) {
       var series = generateData(result.features);
 
       if (regionid == 'WLD') {
+        var last_value = Math.round(series[series.length-1]["trade_value_GR_MA"]*10)/10;
+        console.log(last_value);
+        var trend = last_value > 0 ? "increased" : "decreased";
         is_index_checked == true ?  createChart(series, regionid, "container-"+regionid+"-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
         is_index_checked == true ?  createChart(series, regionid, "container-"+regionid+"-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
+        $("#sentence-text").html("According to our nowcast model, global merchandise trade value over the last three months <b class='text-highlight'>"+trend+"</b> by <b class='text-highlight'>"+last_value+"</b> compared to a year ago.");
       }
 
 
@@ -163,10 +167,19 @@ var queryAndChartData = function(regionid) {
         $(this).children().addClass('active');
         const selected = $('a.nav-link.active').attr('id');
         is_index_checked = $('#switch').is(':checked');
+        
+        last_value = Math.round(series[series.length-1][selected+"_GR_MA"]*10)/10;
+        trend = last_value > 0 ? "increased" : "decreased";
+        if (regionid == 'WLD')
+          $("#sentence-text").html("According to our nowcast model, global merchandise " + selected.split('_').join(' ') + " over the last three months <b class='text-highlight'>"+trend+"</b> by <b class='text-highlight'>"+last_value+"</b> compared to a year ago.");
+
+
 
         if (selected == 'trade_summary') {
           $("#container-WLD-value").show();
           $("#container-WLD-volume").show();
+          $("#div-WLD-value").show();
+          $("#div-WLD-volume").show();
           $("#container-WLD").hide();
           $("#container-110").hide();
           $("#container-200").hide();
@@ -185,6 +198,8 @@ var queryAndChartData = function(regionid) {
         } else {
           $("#container-WLD-value").hide();
           $("#container-WLD-volume").hide();
+          $("#div-WLD-value").hide();
+          $("#div-WLD-volume").hide();
           $("#container-WLD").show();
           $("#container-110").show();
           $("#container-200").show();

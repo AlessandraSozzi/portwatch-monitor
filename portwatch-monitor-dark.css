@@ -51,3 +51,11 @@ font-family: Arial, Helvetica, sans-serif;
 .highcharts-button-box {
     fill: #0a1a30;
 }
+
+#sentence-text {
+    color: #c0c0c0;
+}
+
+.text-highlight {
+    color: #fff;
+}
