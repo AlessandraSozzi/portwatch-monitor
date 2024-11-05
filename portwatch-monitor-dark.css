@@ -31,6 +31,13 @@ border: none;
 color: #52bdec;
 }
 
+.nav-link.active{
+color: white;
+background-color: #0a1a30; 
+border-color: none;
+border-bottom: 3px solid white;
+}
+
 #source {
 font-size: small;
 font-family: Arial, Helvetica, sans-serif;
