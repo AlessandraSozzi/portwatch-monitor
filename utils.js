@@ -55,6 +55,35 @@ function growthRate(array, countBefore) {
 }
 
 
+function indexedGrowthRate(array, countBefore) {
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    if (i < countBefore) {
+      result.push(null);
+      continue;
+    }
+    const growth = (array[i]/array[i-countBefore]-1)*100;
+    result.push(growth);
+  }
+  return result;
+}
+
+var indexedMovingAvg = function(array, countBefore, countAfter) {
+  if (countAfter == undefined) countAfter = 0;
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    if (i < (countBefore-1)) {
+      result.push(null);
+      continue;
+    }
+    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
+    const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
+    result.push(avg);
+  }
+  return result;
+};
+
+
 var generateData = function(features) {
 
     var series = features.map((feature) => {
@@ -70,7 +99,9 @@ var generateData = function(features) {
           import_volume: parseFloat(feature.attributes.volume_import_total),
           export_volume: parseFloat(feature.attributes.volume_export_total),
           import_value: parseFloat(feature.attributes.value_import_total),
-          export_value: parseFloat(feature.attributes.value_export_total)
+          export_value: parseFloat(feature.attributes.value_export_total),
+          trade_value: parseFloat(feature.attributes.trade_value),
+          trade_volume: parseFloat(feature.attributes.trade_volume)
         }
 
         datapoint['portcalls'] = (datapoint['portcalls_tanker']+
@@ -84,6 +115,8 @@ var generateData = function(features) {
   
     series.sort((a, b) => a.date - b.date);
 
+    trade_value_MA = movingAvg(series.map(x => x.trade_value), ma, 0);
+    trade_volume_MA = movingAvg(series.map(x => x.trade_volume), ma, 0);
     import_value_MA = movingAvg(series.map(x => x.import_value), ma, 0);
     export_value_MA = movingAvg(series.map(x => x.export_value), ma, 0);
     import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
@@ -95,12 +128,16 @@ var generateData = function(features) {
     export_value_GR = growthRate(series.map(x => x.export_value), gr).slice(gr, series.length);
     import_volume_GR = growthRate(series.map(x => x.import_volume), gr).slice(gr, series.length);
     export_volume_GR = growthRate(series.map(x => x.export_volume), gr).slice(gr, series.length);
+    trade_value_GR = growthRate(series.map(x => x.trade_value), gr).slice(gr, series.length);
+    trade_volume_GR = growthRate(series.map(x => x.trade_volume), gr).slice(gr, series.length);
 
     portcalls_GR_MA = movingAvg(portcalls_GR, ma, 0);
     import_value_GR_MA = movingAvg(import_value_GR, ma, 0);
     export_value_GR_MA = movingAvg(export_value_GR, ma, 0);
     import_volume_GR_MA = movingAvg(import_volume_GR, ma, 0);
     export_volume_GR_MA = movingAvg(export_volume_GR, ma, 0);
+    trade_value_GR_MA = movingAvg(trade_value_GR, ma, 0);
+    trade_volume_GR_MA = movingAvg(trade_volume_GR, ma, 0);
 
 
     series = series.map(function(feature, i) {
@@ -109,18 +146,24 @@ var generateData = function(features) {
       feature['export_value_MA'] = export_value_MA[i];
       feature['import_volume_MA'] = import_volume_MA[i];
       feature['export_volume_MA'] = export_volume_MA[i];
+      feature['trade_value_MA'] = trade_value_MA[i];
+      feature['trade_volume_MA'] = trade_volume_MA[i];
       if (i >= gr) {
         feature['portcalls_GR'] = portcalls_GR[i-gr];
         feature['import_value_GR'] = import_value_GR[i-gr];
         feature['export_value_GR'] = export_value_GR[i-gr];
         feature['import_volume_GR'] = import_volume_GR[i-gr];
         feature['export_volume_GR'] = export_volume_GR[i-gr];
+        feature['trade_value_GR'] = trade_value_GR[i-gr];
+        feature['trade_volume_GR'] = trade_volume_GR[i-gr];
         // Moving Average of growth rates
         feature['portcalls_GR_MA'] = portcalls_GR_MA[i-gr];
         feature['import_value_GR_MA'] = import_value_GR_MA[i-gr];
         feature['export_value_GR_MA'] = export_value_GR_MA[i-gr];
         feature['import_volume_GR_MA'] = import_volume_GR_MA[i-gr];
         feature['export_volume_GR_MA'] = export_volume_GR_MA[i-gr];
+        feature['trade_value_GR_MA'] = trade_value_GR_MA[i-gr];
+        feature['trade_volume_GR_MA'] = trade_volume_GR_MA[i-gr];
       }
       return feature;
     });
@@ -151,6 +194,16 @@ var labels = {
       title: "Monthly Import Value",
       name: 'Import Volume'
     },
+    trade_value: {
+      yAxis: "Index [2019 Avg. = 100]",
+      title: "Monthly Trade Value",
+      name: 'Trade Value'
+    },
+    trade_volume: {
+      yAxis: "Index [2019 Avg. = 100]",
+      title: "Monthly Trade Volume",
+      name: 'Trade Volume'
+    },
     export_value: {
       yAxis: "Index [2019 Avg. = 100]",
       title: "Monthly Export Value",
@@ -167,7 +220,7 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
     var options = {
     
         chart: {
-          backgroundColor: '#fff',
+          backgroundColor: '#0a1a30'
         },
     
         credits: {
@@ -175,7 +228,16 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
         },
     
         legend: {
-          enabled: true
+          enabled: true,
+          itemHiddenStyle: {
+            color: '#fff'
+          },
+          itemHoverStyle: {
+            color: '#fff'
+          },
+          itemStyle: {
+            color: '#fff'
+          }
     
         },
     
@@ -199,84 +261,73 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
             buttons: {
                 contextButton: {
                     symbol: 'download',
-                    text: ''
+                    text: '',
+                  symbolFill: '#c0c0c0',
+                  symbolStroke: '#c0c0c0'
                 }
             }
         },
         series: []
     };
     
-    const region = data[0].region;   
+    var region = data[0].region;   
+    if (chartType == "trade_value") 
+      region += " Trade Value";
+    if (chartType == "trade_volume") 
+      region += " Trade Volume";    
     
     //console.log(chartType);
     //console.log(labels);
     
     options['title'] = {
-      text: region 
+      text: region, 
+      style: {
+        color: '#c0c0c0',
+     }
     };
     
     options['yAxis'] = {
+      gridLineColor: '#c0c0c0',
+      labels: {
+        style: {
+          color: '#c0c0c0'
+        }
+      },
       title: {
-        text: labels[chartType].yAxis
+        text: labels[chartType].yAxis,
+        style: {
+          color: '#c0c0c0'
+        }
       },
       opposite: false
     }
 
     options['xAxis'] = {
+      gridLineColor: '#c0c0c0',
+      lineColor: '#c0c0c0',
+      labels: {
+        style: {
+          color: '#c0c0c0'
+        }
+      },
+      tickColor: '#c0c0c0',
       type: 'datetime'
     }
   
-    if (chartType == "portcalls") {
-  
-      options.series = [
-        { name: "Number of Cargo Ships",
-          data: data.map(x => [x.date, x['portcalls_dry_bulk']+x['portcalls_container']+x['portcalls_roro']+x['portcalls_general_cargo']]),
-          type: 'column',
-          stack: 1,
-          tooltip: {
-            valueDecimals: 0,
-          },
-          color: '#afc5dc',
-          showInLegend: true},
-      { name: "Number of Tanker Ships",
-        data: data.map(x => [x.date, x['portcalls_tanker']]),
-        type: 'column',
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: '#004c97',
-        showInLegend: true},
-      { name: "Total 3-month ma",
-          data: data.map(x => [x.date, x['portcalls_MA']]),
-          type: 'line',
-          marker: {
-            enabled: false, // auto
-            lineWidth: 1,
-          },
-          color: '#f3ab0a',
-          tooltip: {
-                valueDecimals: 2,
-            },
-          showInLegend: true}];
-  
-    } else {
-      //console.log(chartType);
-      options.series = [{ name: chartType.replace("_", " ")+' Index',
-                            data: data.map(x => [x.date, x[chartType]]),
-                            type: 'line',
-                            marker: {
-                              enabled: false, // auto
-                              lineWidth: 1,
+ 
+    options.series = [{ name: chartType.replace("_", " ")+' Index',
+                          data: data.map(x => [x.date, x[chartType]]),
+                          type: 'line',
+                          marker: {
+                            enabled: false, // auto
+                            lineWidth: 1,
+                          },
+                          color: '#FFFFED',
+                          tooltip: {
+                                valueDecimals: 2,
                             },
-                            color: '#f3ab0a',
-                            tooltip: {
-                                  valueDecimals: 2,
-                              },
-                            showInLegend: false          
-                          }];
-    }
-  
+                          showInLegend: false          
+                        }];  
     
   
     //console.log(options);
@@ -292,7 +343,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
   var options = {
   
       chart: {
-        backgroundColor: '#fff',
+        backgroundColor: '#0a1a30',
       },
   
       credits: {
@@ -300,8 +351,16 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
       },
   
       legend: {
-        enabled: true
-  
+        enabled: true,
+        itemHiddenStyle: {
+          color: '#fff'
+        },
+        itemHoverStyle: {
+          color: '#fff'
+        },
+        itemStyle: {
+          color: '#fff'
+        }
       },
   
       plotOptions: {
@@ -312,7 +371,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         },
         column: {
           stacking: 'normal',
-          negativeColor: '#d84439',
+          negativeColor: '#91FFFF',
           threshold: 0
         }
         
@@ -327,27 +386,53 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
           buttons: {
               contextButton: {
                   symbol: 'download',
-                  text: ''
+                  text: '',
+                  symbolFill: '#c0c0c0',
+                  symbolStroke: '#c0c0c0'
               }
           }
       },
       series: []
   };
   
-  const region = data[0].region;   
+  var region = data[0].region;   
+  if (chartType == "trade_value") 
+    region += " Trade Value";
+  if (chartType == "trade_volume") 
+    region += " Trade Volume";   
     
   options['title'] = {
-    text: region 
-  };
+    text:  region, 
+    style: {
+      color: '#c0c0c0',
+   }
+  }
   
   options['yAxis'] = {
+    gridLineColor: '#c0c0c0',
+    labels: {
+      style: {
+        color: '#c0c0c0'
+      }
+    },
     title: {
-      text: labels['growth_rate'].yAxis
+      text: labels['growth_rate'].yAxis,
+      style: {
+        color: '#c0c0c0'
+      }
     },
     opposite: false
   }
 
   options['xAxis'] = {
+    gridLineColor: '#c0c0c0',
+    lineColor: '#c0c0c0',
+    labels: {
+      style: {
+        color: '#c0c0c0'
+      }
+    },
+    tickColor: '#c0c0c0',
     type: 'datetime'
   }
 
@@ -359,7 +444,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         tooltip: {
           valueDecimals: 1,
         },
-        color: '#2d65a2',
+        color: '#FFFFED',
         showInLegend: true},
         { name: "3-month MA",
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
@@ -370,7 +455,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
           marker: {
             enabled: false
           },
-          color: '#000000',
+          color: '#FFFFED',
           dashStyle: 'LongDash',
           showInLegend: true}];
 
