@@ -267,6 +267,12 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
                 }
             }
         },
+        tooltip: {
+          style: {
+            color: '#fff'
+          }
+        },
+
         series: []
     };
     
@@ -324,7 +330,7 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
                           },
                           color: '#FFFFED',
                           tooltip: {
-                                valueDecimals: 2,
+                                valueDecimals: 1
                             },
                           showInLegend: false          
                         }];  
@@ -392,6 +398,11 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
               }
           }
       },
+      tooltip: {
+        style: {
+          color: '#fff'
+        }
+      },
       series: []
   };
   
@@ -442,15 +453,15 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         type: 'column',
         stack: 1,
         tooltip: {
-          valueDecimals: 1,
-        },
+          valueDecimals: 1
+      },
         color: '#FFFFED',
         showInLegend: true},
         { name: "3-month MA",
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
           type: 'spline',
           tooltip: {
-            valueDecimals: 1,
+            valueDecimals: 1
           },
           marker: {
             enabled: false
