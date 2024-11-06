@@ -152,7 +152,7 @@ var queryAndChartData = function(regionid) {
       var lastObs = series[series.length-1];
       var seriesType = isIndexChecked ? "_MA" : "_GR_MA"
       var lastValue = Math.round(lastObs[tabSelected+seriesType]*10)/10;
-      var lastMonth = new Date(lastObs["date"]).toLocaleDateString('en-us', { year:"numeric", month:"short", timeZone:"UTC"});
+      var lastMonth = new Date(lastObs["date"]).toLocaleDateString('en-us', { year:"numeric", month:"long", timeZone:"UTC"});
       var trend = lastValue > 0 ? "increased" : "decreased";
 
       if (regionid == "WLD") {
