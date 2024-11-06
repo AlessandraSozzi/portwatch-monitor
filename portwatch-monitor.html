@@ -157,12 +157,11 @@ var queryAndChartData = function(regionid) {
 
       if (regionid == "WLD") {
         $("#sentence-text").html(
-            "According to our nowcast model, global merchandise " + 
-            tabSelected.split('_').join(' ') + 
-            " over the last three months up to " + 
-            lastMonth + " <b class='text-highlight'>" + 
+          "As of <b class='text-highlight'>end-"+ lastMonth + 
+            "</b>, global merchandise <b class='text-highlight'>" + 
+            tabSelected.split('_').join(' ') + " " +
             trend + "</b> by <b class='text-highlight'>" + 
-            lastValue + "</b> compared to a year ago."
+            lastValue + " percent</b> over the last three months compared to a year ago."
         );
         isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid+"-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
         isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid+"-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
@@ -172,26 +171,27 @@ var queryAndChartData = function(regionid) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
         $(this).children().addClass('active');
         tabSelected = $('a.nav-link.active').attr('id');
+        console.log(tabSelected)
+
         isIndexChecked = $('#switch').is(':checked');
         seriesType = isIndexChecked ? "_MA" : "_GR_MA";
         lastValue = Math.round(lastObs[tabSelected+seriesType]*10)/10;
         trend = lastValue > 0 ? "increased" : "decreased";
         if (regionid == 'WLD')
           $("#sentence-text").html(
-            "According to our nowcast model, global merchandise " + 
-            tabSelected.split('_').join(' ') + 
-            " over the last three months up to " + 
-            lastMonth + " <b class='text-highlight'>" + 
+            "As of <b class='text-highlight'>end-"+ lastMonth + 
+            "</b>, global merchandise <b class='text-highlight'>" + 
+            tabSelected.split('_').join(' ') + " " +
             trend + "</b> by <b class='text-highlight'>" + 
-            lastValue + "</b> compared to a year ago."
+            lastValue + " percent</b> over the last three months compared to a year ago."
         );
 
+        
         if (tabSelected == 'trade_value') {
           $("#container-WLD-value").show();
           $("#container-WLD-volume").show();
           $("#div-WLD-value").show();
           $("#div-WLD-volume").show();
-
           $("#container-WLD").hide();
           $("#container-110").hide();
           $("#container-200").hide();
@@ -205,8 +205,8 @@ var queryAndChartData = function(regionid) {
           $("#container-400").hide();
           $("#container-510").hide();
           $("#container-603").hide();
-          isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid+"-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
-          isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid+"-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
+          isIndexChecked == true ?  createChart(series, regionid, "container-WLD-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
+          isIndexChecked == true ?  createChart(series, regionid, "container-WLD-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
         } else {
           $("#container-WLD-value").hide();
           $("#container-WLD-volume").hide();
