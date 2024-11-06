@@ -448,7 +448,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
   }
 
   options.series = [
-      { name: "Percentage Change",
+      { name: "Y-o-Y",
         data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR']]),
         type: 'column',
         stack: 1,
@@ -477,6 +477,8 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
   return options;
 
 };
+
+
 
 
 /// TESTS
