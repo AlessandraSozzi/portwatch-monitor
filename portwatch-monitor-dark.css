@@ -42,6 +42,7 @@ body {
 
 .nav-tabs .nav-link:hover {
     border-color: transparent; 
+    color: #fff;
 }
 
 .nav-link.active:hover { 
