@@ -17,7 +17,6 @@ body {
 
 .card {
     background-color: #0a1a30;  
-    color: #fff;
 }
 
 .card-header {
@@ -64,15 +63,11 @@ body {
     fill: #0a1a30;
 }
 
-.highcharts-legend-item {
-    color: "#c0c0c0";
-}
-
 .highcharts-button-box {
     fill: #0a1a30;
 }
 
-#sentence-text {
+.sentence-text {
     color: #c0c0c0;
 }
 

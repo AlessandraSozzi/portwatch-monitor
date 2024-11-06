@@ -55,20 +55,26 @@
     </div>-->
   </div>
   <div class="card-body">
-    <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
-      <span id='sentence-text'></span>
-    </div> 
       <div class="row" class="ts" id="div-WLD-value">
+        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
+          <span id="sentence-text-tsval" class="sentence-text"></span>
+        </div> 
         <figure class="highcharts-figure">
             <div id="container-WLD-value"></div>
         </figure>
       </div>
       <div class="row" class="ts" id="div-WLD-volume">
+        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
+          <span id="sentence-text-tsvol" class="sentence-text"></span>
+        </div> 
         <figure class="highcharts-figure">
             <div id="container-WLD-volume"></div>
         </figure>
       </div>
-      <div class="row" class="ts">
+      <div class="row" class="ts" id="div-WLD">
+        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
+          <span id="sentence-text-oth" class="sentence-text"></span>
+        </div> 
         <figure class="highcharts-figure">
             <div id="container-WLD"></div>
         </figure>
@@ -112,6 +118,8 @@ var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/service
 
 Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol; 
 
+var showSummaryOn = true;
+
 
 $(document).ready(function() {
 
@@ -153,82 +161,82 @@ var queryAndChartData = function(regionid) {
       var series = generateData(result.features);
       var lastObs = series[series.length-1];
       var seriesType = isIndexChecked ? "_MA" : "_GR_MA"
-      var lastValue = Math.round(lastObs[tabSelected+seriesType]*10)/10;
       var lastMonth = new Date(lastObs["date"]).toLocaleDateString('en-us', { year:"numeric", month:"long", timeZone:"UTC"});
-      var trend = lastValue > 0 ? "increased" : "decreased";
+      var lastValue, trend
 
       if (regionid == "WLD") {
-        $("#sentence-text").html(
+        
+        lastValue = Math.round(lastObs["trade_value"+seriesType]*10)/10;
+        trend = lastValue > 0 ? "increased" : "decreased";
+        
+        $("#sentence-text-tsval").html(
           "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global merchandise <b class='text-highlight'>" + 
-            tabSelected.split('_').join(' ') + " " +
+            "</b>, global merchandise <b class='text-highlight'>trade value " +
             trend + "</b> by <b class='text-highlight'>" + 
             lastValue + " percent</b> over the last three months compared to a year ago."
         );
-        isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid+"-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
-        isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid+"-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
+        
+        lastValue = Math.round(lastObs["trade_volume"+seriesType]*10)/10;
+        trend = lastValue > 0 ? "increased" : "decreased";
+
+        $("#sentence-text-tsvol").html(
+          "As of <b class='text-highlight'>end-"+ lastMonth + 
+            "</b>, global merchandise <b class='text-highlight'>trade volume " +
+            trend + "</b> by <b class='text-highlight'>" + 
+            lastValue + " percent</b> over the last three months compared to a year ago."
+        );
+
+        isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-value", "trade_value") : createGrowthRateChart(series, "WLD", "container-WLD-value", "trade_value");
+        isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-volume", "trade_volume") : createGrowthRateChart(series, "WLD", "container-WLD-volume", "trade_volume");
       }
 
       $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
         $(this).children().addClass('active');
         tabSelected = $('a.nav-link.active').attr('id');
-        console.log(tabSelected)
-
         isIndexChecked = $('#switch').is(':checked');
         seriesType = isIndexChecked ? "_MA" : "_GR_MA";
-        lastValue = Math.round(lastObs[tabSelected+seriesType]*10)/10;
-        trend = lastValue > 0 ? "increased" : "decreased";
-        if (regionid == 'WLD')
-          $("#sentence-text").html(
-            "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global merchandise <b class='text-highlight'>" + 
-            tabSelected.split('_').join(' ') + " " +
-            trend + "</b> by <b class='text-highlight'>" + 
-            lastValue + " percent</b> over the last three months compared to a year ago."
-        );
 
-        
-        if (tabSelected == 'trade_value') {
-          $("#container-WLD-value").show();
-          $("#container-WLD-volume").show();
-          $("#div-WLD-value").show();
-          $("#div-WLD-volume").show();
-          $("#container-WLD").hide();
-          $("#container-110").hide();
-          $("#container-200").hide();
-          $("#container-163").hide();
-          $("#container-505").hide();
-          $("#container-119").hide();
-          $("#container-903").hide();
-          $("#container-123").hide();
-          $("#container-205").hide();
-          $("#container-998").hide();
-          $("#container-400").hide();
-          $("#container-510").hide();
-          $("#container-603").hide();
-          isIndexChecked == true ?  createChart(series, regionid, "container-WLD-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
-          isIndexChecked == true ?  createChart(series, regionid, "container-WLD-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
+        if (tabSelected == "trade_value") {
+          if (regionid == 'WLD') {
+            lastValue = Math.round(lastObs["trade_value"+seriesType]*10)/10;
+            trend = lastValue > 0 ? "increased" : "decreased";
+            
+            $("#sentence-text-tsval").html(
+              "As of <b class='text-highlight'>end-"+ lastMonth + 
+                "</b>, global merchandise <b class='text-highlight'>trade value " +
+                trend + "</b> by <b class='text-highlight'>" + 
+                lastValue + " percent</b> over the last three months compared to a year ago."
+            );
+
+            lastValue = Math.round(lastObs["trade_volume"+seriesType]*10)/10;
+            trend = lastValue > 0 ? "increased" : "decreased";
+
+            $("#sentence-text-tsvol").html(
+              "As of <b class='text-highlight'>end-"+ lastMonth + 
+                "</b>, global merchandise <b class='text-highlight'>trade volume " +
+                trend + "</b> by <b class='text-highlight'>" + 
+                lastValue + " percent</b> over the last three months compared to a year ago."
+            );
+
+            isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-value", "trade_value") : createGrowthRateChart(series, "WLD", "container-WLD-value", "trade_value");
+            isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-volume", "trade_volume") : createGrowthRateChart(series, "WLD", "container-WLD-volume", "trade_volume");
+          }
         } else {
-          $("#container-WLD-value").hide();
-          $("#container-WLD-volume").hide();
-          $("#div-WLD-value").hide();
-          $("#div-WLD-volume").hide();
-          $("#container-WLD").show();
-          $("#container-110").show();
-          $("#container-200").show();
-          $("#container-163").show();
-          $("#container-505").show();
-          $("#container-119").show();
-          $("#container-903").show();
-          $("#container-123").show();
-          $("#container-205").show();
-          $("#container-998").show();
-          $("#container-400").show();
-          $("#container-510").show();
-          $("#container-603").show();
           isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid, tabSelected): createGrowthRateChart(series, regionid, "container-"+regionid, tabSelected);
+          if (regionid == 'WLD') {
+            lastValue = Math.round(lastObs[tabSelected+seriesType]*10)/10;
+            trend = lastValue > 0 ? "increased" : "decreased";
+            $("#sentence-text-oth").html(
+              "As of <b class='text-highlight'>end-"+ lastMonth + 
+                "</b>, global merchandise <b class='text-highlight'> " + tabSelected.split('_').join(' ') + " " +
+                trend + "</b> by <b class='text-highlight'>" + 
+                lastValue + " percent</b> over the last three months compared to a year ago."
+            ); 
+
+          }
         }
+
       }); 
 
 
@@ -246,6 +254,53 @@ var queryAndChartData = function(regionid) {
     });
   });
 };
+
+
+$('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
+        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
+        $(this).children().addClass('active');
+        tabSelected = $('a.nav-link.active').attr('id');
+        console.log(tabSelected)
+
+        showSummaryOn = tabSelected == 'trade_value' ? true : false;
+
+        if (showSummaryOn) {
+          $("#div-WLD-value").show();
+          $("#div-WLD-volume").show();
+          $("#div-WLD").hide();
+          $("#container-110").hide();
+          $("#container-200").hide();
+          $("#container-163").hide();
+          $("#container-505").hide();
+          $("#container-119").hide();
+          $("#container-903").hide();
+          $("#container-123").hide();
+          $("#container-205").hide();
+          $("#container-998").hide();
+          $("#container-400").hide();
+          $("#container-510").hide();
+          $("#container-603").hide();
+
+        } else {
+          $("#div-WLD-value").hide();
+          $("#div-WLD-volume").hide();
+          $("#div-WLD").show();
+          $("#container-110").show();
+          $("#container-200").show();
+          $("#container-163").show();
+          $("#container-505").show();
+          $("#container-119").show();
+          $("#container-903").show();
+          $("#container-123").show();
+          $("#container-205").show();
+          $("#container-998").show();
+          $("#container-400").show();
+          $("#container-510").show();
+          $("#container-603").show();
+
+        }
+      
+})
 
 
 
