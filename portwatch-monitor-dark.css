@@ -50,9 +50,11 @@ body {
 }
 
 
-#source {
+.source {
     font-size: small;
     font-family: Arial, Helvetica, sans-serif;
+    color: #c0c0c0;
+    font-size: 1vw; 
 }
 
 .highcharts-grid-line {
@@ -74,3 +76,51 @@ body {
 .text-highlight {
     color: #fff;
 }
+
+.btn-group  {
+    width: 250px;
+    text-align: center;
+}
+
+.btn-group label.btn.btn-outline-primary  {
+    width: 50%;
+}
+
+.btn-check:active+.btn-outline-primary, .btn-check:checked+.btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active {
+    color: #fff;
+    background-color: #52bdec;
+    border-color: #52bdec;
+    font-weight: bold;
+}
+
+.btn-outline-primary {
+    background-color: #fff;
+    border-color: #c0c0c0;
+    font-weight: bold;
+    color: #0a1a30;
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #52bdec;
+    border-color: #52bdec;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active:focus, .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-outline-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, .5);
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #52bdec;
+    border-color: #52bdec;
+    font-weight: bold;
+}
+
+.btn-check:focus+.btn-outline-primary, .btn-outline-primary:focus {
+    box-shadow: 0 0 0 0 rgba(13, 110, 253, .5);
+}
+
+
+
+
