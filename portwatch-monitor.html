@@ -51,10 +51,9 @@
   </div>
   <div style="text-align: center;">
     <br>
-    <span style="color:#c0c0c0">ADJUST VIEW</span>
+    <!--<span style="color:#c0c0c0">ADJUST VIEW</span>-->
     <br>
-    <br>
-    <div class="btn-group" role="group" aria-label="Radio toggle button group">
+    <div class="btn-group" role="group" aria-label="Radio toggle button group" style="padding-top: 5px;">
       <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
       <label class="btn btn-outline-primary" for="btnradio1">Growth Rates</label>  
       <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
@@ -163,17 +162,16 @@ var queryAndChartData = function(regionid) {
 
     layer.queryFeatures(query).then((result) => {
 
-      var isIndexChecked = $('#switch').is(':checked'); 
+      var isIndexChecked = $('#btnradio2').is(':checked'); 
       var tabSelected = $('a.nav-link.active').attr('id');
       var series = generateData(result.features);
       var lastObs = series[series.length-1];
-      var seriesType = isIndexChecked ? "_MA" : "_GR_MA"
       var lastMonth = new Date(lastObs["date"]).toLocaleDateString('en-us', { year:"numeric", month:"long", timeZone:"UTC"});
       var lastValue, trend
 
       if (regionid == "WLD") {
         
-        lastValue = Math.round(lastObs["trade_value"+seriesType]*10)/10;
+        lastValue = Math.round(lastObs["trade_value_GR_MA"]*10)/10;
         trend = lastValue > 0 ? "increased" : "decreased";
         
         $("#sentence-text-tsval").html(
@@ -183,7 +181,7 @@ var queryAndChartData = function(regionid) {
             lastValue + " percent</b> over the last three months compared to a year ago."
         );
         
-        lastValue = Math.round(lastObs["trade_volume"+seriesType]*10)/10;
+        lastValue = Math.round(lastObs["trade_volume_GR_MA"]*10)/10;
         trend = lastValue > 0 ? "increased" : "decreased";
 
         $("#sentence-text-tsvol").html(
@@ -201,12 +199,11 @@ var queryAndChartData = function(regionid) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
         $(this).children().addClass('active');
         tabSelected = $('a.nav-link.active').attr('id');
-        isIndexChecked = $('#switch').is(':checked');
-        seriesType = isIndexChecked ? "_MA" : "_GR_MA";
+        isIndexChecked = $('#btnradio2').is(':checked');
 
         if (tabSelected == "trade_value") {
           if (regionid == 'WLD') {
-            lastValue = Math.round(lastObs["trade_value"+seriesType]*10)/10;
+            lastValue = Math.round(lastObs["trade_value_GR_MA"]*10)/10;
             trend = lastValue > 0 ? "increased" : "decreased";
             
             $("#sentence-text-tsval").html(
@@ -216,7 +213,7 @@ var queryAndChartData = function(regionid) {
                 lastValue + " percent</b> over the last three months compared to a year ago."
             );
 
-            lastValue = Math.round(lastObs["trade_volume"+seriesType]*10)/10;
+            lastValue = Math.round(lastObs["trade_volume_GR_MA"]*10)/10;
             trend = lastValue > 0 ? "increased" : "decreased";
 
             $("#sentence-text-tsvol").html(
@@ -232,7 +229,7 @@ var queryAndChartData = function(regionid) {
         } else {
           isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid, tabSelected): createGrowthRateChart(series, regionid, "container-"+regionid, tabSelected);
           if (regionid == 'WLD') {
-            lastValue = Math.round(lastObs[tabSelected+seriesType]*10)/10;
+            lastValue = Math.round(lastObs[tabSelected+"_GR_MA"]*10)/10;
             trend = lastValue > 0 ? "increased" : "decreased";
             $("#sentence-text-oth").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
@@ -247,17 +244,33 @@ var queryAndChartData = function(regionid) {
       }); 
 
 
-      $('#switch').on('change', function(e) {
-        const selected = $('a.nav-link.active').attr('id');
-        is_index_checked = $('#switch').is(':checked'); 
-        console.log("Selected: ", selected, is_index_checked);
-        if (selected == 'trade_summary') {
-          is_index_checked == true ?  createChart(series, regionid, "container-"+regionid+"-value", "trade_value") : createGrowthRateChart(series, regionid, "container-"+regionid+"-value", "trade_value");
-          is_index_checked == true ?  createChart(series, regionid, "container-"+regionid+"-volume", "trade_volume") : createGrowthRateChart(series, regionid, "container-"+regionid+"-volume", "trade_volume");
+      $('#btnradio2').on('change', function(e) {
+        tabSelected = $('a.nav-link.active').attr('id');
+        console.log("Selected: ", tabSelected);
+        if (tabSelected == 'trade_value') {
+          if (regionid == 'WLD') {
+            createChart(series, 'WLD', "container-WLD-value", "trade_value");
+            createChart(series, 'WLD', "container-WLD-volume", "trade_volume");
+          }
         } else {
-          is_index_checked == true ?  createChart(series, regionid, "container-"+regionid, selected): createGrowthRateChart(series, regionid, "container-"+regionid, selected);
+          createChart(series, regionid, "container-"+regionid, tabSelected);
         }
       });
+
+      $('#btnradio1').on('change', function(e) {
+        tabSelected = $('a.nav-link.active').attr('id');
+        console.log("Selected: ", tabSelected);
+        if (tabSelected == 'trade_value') {
+          if (regionid == 'WLD') {
+            createGrowthRateChart(series, 'WLD', "container-WLD-value", "trade_value");
+            createGrowthRateChart(series, 'WLD', "container-WLD-volume", "trade_volume");
+          }
+        } else {
+          createGrowthRateChart(series, regionid, "container-"+regionid, tabSelected);
+        }
+      });
+
+
     });
   });
 };
@@ -307,6 +320,18 @@ $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
 
         }
       
+})
+
+$('#btnradio1').on('change', function(e) {
+  $("#sentence-text-tsval").show();
+  $("#sentence-text-tsvol").show();
+  $("#sentence-text-oth").show();
+})
+
+$('#btnradio2').on('change', function(e) {
+  $("#sentence-text-tsval").hide();
+  $("#sentence-text-tsvol").hide();
+  $("#sentence-text-oth").hide();
 })
 
 
