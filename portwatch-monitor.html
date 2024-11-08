@@ -178,7 +178,7 @@ var queryAndChartData = function(regionid) {
         
         $("#sentence-text-tsval").html(
           "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global merchandise <b class='text-highlight'>trade value</b> over the last three months is estimated to have " +
+            "</b>, global merchandise <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
             trend + "</b> by <b class='text-highlight'>" + 
             lastValue + " percent</b> compared to a year ago."
         );
@@ -188,7 +188,7 @@ var queryAndChartData = function(regionid) {
 
         $("#sentence-text-tsvol").html(
           "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global merchandise <b class='text-highlight'>trade volume</b> over the last three months is estimated to have " +
+            "</b>, global merchandise <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
             trend + "</b> by <b class='text-highlight'>" + 
             lastValue + " percent</b> compared to a year ago."
         );
@@ -210,7 +210,7 @@ var queryAndChartData = function(regionid) {
             
             $("#sentence-text-tsval").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global merchandise <b class='text-highlight'>trade value</b> over the last three months is estimated to have " +
+                "</b>, global merchandise <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
                 trend + "</b> by <b class='text-highlight'>" + 
                 lastValue + " percent</b> compared to a year ago."
             );
@@ -220,7 +220,7 @@ var queryAndChartData = function(regionid) {
 
             $("#sentence-text-tsvol").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global merchandise <b class='text-highlight'>trade volume</b> over the last three months is estimated to have " +
+                "</b>, global merchandise <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
                 trend + "</b> by <b class='text-highlight'>" + 
                 lastValue + " percent</b> compared to a year ago."
             );
@@ -235,7 +235,7 @@ var queryAndChartData = function(regionid) {
             trend = lastValue > 0 ? "increased" : "decreased";
             $("#sentence-text-oth").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global merchandise <b class='text-highlight'> " + tabSelected.split('_').join(' ') + "</b> over the last three months is estimated to have " +
+                "</b>, global merchandise <b class='text-highlight'> " + tabSelected.split('_').join(' ') + "</b> over the last three months is estimated to have <b class='text-highlight'>" +
                 trend + "</b> by <b class='text-highlight'>" + 
                 lastValue + " percent</b> compared to a year ago."
             ); 
