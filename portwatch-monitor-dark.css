@@ -71,10 +71,13 @@ body {
 
 .sentence-text {
     color: #c0c0c0;
+    font-size: 1rem;
 }
 
 .text-highlight {
     color: #fff;
+    font-size: 1.1rem;
+
 }
 
 .btn-group  {
