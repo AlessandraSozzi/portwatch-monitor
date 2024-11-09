@@ -26,9 +26,9 @@
 
 </style>
 
-<div style="text-align: right; padding-right: 20; padding-top: 10;">
+<div style="text-align: right; padding-right: 20; padding-top: 10;color:#c0c0c0; font-size:1vw;">
   <p><img src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png">
-  <span style="color:#c0c0c0; font-size:1vw;">Updated: October 7, 2024</span>
+  <span>Updated: </span><span id="latest"></span>
   </p>
 </div>
 <div class="card text-center">
@@ -147,6 +147,11 @@ $(document).ready(function() {
 
 });
 
+$.get( "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0?f=json", function( data ) {
+  const lastEditDate = new Date(data.editingInfo.dataLastEditDate).toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric", timeZone:"UTC"});
+  $("#latest" ).html(lastEditDate);
+});
+
 
 var queryAndChartData = function(regionid) {
 
@@ -163,6 +168,7 @@ var queryAndChartData = function(regionid) {
       });
 
     layer.queryFeatures(query).then((result) => {
+  
 
       var isIndexChecked = $('#btnradio2').is(':checked'); 
       var tabSelected = $('a.nav-link.active').attr('id');
@@ -172,6 +178,7 @@ var queryAndChartData = function(regionid) {
       var lastValue, trend
 
       if (regionid == "WLD") {
+        console.log(result.editingInfo)
         
         lastValue = Math.round(lastObs["trade_value_GR_MA"]*10)/10;
         trend = lastValue > 0 ? "increased" : "decreased";
