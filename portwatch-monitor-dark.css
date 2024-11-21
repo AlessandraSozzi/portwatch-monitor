@@ -1,6 +1,6 @@
 body {
     background-color: #0a1a30;
-    font-family: Avenir Next;
+    font-family: Avenir Next !important;
 }
 
 #container {
