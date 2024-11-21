@@ -218,11 +218,7 @@ var labels = {
 var createChart = function(data, regionid, containerID, chartType="portcalls") {
 
     var options = {
-    
-        chart: {
-          backgroundColor: '#0a1a30'
-        },
-    
+        
         credits: {
             enabled: false
         },
@@ -336,8 +332,6 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
                         }];  
     
   
-    //console.log(options);
-
     var chart = new Highcharts.Chart(containerID, options);
   
     return options;
@@ -347,10 +341,6 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
 var createGrowthRateChart = function(data, regionid, containerID, chartType="portcalls") {
 
   var options = {
-  
-      chart: {
-        backgroundColor: '#0a1a30',
-      },
   
       credits: {
           enabled: false
@@ -377,7 +367,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         },
         column: {
           stacking: 'normal',
-          negativeColor: '#91FFFF',
+          negativeColor: '#FFFFED',
           threshold: 0
         }
         
@@ -455,8 +445,12 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
         tooltip: {
           valueDecimals: 1
       },
-        color: '#FFFFED',
-        showInLegend: true},
+        color: '#f3a90a',
+        showInLegend: true,
+        marker: {
+          symbol: 'url(https://www.highcharts.com/samples/graphics/sun.png)'
+        }
+        },
         { name: "3-month MA",
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
           type: 'spline',

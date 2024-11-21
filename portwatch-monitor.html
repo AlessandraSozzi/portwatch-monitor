@@ -27,7 +27,7 @@
 </style>
 
 <div style="text-align: right; padding-right: 20; padding-top: 10;color:#c0c0c0; font-size:1vw;">
-  <p><img src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png">
+  <p><img src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png" style="padding-right: 5px;">
   <span>Updated: </span><span id="latest"></span>
   </p>
 </div>
@@ -41,10 +41,10 @@
         <a class="nav-link" href="#" id="import_value">IMPORT VALUE</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" id="export_value">EXPORT VALUE</a>
+        <a class="nav-link" href="#" id="import_volume">IMPORT VOLUME</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" id="import_volume">IMPORT VOLUME</a>
+        <a class="nav-link" href="#" id="export_value">EXPORT VALUE</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#" id="export_volume">EXPORT VOLUME</a>
@@ -92,29 +92,36 @@
         <div class="col"><figure class="highcharts-figure"><div id="container-200"></div></figure></div>
       </div>
       <div class="row"  class="ts">
-        <div class="col"><figure class="highcharts-figure"><div id="container-163"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-505"></div></figure></div>
-      </div>
-      <div class="row" class="ts">
         <div class="col"><figure class="highcharts-figure"><div id="container-119"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-903"></div></figure></div>
-      </div>
-      <div class="row" class="ts">
         <div class="col"><figure class="highcharts-figure"><div id="container-123"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-205"></div></figure></div>
-      </div>
-      <div class="row" class="ts">
-        <div class="col"><figure class="highcharts-figure"><div id="container-998"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-400"></div></figure></div>
+       
       </div>
       <div class="row" class="ts">
         <div class="col"><figure class="highcharts-figure"><div id="container-510"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-603"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-505"></div></figure></div>
       </div>
+      <div class="row" class="ts">  
+        <div class="col"><figure class="highcharts-figure"><div id="container-903"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-400"></div></figure></div>
+      </div>
+
+      <div class="row" class="ts">
+        <div class="col"><figure class="highcharts-figure"><div id="container-603"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-205"></div></figure></div>
+      </div>
+      <!--<div class="row" class="ts">   
+        <div class="col"><figure class="highcharts-figure"><div id="container-163"></div></figure></div>
+        <div class="col"><figure class="highcharts-figure"><div id="container-998"></div></figure></div>
+      </div>--> 
   </div>
   <div style="margin-right:12px; margin-left:12px" >   
-    <span class="source" style="float:left;">Note: Country groups/regions are defined by the IMF World Economic Outlook (WEO) classification of economies.</span>               
-    <span class="source" style="float:right;text-align:right;">Sources: UN Global Platform; PortWatch.</span>  
+    <span class="source" style="float:right;text-align:right;">Source: IMF PortWatch (<a href="https://portwatch.imf.org/" target="_blank" style="color:#3b9ec5">portwatch.imf.org</a>).</span>      
+  </div>
+  <br>
+  <div style="margin-right:20px; margin-left:20px">
+    <span class="source" style="float:left;text-align:left;">Notes: In all charts, trade refers to trade in goods (merchandise trade) and is reported in both in value and volume terms. Exports and imports are both measured on a free-on-board (fob) basis. For detailed background information on methodology see <a href="#" target="_blank" style="color:#3b9ec5">here</a>.</span> 
+    <br>
+    <span class="source" style="float:left;text-align:left;">Country groups/regions are defined by the IMF World Economic Outlook (WEO) classification of economies. For more information on composition see <a href="https://www.imf.org/en/Publications/WEO/weo-database/2024/October/groups-and-aggregates" target="_blank" style="color:#3b9ec5">here</a>.</span> 
   </div>
   <br>
   <br>
@@ -134,13 +141,13 @@ $(document).ready(function() {
   queryAndChartData('WLD');
   queryAndChartData('110');
   queryAndChartData('200');
-  queryAndChartData('163');
+  //queryAndChartData('163');
   queryAndChartData('505');
   queryAndChartData('119');
   queryAndChartData('903');
   queryAndChartData('123');
   queryAndChartData('205');
-  queryAndChartData('998');
+  //queryAndChartData('998');
   queryAndChartData('400');
   queryAndChartData('510');
   queryAndChartData('603'); 
@@ -185,7 +192,7 @@ var queryAndChartData = function(regionid) {
         
         $("#sentence-text-tsval").html(
           "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global merchandise <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
             trend + "</b> by <b class='text-highlight'>" + 
             lastValue + " percent</b> compared to a year ago."
         );
@@ -195,7 +202,7 @@ var queryAndChartData = function(regionid) {
 
         $("#sentence-text-tsvol").html(
           "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global merchandise <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
             trend + "</b> by <b class='text-highlight'>" + 
             lastValue + " percent</b> compared to a year ago."
         );
@@ -217,7 +224,7 @@ var queryAndChartData = function(regionid) {
             
             $("#sentence-text-tsval").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global merchandise <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+                "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
                 trend + "</b> by <b class='text-highlight'>" + 
                 lastValue + " percent</b> compared to a year ago."
             );
@@ -227,7 +234,7 @@ var queryAndChartData = function(regionid) {
 
             $("#sentence-text-tsvol").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global merchandise <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
+                "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
                 trend + "</b> by <b class='text-highlight'>" + 
                 lastValue + " percent</b> compared to a year ago."
             );
@@ -242,7 +249,7 @@ var queryAndChartData = function(regionid) {
             trend = lastValue > 0 ? "increased" : "decreased";
             $("#sentence-text-oth").html(
               "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global merchandise <b class='text-highlight'> " + tabSelected.split('_').join(' ') + "</b> over the last three months is estimated to have <b class='text-highlight'>" +
+                "</b>, global maritime <b class='text-highlight'> " + tabSelected.split('_').join(' ') + "</b> over the last three months is estimated to have <b class='text-highlight'>" +
                 trend + "</b> by <b class='text-highlight'>" + 
                 lastValue + " percent</b> compared to a year ago."
             ); 
@@ -299,13 +306,13 @@ $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $("#div-WLD").hide();
           $("#container-110").hide();
           $("#container-200").hide();
-          $("#container-163").hide();
+          //$("#container-163").hide();
           $("#container-505").hide();
           $("#container-119").hide();
           $("#container-903").hide();
           $("#container-123").hide();
           $("#container-205").hide();
-          $("#container-998").hide();
+          //$("#container-998").hide();
           $("#container-400").hide();
           $("#container-510").hide();
           $("#container-603").hide();
@@ -316,13 +323,13 @@ $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
           $("#div-WLD").show();
           $("#container-110").show();
           $("#container-200").show();
-          $("#container-163").show();
+          //$("#container-163").show();
           $("#container-505").show();
           $("#container-119").show();
           $("#container-903").show();
           $("#container-123").show();
           $("#container-205").show();
-          $("#container-998").show();
+          //$("#container-998").show();
           $("#container-400").show();
           $("#container-510").show();
           $("#container-603").show();
