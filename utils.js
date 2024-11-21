@@ -180,32 +180,32 @@ var labels = {
       name: "Number of Ships"
     },
     import_volume: {
-      yAxis: "Index [2019 Avg. = 100]",
+      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
       title: "Monthly Import Volume",
       name: 'Import Volume'
     },
     export_volume: {
-      yAxis: "Index [2019 Avg. = 100]",
+      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
       title: "Monthly Export Volume",
       name: 'Export Volume'
     },
     import_value: {
-      yAxis: "Index [2019 Avg. = 100]",
+      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
       title: "Monthly Import Value",
       name: 'Import Volume'
     },
     trade_value: {
-      yAxis: "Index [2019 Avg. = 100]",
+      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
       title: "Monthly Trade Value",
       name: 'Trade Value'
     },
     trade_volume: {
-      yAxis: "Index [2019 Avg. = 100]",
+      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
       title: "Monthly Trade Volume",
       name: 'Trade Volume'
     },
     export_value: {
-      yAxis: "Index [2019 Avg. = 100]",
+      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
       title: "Monthly Export Value",
       name: 'Export Volume'
     },
@@ -285,8 +285,17 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
       text: region, 
       style: {
         color: '#c0c0c0',
-     }
-    };
+     },
+    }
+
+    options['subtitle'] = {
+      text: labels[chartType].yAxis,
+      align: 'left',
+      style: {
+        color: '#c0c0c0'
+      },  
+      x: 25
+    }
     
     options['yAxis'] = {
       gridLineColor: '#c0c0c0',
@@ -295,13 +304,10 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
           color: '#c0c0c0'
         }
       },
+      opposite: false,
       title: {
-        text: labels[chartType].yAxis,
-        style: {
-          color: '#c0c0c0'
-        }
-      },
-      opposite: false
+        text: ''
+      }
     }
 
     options['xAxis'] = {
@@ -324,7 +330,7 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
                             enabled: false, // auto
                             lineWidth: 1,
                           },
-                          color: '#FFFFED',
+                          color: '#f3a90a',
                           tooltip: {
                                 valueDecimals: 1
                             },
@@ -406,6 +412,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
     text:  region, 
     style: {
       color: '#c0c0c0',
+      y: -10
    }
   }
   
@@ -446,10 +453,7 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
           valueDecimals: 1
       },
         color: '#f3a90a',
-        showInLegend: true,
-        marker: {
-          symbol: 'url(https://www.highcharts.com/samples/graphics/sun.png)'
-        }
+        showInLegend: true
         },
         { name: "3-month MA",
           data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
