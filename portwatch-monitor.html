@@ -169,7 +169,8 @@ var queryAndChartData = function(regionid) {
         where: "ISO3='"+regionid+"'",
         returnGeometry: false,
         outFields: "*",
-        maxRecordCountFactor: 5
+        maxRecordCountFactor: 5,
+        cacheHint: true
       });
 
     layer.queryFeatures(query).then((result) => {
