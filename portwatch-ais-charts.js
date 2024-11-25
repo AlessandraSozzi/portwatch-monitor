@@ -1,6 +1,5 @@
-const shift = 12; // Changed from 52*7: 52*7days - to keep comparing mondays with mondays, tuesdays with tuesdays, etc
-const ma = 3;
-const gr = 12;
+const shift = 365; // Changed from 52*7: 52*7days - to keep comparing mondays with mondays, tuesdays with tuesdays, etc
+const ma = 7;
 
 var downloadSymbol = function(x, y, w, h) {
     const path = [
@@ -35,106 +34,73 @@ var movingAvg = function(array, countBefore, countAfter) {
     return result;
 };
 
-var indexed = function(series, column, base=2019) {
-  const values2019 = series.filter(x => x.date.getFullYear() == base).map(x => x[column]);
-  const avg2019 = values2019.reduce((sum, currentValue) => sum + currentValue, 0) / values2019.length;
-  return series.map(x => x[column]) / avg2019 * 100;
+var parsePort = function(features) {
+
+  var series = features.map((feature) => {
+      datapoint = {
+        date: feature.attributes.date, 
+        portid: feature.attributes.portid,
+        portname: feature.attributes.portname,
+        country: feature.attributes.country,
+        portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
+        portcalls_cargo: parseInt(feature.attributes.portcalls_cargo),
+        portcalls: parseInt(feature.attributes.portcalls),
+        import: parseFloat(feature.attributes.import),
+        export: parseFloat(feature.attributes.export),
+      }
+      return datapoint;
+  });
+
+  series.sort((a, b) => a.date - b.date);
+
+  //console.log(series);
+  return series;
+
 };
 
-function growthRate(array, countBefore) {
-  const result = [];
-  for (let i = 0; i < array.length; i++) {
-    if (i < countBefore) {
-      result.push(null);
-      continue;
+var groupPorts = function(data) {
+
+  const reduced = data.reduce((acc, item) => {
+    if (!acc[item.date]) {
+      acc[item.date] = {
+        date: item.date,
+        portcalls_tanker: 0,
+        portcalls_cargo: 0,
+        portcalls: 0,
+        import: 0,
+        export: 0,
+      };
     }
-    const growth = (array[i]/array[i-countBefore]-1)*100;
-    result.push(growth);
-  }
-  return result;
-}
+    acc[item.date]["portcalls_tanker"] += item.portcalls_tanker;
+    acc[item.date]["portcalls_cargo"] += item.portcalls_cargo;
+    acc[item.date]["portcalls"] += item.portcalls;
+    acc[item.date]["import"] += item.import;
+    acc[item.date]["export"] += item.export;
+    return acc;
+  }, {});
+
+  return Object.values(reduced);
+
+};
 
 
-var generateData = function(features) {
-
-    var series = features.map((feature) => {
-        datapoint = {
-          region: feature.attributes.region,
-          ISO3: feature.attributes.ISO3,
-          date: Date.parse(feature.attributes.date), 
-          portcalls_tanker: parseInt(feature.attributes.ais_portcalls_tanker),
-          portcalls_general_cargo: parseInt(feature.attributes.ais_portcalls_general_cargo),
-          portcalls_dry_bulk: parseInt(feature.attributes.ais_portcalls_dry_bulk),
-          portcalls_roro: parseInt(feature.attributes.ais_portcalls_roro),
-          portcalls_container: parseInt(feature.attributes.ais_portcalls_container),
-          import_volume: parseFloat(feature.attributes.volume_import_total),
-          export_volume: parseFloat(feature.attributes.volume_export_total),
-          import_value: parseFloat(feature.attributes.value_import_total),
-          export_value: parseFloat(feature.attributes.value_export_total),
-          trade_value: parseFloat(feature.attributes.trade_value),
-          trade_volume: parseFloat(feature.attributes.trade_volume)
-        }
-
-        datapoint['portcalls'] = (datapoint['portcalls_tanker']+
-                                  datapoint['portcalls_general_cargo']+
-                                  datapoint['portcalls_dry_bulk']+
-                                  datapoint['portcalls_roro']+
-                                  datapoint['portcalls_container'])
-
-        return datapoint;
-    });
+var generateIndicators = function(series) {
   
     series.sort((a, b) => a.date - b.date);
 
-    trade_value_MA = movingAvg(series.map(x => x.trade_value), ma, 0);
-    trade_volume_MA = movingAvg(series.map(x => x.trade_volume), ma, 0);
-    import_value_MA = movingAvg(series.map(x => x.import_value), ma, 0);
-    export_value_MA = movingAvg(series.map(x => x.export_value), ma, 0);
-    import_volume_MA = movingAvg(series.map(x => x.import_volume), ma, 0);
-    export_volume_MA = movingAvg(series.map(x => x.export_volume), ma, 0);
+    import_MA = movingAvg(series.map(x => x.import), ma, 0);
+    export_MA = movingAvg(series.map(x => x.export), ma, 0);
     portcalls_MA = movingAvg(series.map(x => x.portcalls), ma, 0);
 
-    portcalls_GR = growthRate(series.map(x => x.portcalls), gr).slice(gr, series.length);
-    import_value_GR = growthRate(series.map(x => x.import_value), gr).slice(gr, series.length);
-    export_value_GR = growthRate(series.map(x => x.export_value), gr).slice(gr, series.length);
-    import_volume_GR = growthRate(series.map(x => x.import_volume), gr).slice(gr, series.length);
-    export_volume_GR = growthRate(series.map(x => x.export_volume), gr).slice(gr, series.length);
-    trade_value_GR = growthRate(series.map(x => x.trade_value), gr).slice(gr, series.length);
-    trade_volume_GR = growthRate(series.map(x => x.trade_volume), gr).slice(gr, series.length);
-
-    portcalls_GR_MA = movingAvg(portcalls_GR, ma, 0);
-    import_value_GR_MA = movingAvg(import_value_GR, ma, 0);
-    export_value_GR_MA = movingAvg(export_value_GR, ma, 0);
-    import_volume_GR_MA = movingAvg(import_volume_GR, ma, 0);
-    export_volume_GR_MA = movingAvg(export_volume_GR, ma, 0);
-    trade_value_GR_MA = movingAvg(trade_value_GR, ma, 0);
-    trade_volume_GR_MA = movingAvg(trade_volume_GR, ma, 0);
-
-
     series = series.map(function(feature, i) {
+
+      feature['import_MA'] = import_MA[i];
+      feature['export_MA'] = export_MA[i];
       feature['portcalls_MA'] = portcalls_MA[i];
-      feature['import_value_MA'] = import_value_MA[i];
-      feature['export_value_MA'] = export_value_MA[i];
-      feature['import_volume_MA'] = import_volume_MA[i];
-      feature['export_volume_MA'] = export_volume_MA[i];
-      feature['trade_value_MA'] = trade_value_MA[i];
-      feature['trade_volume_MA'] = trade_volume_MA[i];
-      if (i >= gr) {
-        feature['portcalls_GR'] = portcalls_GR[i-gr];
-        feature['import_value_GR'] = import_value_GR[i-gr];
-        feature['export_value_GR'] = export_value_GR[i-gr];
-        feature['import_volume_GR'] = import_volume_GR[i-gr];
-        feature['export_volume_GR'] = export_volume_GR[i-gr];
-        feature['trade_value_GR'] = trade_value_GR[i-gr];
-        feature['trade_volume_GR'] = trade_volume_GR[i-gr];
-        // Moving Average of growth rates
-        feature['portcalls_GR_MA'] = portcalls_GR_MA[i-gr];
-        feature['import_value_GR_MA'] = import_value_GR_MA[i-gr];
-        feature['export_value_GR_MA'] = export_value_GR_MA[i-gr];
-        feature['import_volume_GR_MA'] = import_volume_GR_MA[i-gr];
-        feature['export_volume_GR_MA'] = export_volume_GR_MA[i-gr];
-        feature['trade_value_GR_MA'] = trade_value_GR_MA[i-gr];
-        feature['trade_volume_GR_MA'] = trade_volume_GR_MA[i-gr];
+      if (i > shift) {
+        feature['import_MA_shifted'] = import_MA[i-shift];
+        feature['export_MA_shifted'] = export_MA[i-shift];
+        feature['portcalls_MA_shifted'] = portcalls_MA[i-shift];
       }
       return feature;
     });
@@ -144,308 +110,169 @@ var generateData = function(features) {
 
 };
 
+var parseEvents = function(features) {
+  var series = features.map((feature) => {
+    datapoint = {
+      eventid: feature.attributes.eventid,
+      eventtype: feature.attributes.eventtype,
+      eventname: feature.attributes.eventname,
+      affectedports: feature.attributes.affectedports,
+      fromdate: feature.attributes.fromdate,
+      todate: feature.attributes.todate
+    }
+    return datapoint;
+  });
+  return series;
+}
+
 var labels = {
-    portcalls: {
-      yAxis: "Number of Ships",
-      title: "Monthly Arrivals of Ships",
-      name: "Number of Ships"
-    },
-    import_volume: {
-      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
-      title: "Monthly Import Volume",
-      name: 'Import Volume'
-    },
-    export_volume: {
-      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
-      title: "Monthly Export Volume",
-      name: 'Export Volume'
-    },
-    import_value: {
-      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
-      title: "Monthly Import Value",
-      name: 'Import Volume'
-    },
-    trade_value: {
-      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
-      title: "Monthly Trade Value",
-      name: 'Trade Value'
-    },
-    trade_volume: {
-      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
-      title: "Monthly Trade Volume",
-      name: 'Trade Volume'
-    },
-    export_value: {
-      yAxis: "Index [2019 avg. = 100]; not seasonally adjusted.",
-      title: "Monthly Export Value",
-      name: 'Export Volume'
-    },
-    growth_rate: {
-      yAxis: "Percentage Change",
-    }
-};
-
-
-var createChart = function(data, regionid, containerID, chartType="portcalls") {
-
-    var options = {
-        
-        credits: {
-            enabled: false
-        },
-    
-        legend: {
-          enabled: true,
-          itemHiddenStyle: {
-            color: '#fff'
-          },
-          itemHoverStyle: {
-            color: '#fff'
-          },
-          itemStyle: {
-            color: '#fff'
-          }
-    
-        },
-    
-        plotOptions: {
-          series: {
-              dataGrouping: {
-                enabled: false
-              },
-          },
-          column: {
-            stacking: 'normal'
-          }
-        },
-    
-        xAxis: {
-            plotBands: []
-        },
-    
-        exporting: {
-            enabled: true,
-            buttons: {
-                contextButton: {
-                    symbol: 'download',
-                    text: '',
-                  symbolFill: '#c0c0c0',
-                  symbolStroke: '#c0c0c0'
-                }
-            }
-        },
-        tooltip: {
-          style: {
-            color: '#fff'
-          }
-        },
-
-        series: []
-    };
-    
-    var region = data[0].region;   
-    if (chartType == "trade_value") 
-      region += " Trade Value";
-    if (chartType == "trade_volume") 
-      region += " Trade Volume";    
-    
-    //console.log(chartType);
-    //console.log(labels);
-    
-    options['title'] = {
-      text: region, 
-      style: {
-        color: '#c0c0c0',
-     },
-    }
-
-    options['subtitle'] = {
-      text: labels[chartType].yAxis,
-      align: 'left',
-      style: {
-        color: '#c0c0c0'
-      },  
-      x: 25
-    }
-    
-    options['yAxis'] = {
-      gridLineColor: '#c0c0c0',
-      labels: {
-        style: {
-          color: '#c0c0c0'
-        }
-      },
-      opposite: false,
-      title: {
-        text: ''
-      }
-    }
-
-    options['xAxis'] = {
-      gridLineColor: '#c0c0c0',
-      lineColor: '#c0c0c0',
-      labels: {
-        style: {
-          color: '#c0c0c0'
-        }
-      },
-      tickColor: '#c0c0c0',
-      type: 'datetime'
-    }
-  
- 
-    options.series = [{ name: chartType.replace("_", " ")+' Index',
-                          data: data.map(x => [x.date, x[chartType]]),
-                          type: 'line',
-                          marker: {
-                            enabled: false, // auto
-                            lineWidth: 1,
-                          },
-                          color: '#f3a90a',
-                          tooltip: {
-                                valueDecimals: 1
-                            },
-                          showInLegend: false          
-                        }];  
-    
-  
-    var chart = new Highcharts.Chart(containerID, options);
-  
-    return options;
-  
-};
-
-var createGrowthRateChart = function(data, regionid, containerID, chartType="portcalls") {
-
-  var options = {
-  
-      credits: {
-          enabled: false
-      },
-  
-      legend: {
-        enabled: true,
-        itemHiddenStyle: {
-          color: '#fff'
-        },
-        itemHoverStyle: {
-          color: '#fff'
-        },
-        itemStyle: {
-          color: '#fff'
-        }
-      },
-  
-      plotOptions: {
-        series: {
-            dataGrouping: {
-              enabled: false
-            },
-        },
-        column: {
-          stacking: 'normal',
-          negativeColor: '#FFFFED',
-          threshold: 0
-        }
-        
-      },
-  
-      xAxis: {
-          plotBands: []
-      },
-  
-      exporting: {
-          enabled: true,
-          buttons: {
-              contextButton: {
-                  symbol: 'download',
-                  text: '',
-                  symbolFill: '#c0c0c0',
-                  symbolStroke: '#c0c0c0'
-              }
-          }
-      },
-      tooltip: {
-        style: {
-          color: '#fff'
-        }
-      },
-      series: []
-  };
-  
-  var region = data[0].region;   
-  if (chartType == "trade_value") 
-    region += " Trade Value";
-  if (chartType == "trade_volume") 
-    region += " Trade Volume";   
-    
-  options['title'] = {
-    text:  region, 
-    style: {
-      color: '#c0c0c0',
-      y: -10
-   }
+  portcalls: {
+    yAxis: "Number of Ships",
+    title: "Arrivals of Ships",
+  },
+  import: {
+    yAxis: "Metric Tons",
+    title: "Import Volume",
+    name: 'Import Volume'
+  },
+  export: {
+    yAxis: "Metric Tons",
+    title: "Export Volume",
+    name: 'Export Volume'
   }
-  
-  options['yAxis'] = {
-    gridLineColor: '#c0c0c0',
-    labels: {
-      style: {
-        color: '#c0c0c0'
-      }
+};
+
+var options = {
+      
+  chart: {
+    backgroundColor: '#fff',
+  },
+
+  credits: {
+      enabled: false
+  },
+
+  legend: {
+    enabled: true
+
+  },
+
+  plotOptions: {
+    series: {
+        dataGrouping: {
+          enabled: false
+        },
+        showInNavigator: true
     },
-    title: {
-      text: labels['growth_rate'].yAxis,
-      style: {
-        color: '#c0c0c0'
+    column: {
+      stacking: 'normal'
+    }
+  },
+
+  rangeSelector: {
+      selected: 1
+  },
+
+  xAxis: {
+      plotBands: []
+  },
+
+  exporting: {
+      enabled: true,
+      buttons: {
+          contextButton: {
+              symbol: 'download',
+              text: 'Export Data'
+          }
       }
+  },
+
+
+  series: []
+};
+
+
+var createDisruptionAisChart = function(data, chartType="portcalls") {
+
+  options['yAxis'] = {
+    title: {
+      text: labels[chartType].yAxis
     },
     opposite: false
   }
 
-  options['xAxis'] = {
-    gridLineColor: '#c0c0c0',
-    lineColor: '#c0c0c0',
-    labels: {
-      style: {
-        color: '#c0c0c0'
-      }
-    },
-    tickColor: '#c0c0c0',
-    type: 'datetime'
-  }
+  if (chartType == "portcalls") {
 
-  options.series = [
-      { name: "Y-o-Y",
-        data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR']]),
+    options.series = [
+      { name: "Number of Cargo Ships",
+        data: data.map(x => [x.date, x['portcalls_cargo']]),
         type: 'column',
         stack: 1,
         tooltip: {
-          valueDecimals: 1
-      },
-        color: '#f3a90a',
-        showInLegend: true
+          valueDecimals: 0,
         },
-        { name: "3-month MA",
-          data: data.slice(gr, data.length).map(x => [x.date, x[chartType+'_GR_MA']]),
-          type: 'spline',
-          tooltip: {
-            valueDecimals: 1
-          },
-          marker: {
-            enabled: false
-          },
-          color: '#FFFFED',
-          dashStyle: 'LongDash',
-          showInLegend: true}];
+        color: '#afc5dc',
+        showInLegend: true},
+    { name: "Number of Tanker Ships",
+      data: data.map(x => [x.date, x['portcalls_tanker']]),
+      type: 'column',
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
+      },
+      color: '#004c97',
+      showInLegend: true}];
 
-  //console.log(options);
+  } else {
+    options.series = [{ name: labels[chartType].name,
+                        data: data.map(x => [x.date, x[chartType]]),
+                        type: 'column',
+                        tooltip: {
+                          valueDecimals: 0,
+                        },
+                        color: '#004c97',
+                        showInLegend: true}];
+  }
 
-  var chart = new Highcharts.Chart(containerID, options);
 
-  return options;
+  options.series = options.series.concat([
+  { name: '7-day Moving Average',
+    data: data.map(x => [x.date, x[chartType+"_MA"]]),
+    type: 'line',
+    marker: {
+      enabled: false, // auto
+      lineWidth: 1,
+    },
+    color: '#f3ab0a',
+    tooltip: {
+          valueDecimals: 0,
+      },
+    showInLegend: true          
+  },
+  { name: 'Prior Year: 7-day Moving Average',
+    data: data.slice(shift+1).map(x => [x.date, x[chartType+"_MA_shifted"]]),
+    type: 'line',
+    marker: {
+      enabled: false, // auto
+      lineWidth: 1,
+    },
+    dashStyle: 'Dash',
+    color: '#474747',
+    tooltip: {
+          valueDecimals: 0,
+      },
+    showInLegend: true          
+  }]);
 
+  options['title'] = {
+    text: "Aggregated " + labels[chartType].title
+  };
+
+  var chart = new Highcharts.stockChart('container', options);
+  
 };
+
+
 
 
 
@@ -455,7 +282,5 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
 console.log(labels);
 
 console.log(movingAvg([1,2,3,1,1,1], 2));
-
-console.log(growthRate([1,2,3,1,1,1], 3));
 
 
