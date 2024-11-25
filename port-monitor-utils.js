@@ -55,35 +55,6 @@ function growthRate(array, countBefore) {
 }
 
 
-function indexedGrowthRate(array, countBefore) {
-  const result = [];
-  for (let i = 0; i < array.length; i++) {
-    if (i < countBefore) {
-      result.push(null);
-      continue;
-    }
-    const growth = (array[i]/array[i-countBefore]-1)*100;
-    result.push(growth);
-  }
-  return result;
-}
-
-var indexedMovingAvg = function(array, countBefore, countAfter) {
-  if (countAfter == undefined) countAfter = 0;
-  const result = [];
-  for (let i = 0; i < array.length; i++) {
-    if (i < (countBefore-1)) {
-      result.push(null);
-      continue;
-    }
-    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
-    const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
-    result.push(avg);
-  }
-  return result;
-};
-
-
 var generateData = function(features) {
 
     var series = features.map((feature) => {
