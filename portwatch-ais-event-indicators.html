@@ -100,6 +100,9 @@ var queryAndChartData = function(eventid) {
                   
                   const ports = event["affectedports"].split("; ");
                   console.log(event, ports);
+                  if (event.todate == null) {
+                    event.todate = Date.now(); 
+                  }
 
                   options['xAxis']['plotBands'].push({
                         color: 'rgba(255, 0, 0, 0.1)', // Red
