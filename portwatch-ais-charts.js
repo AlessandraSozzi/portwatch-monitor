@@ -118,7 +118,7 @@ var parseEvents = function(features) {
       eventname: feature.attributes.eventname,
       affectedports: feature.attributes.affectedports,
       fromdate: feature.attributes.fromdate,
-      todate: feature.attributes.todate
+      todate: feature.attributes.todate == null ? Date.now() :  feature.attributes.todate
     }
     return datapoint;
   });
@@ -270,6 +270,86 @@ var createDisruptionAisChart = function(data, chartType="portcalls") {
 
   var chart = new Highcharts.stockChart('container', options);
   
+};
+
+
+var createAisChart = function(data, chartType="portcalls") {
+
+  options['title'] = {
+    text: data[0].portname + ": " + labels[chartType].title
+  };
+
+  options['yAxis'] = {
+    title: {
+      text: labels[chartType].yAxis
+    },
+    opposite: false
+  }
+
+  if (chartType == "portcalls") {
+
+    options.series = [
+      { name: "Number of Cargo Ships",
+        data: data.map(x => [x.date, x['portcalls_cargo']]),
+        type: 'column',
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: '#afc5dc',
+        showInLegend: true},
+    { name: "Number of Tanker Ships",
+      data: data.map(x => [x.date, x['portcalls_tanker']]),
+      type: 'column',
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
+      },
+      color: '#004c97',
+      showInLegend: true}];
+
+  } else {
+    options.series = [{ name: labels[chartType].name,
+                        data: data.map(x => [x.date, x[chartType]]),
+                        type: 'column',
+                        tooltip: {
+                          valueDecimals: 0,
+                        },
+                        color: '#004c97',
+                        showInLegend: true}];
+  }
+
+
+  options.series = options.series.concat([
+  { name: '7-day Moving Average',
+    data: data.map(x => [x.date, x[chartType+"_MA"]]),
+    type: 'line',
+    marker: {
+      enabled: false, // auto
+      lineWidth: 1,
+    },
+    color: '#f3ab0a',
+    tooltip: {
+          valueDecimals: 0,
+      },
+    showInLegend: true          
+  },
+  { name: 'Prior Year: 7-day Moving Average',
+    data: data.slice(shift+1).map(x => [x.date, x[chartType+"_MA_shifted"]]),
+    type: 'line',
+    marker: {
+      enabled: false, // auto
+      lineWidth: 1,
+    },
+    dashStyle: 'Dash',
+    color: '#474747',
+    tooltip: {
+          valueDecimals: 0,
+      },
+    showInLegend: true          
+  }]);
+
+  var chart = new Highcharts.stockChart('container', options);  
 };
 
 

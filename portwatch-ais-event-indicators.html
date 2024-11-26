@@ -98,11 +98,8 @@ var queryAndChartData = function(eventid) {
                 })
                 .then((event) => {
                   
-                  const ports = event["affectedports"].split("; ");
-                  console.log(event, ports);
-                  if (event.todate == null) {
-                    event.todate = Date.now(); 
-                  }
+                  const affectedports = event["affectedports"].split("; ");
+                  console.log(event, affectedports);
 
                   options['xAxis']['plotBands'].push({
                         color: 'rgba(255, 0, 0, 0.1)', // Red
@@ -140,7 +137,7 @@ var queryAndChartData = function(eventid) {
                     return results;
                   }
 
-                  executeDynamicQueries(ports).then((ports) => {
+                  executeDynamicQueries(affectedports).then((ports) => {
                       var portsnote = [];
                       ports.forEach(portData => portsnote.push(portData[0].portname + " (" + portData[0].country + ")"));
                       $('#ports').text("Ports included: "+ portsnote.sort().join("; ") + ".")
