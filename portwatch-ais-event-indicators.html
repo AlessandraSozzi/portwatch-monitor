@@ -119,6 +119,15 @@ var queryAndChartData = function(eventid) {
                         }
                   });
 
+                  // Set extent of chart around disruption if disruption is older than last 3 months
+                  fromdate = event.fromdate
+                  currentMin = Date.now()-(24*60*60*1000*90);
+                  //console.log(currentMin, fromdate); 
+                  if (currentMin >= fromdate) {
+                    options['xAxis']['min'] = fromdate-(24*60*60*1000*30);
+                    options['xAxis']['max'] = fromdate+(24*60*60*1000*60);
+                  }
+
                   async function executeDynamicQueries(portids) {
                     const promises = portids.map(portid => {
                       // Assuming your query function returns a promise
@@ -147,6 +156,7 @@ var queryAndChartData = function(eventid) {
                     const grouped = groupPorts(data);
                     const final = generateIndicators(grouped);
                     //console.log(final);
+
                     createDisruptionAisChart(final, "portcalls");
 
                     $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
