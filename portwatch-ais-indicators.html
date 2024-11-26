@@ -66,7 +66,7 @@ $(document).ready(function() {
   const urlParams = new URLSearchParams(queryString);
   var portid = urlParams.get('portid');
   portid = portid == null ? 'port0' : portid;
-  console.log(portid);
+  //console.log(portid);
 
   queryAndChartData(portid); 
 
@@ -112,7 +112,7 @@ var queryAndChartData = function(portid) {
 
         [port, events] = results;
         const final = generateIndicators(port);
-        console.log(events, final);
+        //console.log(events, final);
 
         events.forEach((event) => {
           options['xAxis']['plotBands'].push({
@@ -141,7 +141,7 @@ var queryAndChartData = function(portid) {
         $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
         $(this).children().addClass('active');
         const selected = $(this).attr('id');
-        console.log(selected);
+        //console.log(selected);
         createDisruptionAisChart(final, selected);
       }); 
                   

@@ -67,7 +67,7 @@ $(document).ready(function() {
   const urlParams = new URLSearchParams(queryString);
   var eventid = urlParams.get('eventid');
   eventid = eventid == undefined ? 1001111 : eventid;
-  console.log(eventid);
+  //console.log(eventid);
 
   queryAndChartData(eventid); 
 
@@ -99,7 +99,7 @@ var queryAndChartData = function(eventid) {
                 .then((event) => {
                   
                   const affectedports = event["affectedports"].split("; ");
-                  console.log(event, affectedports);
+                  //console.log(event, affectedports);
 
                   options['xAxis']['plotBands'].push({
                         color: 'rgba(255, 0, 0, 0.1)', // Red
@@ -146,14 +146,14 @@ var queryAndChartData = function(eventid) {
                   .then((data) => {
                     const grouped = groupPorts(data);
                     const final = generateIndicators(grouped);
-                    console.log(final);
+                    //console.log(final);
                     createDisruptionAisChart(final, "portcalls");
 
                     $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
                       $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
                       $(this).children().addClass('active');
                       const selected = $(this).attr('id');
-                      console.log(selected);
+                      //console.log(selected);
                       createDisruptionAisChart(final, selected);
                     }); 
                   });

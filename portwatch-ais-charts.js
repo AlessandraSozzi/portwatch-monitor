@@ -359,8 +359,8 @@ var createAisChart = function(data, chartType="portcalls") {
 
 /// TESTS
 
-console.log(labels);
+//console.log(labels);
 
-console.log(movingAvg([1,2,3,1,1,1], 2));
+//console.log(movingAvg([1,2,3,1,1,1], 2));
 
 
