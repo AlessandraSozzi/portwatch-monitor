@@ -184,6 +184,7 @@ var queryAndChartData = function(regionid) {
       var lastValue, trend
 
       if (regionid == "WLD") {
+        console.log(series)
         console.log(result.editingInfo)
         
         lastValue = Math.round(lastObs["trade_value_GR_MA"]*10)/10;
