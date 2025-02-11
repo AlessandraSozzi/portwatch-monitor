@@ -120,6 +120,7 @@ var queryAndChartData = function(regionid) {
       const is_growth_checked = $('#switch').is(':checked'); 
 
       var series = generateData(result.features);
+      console.log(series)
       is_growth_checked == true ? createGrowthRateChart(series, regionid, "container-"+regionid, "portcalls") : createChart(series, regionid, "container-"+regionid, "portcalls");
 
       $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
