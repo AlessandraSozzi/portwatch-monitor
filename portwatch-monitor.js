@@ -294,7 +294,7 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
     }
   
  
-    options.series = [{ name: chartType.replace("_", " ")+' Index',
+    options.series = [{ name: chartType.replace("_", " ")+' index',
                           data: data.map(x => [x.date, x[chartType]]),
                           type: 'line',
                           marker: {
