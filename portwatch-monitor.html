@@ -2,355 +2,530 @@
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/stock/modules/data.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+/>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://js.arcgis.com/4.28/"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
 <script src="portwatch-monitor.js"></script>
-<link rel="stylesheet" type="text/css" href="portwatch-monitor.css">
+<link rel="stylesheet" type="text/css" href="portwatch-monitor.css" />
 
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous"
+></script>
 <style>
- /*
+  /*
   .not-show {
    display: none; 
   }*/
-
 </style>
 
-<div style="text-align: right; padding-right: 20; padding-top: 10;color:#c0c0c0; font-size:1vw;">
-  <p><img src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png" style="padding-right: 5px;">
-  <span>Updated: </span><span id="latest"></span>
+<div
+  style="
+    text-align: right;
+    padding-right: 20;
+    padding-top: 10;
+    color: #c0c0c0;
+    font-size: 1vw;
+  "
+>
+  <p>
+    <img
+      src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png"
+      style="padding-right: 5px"
+    />
+    <span>Updated: </span><span id="latest"></span>
   </p>
 </div>
 <div class="card text-center">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs justify-content-center">
       <li class="nav-item">
-        <a class="nav-link active" href="#" id="trade_value">TRADE SUMMARY</a>
+        <a class="nav-link active" href="#" id="trade_value">TRADE VALUE</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" id="import_value">IMPORT VALUE</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" id="import_volume">IMPORT VOLUME</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" id="export_value">EXPORT VALUE</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" id="export_volume">EXPORT VOLUME</a>
+        <a class="nav-link" href="#" id="import_value">TRADE VOLUME</a>
       </li>
     </ul>
   </div>
-  <div style="text-align: center;">
-    <br>
+  <div style="text-align: center">
+    <br />
     <!--<span style="color:#c0c0c0">ADJUST VIEW</span>-->
-    <br>
-    <div class="btn-group" role="group" aria-label="Radio toggle button group" style="padding-top: 5px;">
-      <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-      <label class="btn btn-outline-primary" for="btnradio1">Growth Rates</label>  
-      <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+    <br />
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Radio toggle button group"
+      style="padding-top: 5px"
+    >
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio1"
+        autocomplete="off"
+        checked
+      />
+      <label class="btn btn-outline-primary" for="btnradio1"
+        >Growth Rates</label
+      >
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio2"
+        autocomplete="off"
+      />
       <label class="btn btn-outline-primary" for="btnradio2">Index</label>
     </div>
   </div>
   <div class="card-body">
-      <div class="row" class="ts" id="div-WLD-value">
-        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
-          <span id="sentence-text-tsval" class="sentence-text"></span>
-        </div> 
+    <div class="row" class="ts" id="div-WLD-value">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-tsval" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD-value"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts" id="div-WLD-volume">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-tsvol" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD-volume"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts" id="div-WLD">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-oth" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts">
+      <div class="col">
         <figure class="highcharts-figure">
-            <div id="container-WLD-value"></div>
+          <div id="container-110"></div>
         </figure>
       </div>
-      <div class="row" class="ts" id="div-WLD-volume">
-        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
-          <span id="sentence-text-tsvol" class="sentence-text"></span>
-        </div> 
+      <div class="col">
         <figure class="highcharts-figure">
-            <div id="container-WLD-volume"></div>
+          <div id="container-200"></div>
         </figure>
       </div>
-      <div class="row" class="ts" id="div-WLD">
-        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20;">
-          <span id="sentence-text-oth" class="sentence-text"></span>
-        </div> 
+    </div>
+    <div class="row" class="ts">
+      <div class="col">
         <figure class="highcharts-figure">
-            <div id="container-WLD"></div>
+          <div id="container-119"></div>
         </figure>
       </div>
-      <div class="row" class="ts">
-        <div class="col"><figure class="highcharts-figure"><div id="container-110"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-200"></div></figure></div>
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-123"></div>
+        </figure>
       </div>
-      <div class="row"  class="ts">
-        <div class="col"><figure class="highcharts-figure"><div id="container-119"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-123"></div></figure></div>
-       
+    </div>
+    <div class="row" class="ts">
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-510"></div>
+        </figure>
       </div>
-      <div class="row" class="ts">
-        <div class="col"><figure class="highcharts-figure"><div id="container-510"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-505"></div></figure></div>
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-505"></div>
+        </figure>
       </div>
-      <div class="row" class="ts">  
-        <div class="col"><figure class="highcharts-figure"><div id="container-903"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-400"></div></figure></div>
+    </div>
+    <div class="row" class="ts">
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-903"></div>
+        </figure>
       </div>
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-400"></div>
+        </figure>
+      </div>
+    </div>
 
-      <div class="row" class="ts">
-        <div class="col"><figure class="highcharts-figure"><div id="container-603"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-205"></div></figure></div>
+    <div class="row" class="ts">
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-603"></div>
+        </figure>
       </div>
-      <!--<div class="row" class="ts">   
+      <div class="col">
+        <figure class="highcharts-figure">
+          <div id="container-205"></div>
+        </figure>
+      </div>
+    </div>
+    <!--<div class="row" class="ts">   
         <div class="col"><figure class="highcharts-figure"><div id="container-163"></div></figure></div>
         <div class="col"><figure class="highcharts-figure"><div id="container-998"></div></figure></div>
-      </div>--> 
+      </div>-->
   </div>
-  <div style="margin-right:12px; margin-left:12px" >   
-    <span class="source" style="float:right;text-align:right;">Source: IMF PortWatch (<a href="https://portwatch.imf.org/" target="_blank" style="color:#3b9ec5">portwatch.imf.org</a>).</span>      
+  <div style="margin-right: 12px; margin-left: 12px">
+    <span class="source" style="float: right; text-align: right"
+      >Source: IMF PortWatch (<a
+        href="https://portwatch.imf.org/"
+        target="_blank"
+        style="color: #3b9ec5"
+        >portwatch.imf.org</a
+      >).</span
+    >
   </div>
-  <br>
-  <div style="margin-right:20px; margin-left:20px">
-    <span class="source" style="float:left;text-align:left;">Notes: In all charts, trade refers to trade in goods (merchandise trade) and is reported in both in value and volume terms. Exports and imports are both measured on a free-on-board (fob) basis. For detailed background information on methodology see <a href="#" target="_blank" style="color:#3b9ec5">here</a>. Country groups/regions are defined by the IMF World Economic Outlook (WEO) classification of economies. For more information on composition see <a href="https://www.imf.org/en/Publications/WEO/weo-database/2024/October/groups-and-aggregates" target="_blank" style="color:#3b9ec5">here</a>.</span> 
+  <br />
+  <div style="margin-right: 20px; margin-left: 20px">
+    <span class="source" style="float: left; text-align: left"
+      >Notes: In all charts, trade refers to trade in goods (merchandise trade)
+      and is reported in both in value and volume terms. Exports and imports are
+      both measured on a free-on-board (fob) basis. For detailed background
+      information on methodology see
+      <a href="#" target="_blank" style="color: #3b9ec5">here</a>. Country
+      groups/regions are defined by the IMF World Economic Outlook (WEO)
+      classification of economies. For more information on composition see
+      <a
+        href="https://www.imf.org/en/Publications/WEO/weo-database/2024/October/groups-and-aggregates"
+        target="_blank"
+        style="color: #3b9ec5"
+        >here</a
+      >.</span
+    >
   </div>
-  <br>
-  <br>
+  <br />
+  <br />
 </div>
 
 <script>
+  var baseUrl =
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0";
 
-var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0"
+  Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
 
-Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol; 
+  var showSummaryOn = true;
 
-var showSummaryOn = true;
+  $(document).ready(function () {
+    queryAndChartData("WLD");
+    queryAndChartData("110");
+    queryAndChartData("200");
+    //queryAndChartData('163');
+    queryAndChartData("505");
+    queryAndChartData("119");
+    queryAndChartData("903");
+    queryAndChartData("123");
+    queryAndChartData("205");
+    //queryAndChartData('998');
+    queryAndChartData("400");
+    queryAndChartData("510");
+    queryAndChartData("603");
+  });
 
+  $.get(
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0?f=json",
+    function (data) {
+      const lastEditDate = new Date(
+        data.editingInfo.dataLastEditDate
+      ).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+      });
+      $("#latest").html(lastEditDate);
+    }
+  );
 
-$(document).ready(function() {
-
-  queryAndChartData('WLD');
-  queryAndChartData('110');
-  queryAndChartData('200');
-  //queryAndChartData('163');
-  queryAndChartData('505');
-  queryAndChartData('119');
-  queryAndChartData('903');
-  queryAndChartData('123');
-  queryAndChartData('205');
-  //queryAndChartData('998');
-  queryAndChartData('400');
-  queryAndChartData('510');
-  queryAndChartData('603'); 
-
-});
-
-$.get( "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0?f=json", function( data ) {
-  const lastEditDate = new Date(data.editingInfo.dataLastEditDate).toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric", timeZone:"UTC"});
-  $("#latest" ).html(lastEditDate);
-});
-
-
-var queryAndChartData = function(regionid) {
-
-  require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
+  var queryAndChartData = function (regionid) {
+    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
+      FeatureLayer,
+      Query
+    ) => {
       const layer = new FeatureLayer({
-        url: baseUrl
+        url: baseUrl,
       });
 
       const query = new Query({
-        where: "ISO3='"+regionid+"'",
+        where: "ISO3='" + regionid + "'",
         returnGeometry: false,
         outFields: "*",
         maxRecordCountFactor: 5,
-        cacheHint: true
+        cacheHint: true,
       });
 
-    layer.queryFeatures(query).then((result) => {
-  
+      layer.queryFeatures(query).then((result) => {
+        var isIndexChecked = $("#btnradio2").is(":checked");
+        var tabSelected = $("a.nav-link.active").attr("id");
+        var series = generateData(result.features);
+        var lastObs = series[series.length - 1];
+        var lastMonth = new Date(lastObs["date"]).toLocaleDateString("en-us", {
+          year: "numeric",
+          month: "long",
+          timeZone: "UTC",
+        });
+        var lastValue, trend;
 
-      var isIndexChecked = $('#btnradio2').is(':checked'); 
-      var tabSelected = $('a.nav-link.active').attr('id');
-      var series = generateData(result.features);
-      var lastObs = series[series.length-1];
-      var lastMonth = new Date(lastObs["date"]).toLocaleDateString('en-us', { year:"numeric", month:"long", timeZone:"UTC"});
-      var lastValue, trend
+        if (regionid == "WLD") {
+          console.log(series);
+          console.log(result.editingInfo);
 
-      if (regionid == "WLD") {
-        console.log(series)
-        console.log(result.editingInfo)
-        
-        lastValue = Math.round(lastObs["trade_value_GR_MA"]*10)/10;
-        trend = lastValue > 0 ? "increased" : "decreased";
-        
-        $("#sentence-text-tsval").html(
-          "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
-            trend + "</b> by <b class='text-highlight'>" + 
-            lastValue + " percent</b> compared to a year ago."
-        );
-        
-        lastValue = Math.round(lastObs["trade_volume_GR_MA"]*10)/10;
-        trend = lastValue > 0 ? "increased" : "decreased";
+          lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
 
-        $("#sentence-text-tsvol").html(
-          "As of <b class='text-highlight'>end-"+ lastMonth + 
-            "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
-            trend + "</b> by <b class='text-highlight'>" + 
-            lastValue + " percent</b> compared to a year ago."
-        );
+          $("#sentence-text-tsval").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
 
-        isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-value", "trade_value") : createGrowthRateChart(series, "WLD", "container-WLD-value", "trade_value");
-        isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-volume", "trade_volume") : createGrowthRateChart(series, "WLD", "container-WLD-volume", "trade_volume");
-      }
+          lastValue = Math.round(lastObs["trade_volume_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
 
-      $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-        $(this).children().addClass('active');
-        tabSelected = $('a.nav-link.active').attr('id');
-        isIndexChecked = $('#btnradio2').is(':checked');
+          $("#sentence-text-tsvol").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
 
-        if (tabSelected == "trade_value") {
-          if (regionid == 'WLD') {
-            lastValue = Math.round(lastObs["trade_value_GR_MA"]*10)/10;
-            trend = lastValue > 0 ? "increased" : "decreased";
-            
-            $("#sentence-text-tsval").html(
-              "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
-                trend + "</b> by <b class='text-highlight'>" + 
-                lastValue + " percent</b> compared to a year ago."
+          isIndexChecked == true
+            ? createChart(series, "WLD", "container-WLD-value", "trade_value")
+            : createGrowthRateChart(
+                series,
+                "WLD",
+                "container-WLD-value",
+                "trade_value"
+              );
+          isIndexChecked == true
+            ? createChart(series, "WLD", "container-WLD-volume", "trade_volume")
+            : createGrowthRateChart(
+                series,
+                "WLD",
+                "container-WLD-volume",
+                "trade_volume"
+              );
+        }
+
+        $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+          $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+          $(this).children().addClass("active");
+          tabSelected = $("a.nav-link.active").attr("id");
+          isIndexChecked = $("#btnradio2").is(":checked");
+
+          if (tabSelected == "trade_value") {
+            if (regionid == "WLD") {
+              lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
+              trend = lastValue > 0 ? "increased" : "decreased";
+
+              $("#sentence-text-tsval").html(
+                "As of <b class='text-highlight'>end-" +
+                  lastMonth +
+                  "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+                  trend +
+                  "</b> by <b class='text-highlight'>" +
+                  lastValue +
+                  " percent</b> compared to a year ago."
+              );
+
+              lastValue = Math.round(lastObs["trade_volume_GR_MA"] * 10) / 10;
+              trend = lastValue > 0 ? "increased" : "decreased";
+
+              $("#sentence-text-tsvol").html(
+                "As of <b class='text-highlight'>end-" +
+                  lastMonth +
+                  "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
+                  trend +
+                  "</b> by <b class='text-highlight'>" +
+                  lastValue +
+                  " percent</b> compared to a year ago."
+              );
+
+              isIndexChecked == true
+                ? createChart(
+                    series,
+                    "WLD",
+                    "container-WLD-value",
+                    "trade_value"
+                  )
+                : createGrowthRateChart(
+                    series,
+                    "WLD",
+                    "container-WLD-value",
+                    "trade_value"
+                  );
+              isIndexChecked == true
+                ? createChart(
+                    series,
+                    "WLD",
+                    "container-WLD-volume",
+                    "trade_volume"
+                  )
+                : createGrowthRateChart(
+                    series,
+                    "WLD",
+                    "container-WLD-volume",
+                    "trade_volume"
+                  );
+            }
+          } else {
+            isIndexChecked == true
+              ? createChart(
+                  series,
+                  regionid,
+                  "container-" + regionid,
+                  tabSelected
+                )
+              : createGrowthRateChart(
+                  series,
+                  regionid,
+                  "container-" + regionid,
+                  tabSelected
+                );
+            if (regionid == "WLD") {
+              lastValue = Math.round(lastObs[tabSelected + "_GR_MA"] * 10) / 10;
+              trend = lastValue > 0 ? "increased" : "decreased";
+              $("#sentence-text-oth").html(
+                "As of <b class='text-highlight'>end-" +
+                  lastMonth +
+                  "</b>, global maritime <b class='text-highlight'> " +
+                  tabSelected.split("_").join(" ") +
+                  "</b> over the last three months is estimated to have <b class='text-highlight'>" +
+                  trend +
+                  "</b> by <b class='text-highlight'>" +
+                  lastValue +
+                  " percent</b> compared to a year ago."
+              );
+            }
+          }
+        });
+
+        $("#btnradio2").on("change", function (e) {
+          tabSelected = $("a.nav-link.active").attr("id");
+          console.log("Selected: ", tabSelected);
+          if (tabSelected == "trade_value") {
+            if (regionid == "WLD") {
+              createChart(series, "WLD", "container-WLD-value", "trade_value");
+              createChart(
+                series,
+                "WLD",
+                "container-WLD-volume",
+                "trade_volume"
+              );
+            }
+          } else {
+            createChart(series, regionid, "container-" + regionid, tabSelected);
+          }
+        });
+
+        $("#btnradio1").on("change", function (e) {
+          tabSelected = $("a.nav-link.active").attr("id");
+          console.log("Selected: ", tabSelected);
+          if (tabSelected == "trade_value") {
+            if (regionid == "WLD") {
+              createGrowthRateChart(
+                series,
+                "WLD",
+                "container-WLD-value",
+                "trade_value"
+              );
+              createGrowthRateChart(
+                series,
+                "WLD",
+                "container-WLD-volume",
+                "trade_volume"
+              );
+            }
+          } else {
+            createGrowthRateChart(
+              series,
+              regionid,
+              "container-" + regionid,
+              tabSelected
             );
-
-            lastValue = Math.round(lastObs["trade_volume_GR_MA"]*10)/10;
-            trend = lastValue > 0 ? "increased" : "decreased";
-
-            $("#sentence-text-tsvol").html(
-              "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
-                trend + "</b> by <b class='text-highlight'>" + 
-                lastValue + " percent</b> compared to a year ago."
-            );
-
-            isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-value", "trade_value") : createGrowthRateChart(series, "WLD", "container-WLD-value", "trade_value");
-            isIndexChecked == true ?  createChart(series, "WLD", "container-WLD-volume", "trade_volume") : createGrowthRateChart(series, "WLD", "container-WLD-volume", "trade_volume");
           }
-        } else {
-          isIndexChecked == true ?  createChart(series, regionid, "container-"+regionid, tabSelected): createGrowthRateChart(series, regionid, "container-"+regionid, tabSelected);
-          if (regionid == 'WLD') {
-            lastValue = Math.round(lastObs[tabSelected+"_GR_MA"]*10)/10;
-            trend = lastValue > 0 ? "increased" : "decreased";
-            $("#sentence-text-oth").html(
-              "As of <b class='text-highlight'>end-"+ lastMonth + 
-                "</b>, global maritime <b class='text-highlight'> " + tabSelected.split('_').join(' ') + "</b> over the last three months is estimated to have <b class='text-highlight'>" +
-                trend + "</b> by <b class='text-highlight'>" + 
-                lastValue + " percent</b> compared to a year ago."
-            ); 
-
-          }
-        }
-
-      }); 
-
-
-      $('#btnradio2').on('change', function(e) {
-        tabSelected = $('a.nav-link.active').attr('id');
-        console.log("Selected: ", tabSelected);
-        if (tabSelected == 'trade_value') {
-          if (regionid == 'WLD') {
-            createChart(series, 'WLD', "container-WLD-value", "trade_value");
-            createChart(series, 'WLD', "container-WLD-volume", "trade_volume");
-          }
-        } else {
-          createChart(series, regionid, "container-"+regionid, tabSelected);
-        }
+        });
       });
-
-      $('#btnradio1').on('change', function(e) {
-        tabSelected = $('a.nav-link.active').attr('id');
-        console.log("Selected: ", tabSelected);
-        if (tabSelected == 'trade_value') {
-          if (regionid == 'WLD') {
-            createGrowthRateChart(series, 'WLD', "container-WLD-value", "trade_value");
-            createGrowthRateChart(series, 'WLD', "container-WLD-volume", "trade_volume");
-          }
-        } else {
-          createGrowthRateChart(series, regionid, "container-"+regionid, tabSelected);
-        }
-      });
-
-
     });
+  };
+
+  $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+    $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+    $(this).children().addClass("active");
+    tabSelected = $("a.nav-link.active").attr("id");
+    console.log(tabSelected);
+
+    showSummaryOn = tabSelected == "trade_value" ? true : false;
+
+    if (showSummaryOn) {
+      $("#div-WLD-value").show();
+      $("#div-WLD-volume").show();
+      $("#div-WLD").hide();
+      $("#container-110").hide();
+      $("#container-200").hide();
+      //$("#container-163").hide();
+      $("#container-505").hide();
+      $("#container-119").hide();
+      $("#container-903").hide();
+      $("#container-123").hide();
+      $("#container-205").hide();
+      //$("#container-998").hide();
+      $("#container-400").hide();
+      $("#container-510").hide();
+      $("#container-603").hide();
+    } else {
+      $("#div-WLD-value").hide();
+      $("#div-WLD-volume").hide();
+      $("#div-WLD").show();
+      $("#container-110").show();
+      $("#container-200").show();
+      //$("#container-163").show();
+      $("#container-505").show();
+      $("#container-119").show();
+      $("#container-903").show();
+      $("#container-123").show();
+      $("#container-205").show();
+      //$("#container-998").show();
+      $("#container-400").show();
+      $("#container-510").show();
+      $("#container-603").show();
+    }
   });
-};
 
+  $("#btnradio1").on("change", function (e) {
+    $("#sentence-text-tsval").show();
+    $("#sentence-text-tsvol").show();
+    $("#sentence-text-oth").show();
+  });
 
-$('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-        $(this).children().addClass('active');
-        tabSelected = $('a.nav-link.active').attr('id');
-        console.log(tabSelected)
-
-        showSummaryOn = tabSelected == 'trade_value' ? true : false;
-
-        if (showSummaryOn) {
-          $("#div-WLD-value").show();
-          $("#div-WLD-volume").show();
-          $("#div-WLD").hide();
-          $("#container-110").hide();
-          $("#container-200").hide();
-          //$("#container-163").hide();
-          $("#container-505").hide();
-          $("#container-119").hide();
-          $("#container-903").hide();
-          $("#container-123").hide();
-          $("#container-205").hide();
-          //$("#container-998").hide();
-          $("#container-400").hide();
-          $("#container-510").hide();
-          $("#container-603").hide();
-
-        } else {
-          $("#div-WLD-value").hide();
-          $("#div-WLD-volume").hide();
-          $("#div-WLD").show();
-          $("#container-110").show();
-          $("#container-200").show();
-          //$("#container-163").show();
-          $("#container-505").show();
-          $("#container-119").show();
-          $("#container-903").show();
-          $("#container-123").show();
-          $("#container-205").show();
-          //$("#container-998").show();
-          $("#container-400").show();
-          $("#container-510").show();
-          $("#container-603").show();
-
-        }
-      
-})
-
-$('#btnradio1').on('change', function(e) {
-  $("#sentence-text-tsval").show();
-  $("#sentence-text-tsvol").show();
-  $("#sentence-text-oth").show();
-})
-
-$('#btnradio2').on('change', function(e) {
-  $("#sentence-text-tsval").hide();
-  $("#sentence-text-tsvol").hide();
-  $("#sentence-text-oth").hide();
-})
-
-
-
-
+  $("#btnradio2").on("change", function (e) {
+    $("#sentence-text-tsval").hide();
+    $("#sentence-text-tsvol").hide();
+    $("#sentence-text-oth").hide();
+  });
 </script>
