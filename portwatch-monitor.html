@@ -55,10 +55,10 @@
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs justify-content-center">
       <li class="nav-item">
-        <a class="nav-link active" href="#" id="trade_value">TRADE VALUE</a>
+        <a class="nav-link active" href="#" id="value">TRADE VALUE</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" id="import_value">TRADE VOLUME</a>
+        <a class="nav-link" href="#" id="volume">TRADE VOLUME</a>
       </li>
     </ul>
   </div>
@@ -93,108 +93,6 @@
       <label class="btn btn-outline-primary" for="btnradio2">Index</label>
     </div>
   </div>
-  <div class="card-body">
-    <div class="row" class="ts" id="div-WLD-value">
-      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
-        <span id="sentence-text-tsval" class="sentence-text"></span>
-      </div>
-      <figure class="highcharts-figure">
-        <div id="container-WLD-value"></div>
-      </figure>
-    </div>
-    <div class="row" class="ts" id="div-WLD-volume">
-      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
-        <span id="sentence-text-tsvol" class="sentence-text"></span>
-      </div>
-      <figure class="highcharts-figure">
-        <div id="container-WLD-volume"></div>
-      </figure>
-    </div>
-    <div class="row" class="ts" id="div-WLD">
-      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
-        <span id="sentence-text-oth" class="sentence-text"></span>
-      </div>
-      <figure class="highcharts-figure">
-        <div id="container-WLD"></div>
-      </figure>
-    </div>
-    <div class="row" class="ts">
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-110"></div>
-        </figure>
-      </div>
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-200"></div>
-        </figure>
-      </div>
-    </div>
-    <div class="row" class="ts">
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-119"></div>
-        </figure>
-      </div>
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-123"></div>
-        </figure>
-      </div>
-    </div>
-    <div class="row" class="ts">
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-510"></div>
-        </figure>
-      </div>
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-505"></div>
-        </figure>
-      </div>
-    </div>
-    <div class="row" class="ts">
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-903"></div>
-        </figure>
-      </div>
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-400"></div>
-        </figure>
-      </div>
-    </div>
-
-    <div class="row" class="ts">
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-603"></div>
-        </figure>
-      </div>
-      <div class="col">
-        <figure class="highcharts-figure">
-          <div id="container-205"></div>
-        </figure>
-      </div>
-    </div>
-    <!--<div class="row" class="ts">   
-        <div class="col"><figure class="highcharts-figure"><div id="container-163"></div></figure></div>
-        <div class="col"><figure class="highcharts-figure"><div id="container-998"></div></figure></div>
-      </div>-->
-  </div>
-  <div style="margin-right: 12px; margin-left: 12px">
-    <span class="source" style="float: right; text-align: right"
-      >Source: IMF PortWatch (<a
-        href="https://portwatch.imf.org/"
-        target="_blank"
-        style="color: #3b9ec5"
-        >portwatch.imf.org</a
-      >).</span
-    >
-  </div>
-  <br />
   <div style="margin-right: 20px; margin-left: 20px">
     <span class="source" style="float: left; text-align: left"
       >Notes: In all charts, trade refers to trade in goods (merchandise trade)
@@ -212,6 +110,48 @@
       >.</span
     >
   </div>
+  <div class="card-body">
+    <div class="row" class="ts" id="div-WLD-trade">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-trade" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD-trade"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts" id="div-WLD-import">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-import" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD-import"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts" id="div-WLD-export">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-export" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD-export"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts">
+      <div class="col">
+          <div id="regional-table"></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-right: 12px; margin-left: 12px">
+    <span class="source" style="float: right; text-align: right"
+      >Source: IMF PortWatch (<a
+        href="https://portwatch.imf.org/"
+        target="_blank"
+        style="color: #3b9ec5"
+        >portwatch.imf.org</a
+      >).</span
+    >
+  </div>
+  <br />
   <br />
   <br />
 </div>
@@ -226,18 +166,18 @@
 
   $(document).ready(function () {
     queryAndChartData("WLD");
-    queryAndChartData("110");
-    queryAndChartData("200");
-    //queryAndChartData('163');
-    queryAndChartData("505");
-    queryAndChartData("119");
-    queryAndChartData("903");
-    queryAndChartData("123");
-    queryAndChartData("205");
-    //queryAndChartData('998');
-    queryAndChartData("400");
-    queryAndChartData("510");
-    queryAndChartData("603");
+    //queryAndChartData("110");
+    //queryAndChartData("200");
+    //queryAndChartData('163'); --exclude--
+    //queryAndChartData("505");
+    //queryAndChartData("119");
+    //queryAndChartData("903");
+    //queryAndChartData("123");
+    //queryAndChartData("205");
+    //queryAndChartData('998'); --exclude--
+    //queryAndChartData("400");
+    //queryAndChartData("510");
+    //queryAndChartData("603");
   });
 
   $.get(
@@ -284,192 +224,133 @@
         });
         var lastValue, trend;
 
-        if (regionid == "WLD") {
-          console.log(series);
-          console.log(result.editingInfo);
+        console.log(series);
+        console.log(result.editingInfo);
 
-          lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
-          trend = lastValue > 0 ? "increased" : "decreased";
+        lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
+        trend = lastValue > 0 ? "increased" : "decreased";
 
-          $("#sentence-text-tsval").html(
-            "As of <b class='text-highlight'>end-" +
-              lastMonth +
-              "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
-              trend +
-              "</b> by <b class='text-highlight'>" +
-              lastValue +
-              " percent</b> compared to a year ago."
-          );
+        $("#sentence-text-trade").html(
+          "As of <b class='text-highlight'>end-" +
+            lastMonth +
+            "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            trend +
+            "</b> by <b class='text-highlight'>" +
+            lastValue +
+            " percent</b> compared to a year ago."
+        );
 
-          lastValue = Math.round(lastObs["trade_volume_GR_MA"] * 10) / 10;
-          trend = lastValue > 0 ? "increased" : "decreased";
+        lastValue = Math.round(lastObs["import_value_GR_MA"] * 10) / 10;
+        trend = lastValue > 0 ? "increased" : "decreased";
 
-          $("#sentence-text-tsvol").html(
-            "As of <b class='text-highlight'>end-" +
-              lastMonth +
-              "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
-              trend +
-              "</b> by <b class='text-highlight'>" +
-              lastValue +
-              " percent</b> compared to a year ago."
-          );
+        $("#sentence-text-import").html(
+          "As of <b class='text-highlight'>end-" +
+            lastMonth +
+            "</b>, global maritime <b class='text-highlight'>import value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            trend +
+            "</b> by <b class='text-highlight'>" +
+            lastValue +
+            " percent</b> compared to a year ago."
+        );
 
-          isIndexChecked == true
-            ? createChart(series, "WLD", "container-WLD-value", "trade_value")
-            : createGrowthRateChart(
-                series,
-                "WLD",
-                "container-WLD-value",
-                "trade_value"
-              );
-          isIndexChecked == true
-            ? createChart(series, "WLD", "container-WLD-volume", "trade_volume")
-            : createGrowthRateChart(
-                series,
-                "WLD",
-                "container-WLD-volume",
-                "trade_volume"
-              );
+        lastValue = Math.round(lastObs["export_value_GR_MA"] * 10) / 10;
+        trend = lastValue > 0 ? "increased" : "decreased";
+
+        $("#sentence-text-export").html(
+          "As of <b class='text-highlight'>end-" +
+            lastMonth +
+            "</b>, global maritime <b class='text-highlight'>export value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            trend +
+            "</b> by <b class='text-highlight'>" +
+            lastValue +
+            " percent</b> compared to a year ago."
+        );
+        
+        if (isIndexChecked == true) {
+            createChart(series, "WLD", "container-WLD-trade", "trade_value");
+            createChart(series, "WLD", "container-WLD-import", "import_value");
+            createChart(series, "WLD", "container-WLD-export", "export_value");
+
+        } else {
+            createGrowthRateChart(series, "WLD", "container-WLD-trade", "trade_value");
+            createGrowthRateChart(series, "WLD", "container-WLD-import", "import_value");
+            createGrowthRateChart(series, "WLD", "container-WLD-export", "export_value");
         }
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
+          
           tabSelected = $("a.nav-link.active").attr("id");
           isIndexChecked = $("#btnradio2").is(":checked");
 
-          if (tabSelected == "trade_value") {
-            if (regionid == "WLD") {
-              lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
-              trend = lastValue > 0 ? "increased" : "decreased";
+          lastValue = Math.round(lastObs["trade_"+tabSelected+"_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
 
-              $("#sentence-text-tsval").html(
-                "As of <b class='text-highlight'>end-" +
-                  lastMonth +
-                  "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
-                  trend +
-                  "</b> by <b class='text-highlight'>" +
-                  lastValue +
-                  " percent</b> compared to a year ago."
-              );
+          $("#sentence-text-trade").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>trade "+tabSelected+"</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
 
-              lastValue = Math.round(lastObs["trade_volume_GR_MA"] * 10) / 10;
-              trend = lastValue > 0 ? "increased" : "decreased";
+          lastValue = Math.round(lastObs["import_"+tabSelected+"_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
 
-              $("#sentence-text-tsvol").html(
-                "As of <b class='text-highlight'>end-" +
-                  lastMonth +
-                  "</b>, global maritime <b class='text-highlight'>trade volume</b> over the last three months is estimated to have <b class='text-highlight'>" +
-                  trend +
-                  "</b> by <b class='text-highlight'>" +
-                  lastValue +
-                  " percent</b> compared to a year ago."
-              );
+          $("#sentence-text-import").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>import "+tabSelected+"</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
 
-              isIndexChecked == true
-                ? createChart(
-                    series,
-                    "WLD",
-                    "container-WLD-value",
-                    "trade_value"
-                  )
-                : createGrowthRateChart(
-                    series,
-                    "WLD",
-                    "container-WLD-value",
-                    "trade_value"
-                  );
-              isIndexChecked == true
-                ? createChart(
-                    series,
-                    "WLD",
-                    "container-WLD-volume",
-                    "trade_volume"
-                  )
-                : createGrowthRateChart(
-                    series,
-                    "WLD",
-                    "container-WLD-volume",
-                    "trade_volume"
-                  );
-            }
+          lastValue = Math.round(lastObs["export_"+tabSelected+"_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
+
+          $("#sentence-text-export").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>export "+tabSelected+"</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
+
+          if (isIndexChecked == true) {
+            createChart(series, "WLD", "container-WLD-trade", "trade_"+tabSelected);
+            createChart(series, "WLD", "container-WLD-import", "import_"+tabSelected);
+            createChart(series, "WLD", "container-WLD-export", "export_"+tabSelected);
+
           } else {
-            isIndexChecked == true
-              ? createChart(
-                  series,
-                  regionid,
-                  "container-" + regionid,
-                  tabSelected
-                )
-              : createGrowthRateChart(
-                  series,
-                  regionid,
-                  "container-" + regionid,
-                  tabSelected
-                );
-            if (regionid == "WLD") {
-              lastValue = Math.round(lastObs[tabSelected + "_GR_MA"] * 10) / 10;
-              trend = lastValue > 0 ? "increased" : "decreased";
-              $("#sentence-text-oth").html(
-                "As of <b class='text-highlight'>end-" +
-                  lastMonth +
-                  "</b>, global maritime <b class='text-highlight'> " +
-                  tabSelected.split("_").join(" ") +
-                  "</b> over the last three months is estimated to have <b class='text-highlight'>" +
-                  trend +
-                  "</b> by <b class='text-highlight'>" +
-                  lastValue +
-                  " percent</b> compared to a year ago."
-              );
-            }
-          }
+            createGrowthRateChart(series, "WLD", "container-WLD-trade", "trade_"+tabSelected);
+            createGrowthRateChart(series, "WLD", "container-WLD-import", "import_"+tabSelected);
+            createGrowthRateChart(series, "WLD", "container-WLD-export", "export_"+tabSelected);
+          }          
         });
 
         $("#btnradio2").on("change", function (e) {
           tabSelected = $("a.nav-link.active").attr("id");
           console.log("Selected: ", tabSelected);
-          if (tabSelected == "trade_value") {
-            if (regionid == "WLD") {
-              createChart(series, "WLD", "container-WLD-value", "trade_value");
-              createChart(
-                series,
-                "WLD",
-                "container-WLD-volume",
-                "trade_volume"
-              );
-            }
-          } else {
-            createChart(series, regionid, "container-" + regionid, tabSelected);
-          }
+          createChart(series, "WLD", "container-WLD-trade", "trade_"+tabSelected);
+          createChart(series, "WLD", "container-WLD-import", "import_"+tabSelected);
+          createChart(series, "WLD", "container-WLD-export", "export_"+tabSelected);
         });
 
         $("#btnradio1").on("change", function (e) {
           tabSelected = $("a.nav-link.active").attr("id");
           console.log("Selected: ", tabSelected);
-          if (tabSelected == "trade_value") {
-            if (regionid == "WLD") {
-              createGrowthRateChart(
-                series,
-                "WLD",
-                "container-WLD-value",
-                "trade_value"
-              );
-              createGrowthRateChart(
-                series,
-                "WLD",
-                "container-WLD-volume",
-                "trade_volume"
-              );
-            }
-          } else {
-            createGrowthRateChart(
-              series,
-              regionid,
-              "container-" + regionid,
-              tabSelected
-            );
-          }
+          createGrowthRateChart(series, "WLD", "container-WLD-trade", "trade_"+tabSelected);
+          createGrowthRateChart(series, "WLD", "container-WLD-import", "import_"+tabSelected);
+          createGrowthRateChart(series, "WLD", "container-WLD-export", "export_"+tabSelected);
         });
+
       });
     });
   };
@@ -518,14 +399,14 @@
   });
 
   $("#btnradio1").on("change", function (e) {
-    $("#sentence-text-tsval").show();
-    $("#sentence-text-tsvol").show();
-    $("#sentence-text-oth").show();
+    $("#sentence-text-trade").show();
+    $("#sentence-text-import").show();
+    $("#sentence-text-export").show();
   });
 
   $("#btnradio2").on("change", function (e) {
-    $("#sentence-text-tsval").hide();
-    $("#sentence-text-tsvol").hide();
-    $("#sentence-text-oth").hide();
+    $("#sentence-text-trade").hide();
+    $("#sentence-text-import").hide();
+    $("#sentence-text-export").hide();
   });
 </script>
