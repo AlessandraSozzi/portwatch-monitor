@@ -142,5 +142,169 @@ body {
 }
 
 
+/** Regional Table CSS **/
 
+
+.xl9810121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+    padding-bottom:5px;
+	color:#c0c0c0;
+	font-size:1rem;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:right;
+	vertical-align:bottom;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid #c0c0c0;
+	border-left:none;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl9710121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+    padding-bottom:5px;
+	color:#c0c0c0;
+	font-size:1rem;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid #c0c0c0;
+	border-left:none;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl9610121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+    padding-bottom:10px;
+	color:#c0c0c0;
+	font-size:0.8rem;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid #c0c0c0;
+	border-left:none;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl1510121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	color:#c0c0c0;
+	font-size:0.8rem;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	white-space:nowrap;
+}
+
+.xl9110121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	color:#c0c0c0;
+	font-size:0.8rem;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl9210121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	color:#c0c0c0;
+	font-size:0.8rem;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl9310121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	color:#c0c0c0;
+	font-size:1rem;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl9410121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	color:#c0c0c0;
+	font-size:1rem;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	background:transparent;
+	white-space:nowrap;
+}
+
+.xl9510121 {
+    padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+    padding-bottom:10px;
+	color:#c0c0c0;
+	font-size:0.8rem;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+	text-align:general;
+	vertical-align:bottom;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid #c0c0c0;
+	border-left:none;
+	background:transparent;
+	white-space:nowrap;
+}
 
