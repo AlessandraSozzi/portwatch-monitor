@@ -557,9 +557,7 @@
           tabSelected = $("a.nav-link.active").attr("id");
           isIndexChecked = $("#btnradio2").is(":checked");
 
-          $("#table-title").html(
-            "Trade " + strCapitalize(tabSelected) + " (3MA, yoy change)"
-          );
+          $("#table-title").html("Trade " + tabSelected + " (3MA, yoy change)");
 
           lastValue =
             Math.round(lastObs["trade_" + tabSelected + "_GR_MA"] * 10) / 10;
