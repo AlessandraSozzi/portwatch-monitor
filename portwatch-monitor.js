@@ -41,7 +41,18 @@ var indexed = function(series, column, base=2019) {
   return series.map(x => x[column]) / avg2019 * 100;
 };
 
-function growthRate(array, countBefore) {
+var strCapitalize = function(str, separator=' ') {
+  var splitStr = str.toLowerCase().split(separator);
+  for (var i = 0; i < splitStr.length; i++) {
+      // You do not need to check if i is larger than splitStr length, as your for does that for you
+      // Assign it back to the array
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+  }
+  // Directly return the joined string
+  return splitStr.join(' '); 
+}
+
+var growthRate = function(array, countBefore) {
   const result = [];
   for (let i = 0; i < array.length; i++) {
     if (i < countBefore) {
@@ -243,17 +254,11 @@ var createChart = function(data, regionid, containerID, chartType="portcalls") {
         series: []
     };
     
-    var region = data[0].region;   
-    if (chartType == "trade_value") 
-      region += " Trade Value";
-    if (chartType == "trade_volume") 
-      region += " Trade Volume";    
-    
-    //console.log(chartType);
-    //console.log(labels);
-    
+    var region = data[0].region;     
+    console.log(region + " " + strCapitalize(chartType, separator='_'));
+        
     options['title'] = {
-      text: region, 
+      text: region + " " + strCapitalize(chartType, separator='_'), 
       style: {
         color: '#c0c0c0',
      },
@@ -374,13 +379,9 @@ var createGrowthRateChart = function(data, regionid, containerID, chartType="por
   };
   
   var region = data[0].region;   
-  if (chartType == "trade_value") 
-    region += " Trade Value";
-  if (chartType == "trade_volume") 
-    region += " Trade Volume";   
-    
+  console.log(region + " " + strCapitalize(chartType, separator='_'));
   options['title'] = {
-    text:  region, 
+    text:  region + " " + strCapitalize(chartType, separator='_'), 
     style: {
       color: '#c0c0c0',
       y: -10

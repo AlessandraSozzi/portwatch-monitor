@@ -50,7 +50,7 @@ body {
 .source {
     font-size: small;
     color: #c0c0c0;
-    font-size: 1vw; 
+    font-size: 0.9vw; 
 }
 
 .highcharts-root {
