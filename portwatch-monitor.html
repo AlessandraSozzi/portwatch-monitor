@@ -472,6 +472,7 @@
           month: "long",
           timeZone: "UTC",
         });
+        var chartsYmax, chartsYmin;
 
         // Fill Table
         const tableDate = new Date(lastObs["date"]).toLocaleDateString(
@@ -528,10 +529,34 @@
         );
 
         if (isIndexChecked == true) {
+          // Get max and min for Y axis for index charts
+          var chartsYmax,
+            chartsYmin = extent([
+              lastObs["trade_value"],
+              lastObs["import_value"],
+              lastObs["export_valu"],
+            ]);
+          console.log("Ymax: ", chartsYmax);
+          console.log("Ymin: ", chartsYmin);
+
           createChart(series, "WLD", "container-WLD-trade", "trade_value");
           createChart(series, "WLD", "container-WLD-import", "import_value");
           createChart(series, "WLD", "container-WLD-export", "export_value");
         } else {
+          // Get max and min for Y axis for growth rate charts
+          var chartsYmax = Math.max(
+            lastObs["trade_value_GR"],
+            lastObs["import_value_GR"],
+            lastObs["export_valu_GR"]
+          );
+          var chartsYmin = Math.min(
+            lastObs["trade_value_GR"],
+            lastObs["import_value_GR"],
+            lastObs["export_value_GR"]
+          );
+          console.log("GRYmax: ", chartsYmax);
+          console.log("GRYmin: ", chartsYmin);
+
           createGrowthRateChart(
             series,
             "WLD",
