@@ -93,6 +93,7 @@ var growthRate = function (array, countBefore) {
 };
 
 var extent = function (array) {
+  const cleanedArray = array.filter((x) => !isNaN(x));
   var min = Math.min(...array);
   var max = Math.max(...array);
   return [min, max];
