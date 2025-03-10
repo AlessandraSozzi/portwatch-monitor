@@ -92,11 +92,20 @@ var growthRate = function (array, countBefore) {
   return result;
 };
 
-var extent = function (array) {
-  const cleanedArray = array.filter((x) => !isNaN(x));
+var roundToNearestTenth = function(number) {
+  return Math.round(number * 10) / 10;
+};
+
+var seriesMin = function (array) {
+  var cleanedArray = array.filter((x) => !isNaN(x));
   var min = Math.min(...cleanedArray);
+  return min;
+};
+
+var seriesMax = function (array) {
+  var cleanedArray = array.filter((x) => !isNaN(x));
   var max = Math.max(...cleanedArray);
-  return [min, max];
+  return max;
 };
 
 var generateData = function (features) {
@@ -282,8 +291,11 @@ var createChart = function (
   data,
   regionid,
   containerID,
-  chartType = "portcalls"
+  chartType = "portcalls",
+  ylim = null
 ) {
+
+  
   var options = {
     credits: {
       enabled: false,
@@ -369,6 +381,12 @@ var createChart = function (
     },
   };
 
+  if (ylim !== null) {
+    console.log(ylim);
+    options["yAxis"]["min"] = ylim[0];
+    options["yAxis"]["max"] = ylim[1];
+  }
+
   options["xAxis"] = {
     gridLineColor: "#c0c0c0",
     lineColor: "#c0c0c0",
@@ -407,8 +425,10 @@ var createGrowthRateChart = function (
   data,
   regionid,
   containerID,
-  chartType = "portcalls"
+  chartType = "portcalls",
+  ylim = null
 ) {
+
   var options = {
     credits: {
       enabled: false,
@@ -488,6 +508,12 @@ var createGrowthRateChart = function (
     },
     opposite: false,
   };
+
+  if (ylim !== null) {
+    console.log(ylim);
+    options["yAxis"]["min"] = ylim[0];
+    options["yAxis"]["max"] = ylim[1];
+  }
 
   options["xAxis"] = {
     gridLineColor: "#c0c0c0",

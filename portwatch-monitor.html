@@ -414,6 +414,17 @@
 
   var showSummaryOn = true;
 
+  var chartsExtent = function(series, chartType, suffix='') {
+
+    var columns = ['trade_'+chartType+suffix, 'import_'+chartType+suffix, 'export_'+chartType+suffix] ;
+
+    allMin = columns.map(col => seriesMin(series.map(s => s[col])));
+    allMax = columns.map(col => seriesMax(series.map(s => s[col])));
+   
+    return [Math.min(...allMin), Math.max(...allMax)];
+    
+  };
+
   $(document).ready(function () {
     queryAndChartData("WLD");
     queryAndTableData("110"); // Advanced Economies
@@ -472,7 +483,14 @@
           month: "long",
           timeZone: "UTC",
         });
-        var chartsYmax, chartsYmin;
+        // Get max and min for Y axis for all charts
+        const yExtents = {
+          "value": chartsExtent(series, "value"),
+          "volume": chartsExtent(series, "volume"),
+          "value_GR": chartsExtent(series, "value", "_GR"),
+          "volume_GR": chartsExtent(series, "volume", "_GR")
+        };
+
 
         // Fill Table
         const tableDate = new Date(lastObs["date"]).toLocaleDateString(
@@ -529,51 +547,33 @@
         );
 
         if (isIndexChecked == true) {
-          // Get max and min for Y axis for index charts
-          var chartsYmax,
-            chartsYmin = extent([
-              lastObs["trade_value"],
-              lastObs["import_value"],
-              lastObs["export_valu"],
-            ]);
-          console.log("Ymax: ", chartsYmax);
-          console.log("Ymin: ", chartsYmin);
+          
+          createChart(series, "WLD", "container-WLD-trade", "trade_value", yExtents["value"]);
+          createChart(series, "WLD", "container-WLD-import", "import_value", yExtents["value"]);
+          createChart(series, "WLD", "container-WLD-export", "export_value", yExtents["value"]);
 
-          createChart(series, "WLD", "container-WLD-trade", "trade_value");
-          createChart(series, "WLD", "container-WLD-import", "import_value");
-          createChart(series, "WLD", "container-WLD-export", "export_value");
-        } else {
-          // Get max and min for Y axis for growth rate charts
-          var chartsYmax = Math.max(
-            lastObs["trade_value_GR"],
-            lastObs["import_value_GR"],
-            lastObs["export_valu_GR"]
-          );
-          var chartsYmin = Math.min(
-            lastObs["trade_value_GR"],
-            lastObs["import_value_GR"],
-            lastObs["export_value_GR"]
-          );
-          console.log("GRYmax: ", chartsYmax);
-          console.log("GRYmin: ", chartsYmin);
+        } else {          
 
           createGrowthRateChart(
             series,
             "WLD",
             "container-WLD-trade",
-            "trade_value"
+            "trade_value",
+            yExtents["value_GR"]
           );
           createGrowthRateChart(
             series,
             "WLD",
             "container-WLD-import",
-            "import_value"
+            "import_value",
+            yExtents["value_GR"]
           );
           createGrowthRateChart(
             series,
             "WLD",
             "container-WLD-export",
-            "export_value"
+            "export_value",
+            yExtents["value_GR"]
           );
         }
 
@@ -642,38 +642,45 @@
               series,
               "WLD",
               "container-WLD-trade",
-              "trade_" + tabSelected
+              "trade_" + tabSelected,
+              yExtents[tabSelected]
+              
             );
             createChart(
               series,
               "WLD",
               "container-WLD-import",
-              "import_" + tabSelected
+              "import_" + tabSelected,
+              yExtents[tabSelected]
             );
             createChart(
               series,
               "WLD",
               "container-WLD-export",
-              "export_" + tabSelected
+              "export_" + tabSelected,
+              yExtents[tabSelected]
             );
           } else {
             createGrowthRateChart(
               series,
               "WLD",
               "container-WLD-trade",
-              "trade_" + tabSelected
+              "trade_" + tabSelected,
+              yExtents[tabSelected+"_GR"]
             );
             createGrowthRateChart(
               series,
               "WLD",
               "container-WLD-import",
-              "import_" + tabSelected
+              "import_" + tabSelected,
+              yExtents[tabSelected+"_GR"]
             );
             createGrowthRateChart(
               series,
               "WLD",
               "container-WLD-export",
-              "export_" + tabSelected
+              "export_" + tabSelected,
+              yExtents[tabSelected+"_GR"]
             );
           }
         });
@@ -685,19 +692,22 @@
             series,
             "WLD",
             "container-WLD-trade",
-            "trade_" + tabSelected
+            "trade_" + tabSelected,
+            yExtents[tabSelected]
           );
           createChart(
             series,
             "WLD",
             "container-WLD-import",
-            "import_" + tabSelected
+            "import_" + tabSelected,
+            yExtents[tabSelected]
           );
           createChart(
             series,
             "WLD",
             "container-WLD-export",
-            "export_" + tabSelected
+            "export_" + tabSelected,
+            yExtents[tabSelected]
           );
         });
 
@@ -708,19 +718,22 @@
             series,
             "WLD",
             "container-WLD-trade",
-            "trade_" + tabSelected
+            "trade_" + tabSelected,
+            yExtents[tabSelected+"_GR"]
           );
           createGrowthRateChart(
             series,
             "WLD",
             "container-WLD-import",
-            "import_" + tabSelected
+            "import_" + tabSelected,
+            yExtents[tabSelected+"_GR"]
           );
           createGrowthRateChart(
             series,
             "WLD",
             "container-WLD-export",
-            "export_" + tabSelected
+            "export_" + tabSelected,
+            yExtents[tabSelected+"_GR"]
           );
         });
       });
