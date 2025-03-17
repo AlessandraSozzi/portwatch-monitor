@@ -1,0 +1,798 @@
+<!-- /* Author CSF */ -->
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+/>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://js.arcgis.com/4.28/"></script>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script src="portwatch-monitor.js"></script>
+<link rel="stylesheet" type="text/css" href="portwatch-monitor.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"
+></script>
+
+<div
+  style="
+    text-align: right;
+    padding-right: 20;
+    padding-top: 10;
+    color: #c0c0c0;
+    font-size: 1vw;
+  "
+>
+  <p>
+    <img
+      src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png"
+      style="padding-right: 5px"
+    />
+    <span>Updated: </span><span id="latest"></span>
+  </p>
+</div>
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" id="value">TRADE VALUE</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="volume">TRADE VOLUME</a>
+      </li>
+    </ul>
+  </div>
+  <div style="text-align: center">
+    <br />
+    <!--<span style="color:#c0c0c0">ADJUST VIEW</span>-->
+    <br />
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Radio toggle button group"
+      style="padding-top: 5px"
+    >
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio1"
+        autocomplete="off"
+        checked
+      />
+      <label class="btn btn-outline-primary" for="btnradio1"
+        >Growth Rates</label
+      >
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio2"
+        autocomplete="off"
+      />
+      <label class="btn btn-outline-primary" for="btnradio2">Index</label>
+    </div>
+  </div>
+  <br />
+  <div style="margin-right: 50px; margin-left: 50px">
+    <span class="source" style="float: left; text-align: center"
+      >Notes: Figures for the last month are preliminary and subject to revision
+      in subsequent months. Trade refers to maritime trade and covers only goods
+      (not services) trade. Exports and imports are both valued on a
+      free-on-board (fob) basis. For background on the methodology see
+      <a href="#" target="_blank" style="color: #3b9ec5">here</a>. Country
+      groups/regions are based on the IMF World Economic Outlook (<a
+        href="https://www.imf.org/en/Publications/WEO/weo-database/2024/October/groups-and-aggregates"
+        target="_blank"
+        style="color: #3b9ec5"
+        >WEO</a
+      >) classification of economies.</span
+    >
+  </div>
+  <div class="card-body">
+    <div class="row" class="ts" id="div-WLD-trade">
+      <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <span id="sentence-text-trade" class="sentence-text"></span>
+      </div>
+      <figure class="highcharts-figure">
+        <div id="container-WLD-trade"></div>
+      </figure>
+    </div>
+    <div class="row" class="ts">
+      <div class="col">
+        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+          <span id="sentence-text-import" class="sentence-text"></span>
+        </div>
+        <figure class="highcharts-figure">
+          <div id="container-WLD-import"></div>
+        </figure>
+      </div>
+      <div class="col">
+        <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+          <span id="sentence-text-export" class="sentence-text"></span>
+        </div>
+        <figure class="highcharts-figure">
+          <div id="container-WLD-export"></div>
+        </figure>
+      </div>
+    </div>
+    <br />
+    <div class="row" class="ts">
+      <div class="col">
+        <div id="regional-table" style="color: #c0c0c0" align="center">
+          <table
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="420"
+            style="border-collapse: collapse; table-layout: fixed; width: 315pt"
+          >
+            <col width="356" style="width: 267pt" />
+            <col width="64" style="width: 48pt" />
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9710121"
+                width="356"
+                style="height: 13.2pt; width: 267pt"
+                id="table-title"
+              >
+                Trade value (3MA, yoy change)
+              </td>
+              <td
+                class="xl9810121"
+                width="64"
+                style="width: 48pt"
+                id="table-date"
+              ></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9110121" style="height: 13.2pt">
+                &nbsp;
+              </td>
+              <td class="xl1510121"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9310121" style="height: 13.2pt">
+                World trade
+              </td>
+              <td class="xl9410121" align="right" id="table-WLD-trade"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9110121" style="height: 13.2pt">
+                &nbsp;
+              </td>
+              <td class="xl9110121">&nbsp;</td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9310121" style="height: 13.2pt">
+                World imports
+              </td>
+              <td class="xl9410121" align="right" id="table-WLD-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9310121"
+                style="height: 13.2pt; padding-left: 10"
+              >
+                Advanced economies
+              </td>
+              <td class="xl9410121" align="right" id="table-110-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Major advanced economies (G7)
+              </td>
+              <td class="xl9210121" align="right" id="table-119-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Other advanced economies (excluding G7 and euro area)
+              </td>
+              <td class="xl9210121" align="right" id="table-123-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9310121"
+                style="height: 13.2pt; padding-left: 10"
+              >
+                Emerging market and developing economies
+              </td>
+              <td class="xl9410121" align="right" id="table-200-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Emerging and developing Asia
+              </td>
+              <td class="xl9210121" align="right" id="table-505-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Emerging and developing Europe
+              </td>
+              <td class="xl9210121" align="right" id="table-903-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Latin America and the Caribbean
+              </td>
+              <td class="xl9210121" align="right" id="table-205-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Middle East and Central Asia
+              </td>
+              <td class="xl9210121" align="right" id="table-400-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Sub-Saharan Africa
+              </td>
+              <td class="xl9210121" align="right" id="table-603-imports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9110121" style="height: 13.2pt">
+                &nbsp;
+              </td>
+              <td class="xl9110121">&nbsp;</td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9310121" style="height: 13.2pt">
+                World exports
+              </td>
+              <td class="xl9410121" align="right" id="table-WLD-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9310121"
+                style="height: 13.2pt; padding-left: 10"
+              >
+                Advanced economies
+              </td>
+              <td class="xl9410121" align="right" id="table-110-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Major advanced economies (G7)
+              </td>
+              <td class="xl9210121" align="right" id="table-119-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Other advanced economies (excluding G7 and euro area)
+              </td>
+              <td class="xl9210121" align="right" id="table-123-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9310121"
+                style="height: 13.2pt; padding-left: 10"
+              >
+                Emerging market and developing economies
+              </td>
+              <td class="xl9410121" align="right" id="table-200-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Emerging and developing Asia
+              </td>
+              <td class="xl9210121" align="right" id="table-505-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Emerging and developing Europe
+              </td>
+              <td class="xl9210121" align="right" id="table-903-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Latin America and the Caribbean
+              </td>
+              <td class="xl9210121" align="right" id="table-205-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9110121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Middle East and Central Asia
+              </td>
+              <td class="xl9210121" align="right" id="table-400-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td
+                height="18"
+                class="xl9510121"
+                style="height: 13.2pt; padding-left: 20"
+              >
+                Sub-Saharan Africa
+              </td>
+              <td class="xl9610121" align="right" id="table-603-exports"></td>
+            </tr>
+            <tr height="18" style="height: 13.2pt">
+              <td height="18" class="xl9110121" style="height: 13.2pt">
+                &nbsp;
+              </td>
+              <td class="xl9110121">&nbsp;</td>
+            </tr>
+            <tr height="0" style="display: none">
+              <td width="356" style="width: 267pt"></td>
+              <td width="64" style="width: 48pt"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-right: 12px; margin-left: 12px">
+    <span class="source" style="float: right; text-align: right"
+      >Source: IMF PortWatch (<a
+        href="https://portwatch.imf.org/"
+        target="_blank"
+        style="color: #3b9ec5"
+        >portwatch.imf.org</a
+      >).</span
+    >
+  </div>
+  <br />
+  <br />
+  <br />
+</div>
+
+<script>
+  var baseUrl =
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0";
+
+  Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
+
+  var showSummaryOn = true;
+
+  var chartsExtent = function(series, chartType, suffix='') {
+
+    var columns = ['trade_'+chartType+suffix, 'import_'+chartType+suffix, 'export_'+chartType+suffix] ;
+
+    allMin = columns.map(col => seriesMin(series.map(s => s[col])));
+    allMax = columns.map(col => seriesMax(series.map(s => s[col])));
+   
+    return [Math.min(...allMin), Math.max(...allMax)];
+    
+  };
+
+  $(document).ready(function () {
+    queryAndChartData("WLD");
+    queryAndTableData("110"); // Advanced Economies
+    queryAndTableData("200"); // Emerging market and developing economies
+    //queryAndChartData('163'); --exclude-- Euro Area
+    queryAndTableData("505"); // Emerging and developing Asia
+    queryAndTableData("119"); // Major advanced economies (G7)
+    queryAndTableData("903"); // Emerging and developing Europe
+    queryAndTableData("123"); // Other advanced economies (excluding G7 and euro area)
+    queryAndTableData("205"); // Latin America and the Caribbean
+    //queryAndChartData('998'); --exclude-- European Union
+    queryAndTableData("400"); // Middle East and Central Asia
+    //queryAndTableData("510"); --exclude-- ASEAN-5
+    queryAndTableData("603"); // Sub-Saharan Africa
+  });
+
+  $.get(
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0?f=json",
+    function (data) {
+      const lastEditDate = new Date(
+        data.editingInfo.dataLastEditDate
+      ).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+      });
+      $("#latest").html(lastEditDate);
+    }
+  );
+
+  var queryAndChartData = function (regionid) {
+    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
+      FeatureLayer,
+      Query
+    ) => {
+      const layer = new FeatureLayer({
+        url: baseUrl,
+      });
+
+      const query = new Query({
+        where: "ISO3='" + regionid + "'",
+        returnGeometry: false,
+        outFields: "*",
+        maxRecordCountFactor: 5,
+        cacheHint: true,
+      });
+
+      layer.queryFeatures(query).then((result) => {
+        var isIndexChecked = $("#btnradio2").is(":checked");
+        var tabSelected = $("a.nav-link.active").attr("id");
+        var series = generateData(result.features);
+        var lastObs = series[series.length - 1];
+        var lastMonth = new Date(lastObs["date"]).toLocaleDateString("en-us", {
+          year: "numeric",
+          month: "long",
+          timeZone: "UTC",
+        });
+        // Get max and min for Y axis for all charts
+        const yExtents = {
+          "value": chartsExtent(series, "value"),
+          "volume": chartsExtent(series, "volume"),
+          "value_GR": chartsExtent(series, "value", "_GR"),
+          "volume_GR": chartsExtent(series, "volume", "_GR")
+        };
+
+
+        // Fill Table
+        const tableDate = new Date(lastObs["date"]).toLocaleDateString(
+          "en-us",
+          { year: "numeric", month: "short", timeZone: "UTC" }
+        );
+        $("#table-date").html(tableDate);
+
+        var lastValue, trend;
+
+        console.log(series);
+        console.log(lastObs["date"]);
+
+        lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
+        trend = lastValue > 0 ? "increased" : "decreased";
+        $("#table-WLD-trade").html(lastValue + "%");
+
+        $("#sentence-text-trade").html(
+          "As of <b class='text-highlight'>end-" +
+            lastMonth +
+            "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            trend +
+            "</b> by <b class='text-highlight'>" +
+            lastValue +
+            " percent</b> compared to a year ago."
+        );
+
+        lastValue = Math.round(lastObs["import_value_GR_MA"] * 10) / 10;
+        trend = lastValue > 0 ? "increased" : "decreased";
+        $("#table-WLD-imports").html(lastValue + "%");
+
+        $("#sentence-text-import").html(
+          "As of <b class='text-highlight'>end-" +
+            lastMonth +
+            "</b>, global maritime <b class='text-highlight'>import value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            trend +
+            "</b> by <b class='text-highlight'>" +
+            lastValue +
+            " percent</b> compared to a year ago."
+        );
+
+        lastValue = Math.round(lastObs["export_value_GR_MA"] * 10) / 10;
+        trend = lastValue > 0 ? "increased" : "decreased";
+        $("#table-WLD-exports").html(lastValue + "%");
+
+        $("#sentence-text-export").html(
+          "As of <b class='text-highlight'>end-" +
+            lastMonth +
+            "</b>, global maritime <b class='text-highlight'>export value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            trend +
+            "</b> by <b class='text-highlight'>" +
+            lastValue +
+            " percent</b> compared to a year ago."
+        );
+
+        if (isIndexChecked == true) {
+          
+          createChart(series, "WLD", "container-WLD-trade", "trade_value", yExtents["value"]);
+          createChart(series, "WLD", "container-WLD-import", "import_value", yExtents["value"]);
+          createChart(series, "WLD", "container-WLD-export", "export_value", yExtents["value"]);
+
+        } else {          
+
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-trade",
+            "trade_value",
+            yExtents["value_GR"]
+          );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-import",
+            "import_value",
+            yExtents["value_GR"]
+          );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-export",
+            "export_value",
+            yExtents["value_GR"]
+          );
+        }
+
+        $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+          $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+          $(this).children().addClass("active");
+
+          tabSelected = $("a.nav-link.active").attr("id");
+          isIndexChecked = $("#btnradio2").is(":checked");
+
+          $("#table-title").html("Trade " + tabSelected + " (3MA, yoy change)");
+
+          lastValue =
+            Math.round(lastObs["trade_" + tabSelected + "_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
+          $("#table-WLD-trade").html(lastValue + "%");
+
+          $("#sentence-text-trade").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>trade " +
+              tabSelected +
+              "</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
+
+          lastValue =
+            Math.round(lastObs["import_" + tabSelected + "_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
+          $("#table-WLD-imports").html(lastValue + "%");
+
+          $("#sentence-text-import").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>import " +
+              tabSelected +
+              "</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
+
+          lastValue =
+            Math.round(lastObs["export_" + tabSelected + "_GR_MA"] * 10) / 10;
+          trend = lastValue > 0 ? "increased" : "decreased";
+          $("#table-WLD-exports").html(lastValue + "%");
+
+          $("#sentence-text-export").html(
+            "As of <b class='text-highlight'>end-" +
+              lastMonth +
+              "</b>, global maritime <b class='text-highlight'>export " +
+              tabSelected +
+              "</b> over the last three months is estimated to have <b class='text-highlight'>" +
+              trend +
+              "</b> by <b class='text-highlight'>" +
+              lastValue +
+              " percent</b> compared to a year ago."
+          );
+
+          if (isIndexChecked == true) {
+            createChart(
+              series,
+              "WLD",
+              "container-WLD-trade",
+              "trade_" + tabSelected,
+              yExtents[tabSelected]
+              
+            );
+            createChart(
+              series,
+              "WLD",
+              "container-WLD-import",
+              "import_" + tabSelected,
+              yExtents[tabSelected]
+            );
+            createChart(
+              series,
+              "WLD",
+              "container-WLD-export",
+              "export_" + tabSelected,
+              yExtents[tabSelected]
+            );
+          } else {
+            createGrowthRateChart(
+              series,
+              "WLD",
+              "container-WLD-trade",
+              "trade_" + tabSelected,
+              yExtents[tabSelected+"_GR"]
+            );
+            createGrowthRateChart(
+              series,
+              "WLD",
+              "container-WLD-import",
+              "import_" + tabSelected,
+              yExtents[tabSelected+"_GR"]
+            );
+            createGrowthRateChart(
+              series,
+              "WLD",
+              "container-WLD-export",
+              "export_" + tabSelected,
+              yExtents[tabSelected+"_GR"]
+            );
+          }
+        });
+
+        $("#btnradio2").on("change", function (e) {
+          tabSelected = $("a.nav-link.active").attr("id");
+          console.log("Selected: ", tabSelected);
+          createChart(
+            series,
+            "WLD",
+            "container-WLD-trade",
+            "trade_" + tabSelected,
+            yExtents[tabSelected]
+          );
+          createChart(
+            series,
+            "WLD",
+            "container-WLD-import",
+            "import_" + tabSelected,
+            yExtents[tabSelected]
+          );
+          createChart(
+            series,
+            "WLD",
+            "container-WLD-export",
+            "export_" + tabSelected,
+            yExtents[tabSelected]
+          );
+        });
+
+        $("#btnradio1").on("change", function (e) {
+          tabSelected = $("a.nav-link.active").attr("id");
+          console.log("Selected: ", tabSelected);
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-trade",
+            "trade_" + tabSelected,
+            yExtents[tabSelected+"_GR"]
+          );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-import",
+            "import_" + tabSelected,
+            yExtents[tabSelected+"_GR"]
+          );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-export",
+            "export_" + tabSelected,
+            yExtents[tabSelected+"_GR"]
+          );
+        });
+      });
+    });
+  };
+
+  var queryAndTableData = function (regionid) {
+    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
+      FeatureLayer,
+      Query
+    ) => {
+      const layer = new FeatureLayer({
+        url: baseUrl,
+      });
+
+      const query = new Query({
+        where: "ISO3='" + regionid + "'",
+        returnGeometry: false,
+        outFields: "*",
+        maxRecordCountFactor: 5,
+        cacheHint: true,
+      });
+
+      layer.queryFeatures(query).then((result) => {
+        var lastValue;
+        var series = generateData(result.features);
+        var lastObs = series[series.length - 1];
+
+        lastValue = Math.round(lastObs["import_value_GR_MA"] * 10) / 10;
+        $("#table-" + regionid + "-imports").html(lastValue + "%");
+        lastValue = Math.round(lastObs["export_value_GR_MA"] * 10) / 10;
+        $("#table-" + regionid + "-exports").html(lastValue + "%");
+
+        $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+          $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+          $(this).children().addClass("active");
+
+          tabSelected = $("a.nav-link.active").attr("id");
+
+          lastValue =
+            Math.round(lastObs["import_" + tabSelected + "_GR_MA"] * 10) / 10;
+          $("#table-" + regionid + "-imports").html(lastValue + "%");
+          lastValue =
+            Math.round(lastObs["export_" + tabSelected + "_GR_MA"] * 10) / 10;
+          $("#table-" + regionid + "-exports").html(lastValue + "%");
+        });
+      });
+    });
+  };
+
+  $("#btnradio1").on("change", function (e) {
+    $("#sentence-text-trade").show();
+    $("#sentence-text-import").show();
+    $("#sentence-text-export").show();
+  });
+
+  $("#btnradio2").on("change", function (e) {
+    $("#sentence-text-trade").hide();
+    $("#sentence-text-import").hide();
+    $("#sentence-text-export").hide();
+  });
+</script>
