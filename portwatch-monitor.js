@@ -528,7 +528,8 @@ var createGrowthRateChart = function (
   };
 
   options.series = [
-    {
+// Remove bars
+/*     {
       name: "Y-o-Y",
       data: data
         .slice(gr, data.length)
@@ -540,7 +541,7 @@ var createGrowthRateChart = function (
       },
       color: "#f3a90a",
       showInLegend: true,
-    },
+    }, */
     {
       name: "3-month MA",
       data: data
@@ -553,7 +554,7 @@ var createGrowthRateChart = function (
       marker: {
         enabled: false,
       },
-      color: "#FFFFED",
+      color: "#f3a90a", //"#FFFFED",
       dashStyle: "LongDash",
       showInLegend: true,
     },
