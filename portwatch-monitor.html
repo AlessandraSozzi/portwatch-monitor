@@ -161,7 +161,17 @@
      * @param {String} tabSelected - The currently selected tab (value or volume)
      * @param {String} chart - The type of chart (trade, import, export)
      */
-    lastMonth = new Date(lastObs["date"]).toLocaleDateString("en-us", {
+
+    lastPeriodEnd = new Date(lastObs["date"]);
+    lastPeriodStart = new Date(lastObs["date"]);
+    lastPeriodStart.setMonth(lastPeriodStart.getMonth() - 2);
+
+    lastPeriodEnd = lastPeriodEnd.toLocaleDateString("en-us", {
+      year: "numeric",
+      month: "long",
+      timeZone: "UTC",
+    });
+    lastPeriodStart = lastPeriodStart.toLocaleDateString("en-us", {
       year: "numeric",
       month: "long",
       timeZone: "UTC",
@@ -173,7 +183,7 @@
     return (
       "Global maritime <b class='text-highlight'>" + strCapitalize(key, separator="_") +
       "</b> over <b class='text-highlight'>" +
-        lastMonth +
+        lastPeriodStart + "-" + lastPeriodEnd +
         "</b> is estimated to have <b class='text-highlight'>" +
         trend +
         "</b> by <b class='text-highlight'>" +
