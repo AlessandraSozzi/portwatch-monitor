@@ -79,29 +79,32 @@
   <div class="card-body">
     <div class="row" class="ts" id="div-WLD-trade">
       <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+        <div><span id="title-WLD-trade"></span></div>
         <span id="sentence-text-trade" class="sentence-text" style="text-align: left;"></span>
+        <span class="ytitle-WLD"></span>
       </div>
       <figure class="highcharts-figure">
-        <div><span id="title-WLD-trade"></span></div>
         <div id="container-WLD-trade"></div>
       </figure>
     </div>
     <div class="row" class="ts">
       <div class="col">
         <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+          <div><span id="title-WLD-import"></span></div>
           <span id="sentence-text-import" class="sentence-text"></span>
+          <span class="ytitle-WLD"></span>
         </div>
         <figure class="highcharts-figure">
-          <div><span id="title-WLD-import"></span></div>
           <div id="container-WLD-import"></div>
         </figure>
       </div>
       <div class="col">
         <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
+          <div><span id="title-WLD-export"></span></div>
           <span id="sentence-text-export" class="sentence-text"></span>
+          <span class="ytitle-WLD"></span>
         </div>
         <figure class="highcharts-figure">
-          <div><span id="title-WLD-export"></span></div>
           <div id="container-WLD-export"></div>
         </figure>
       </div>
@@ -177,6 +180,21 @@
     );
   };
 
+  var dynamicYLabel = function (tabSelected) {
+    /**
+     * Helper function to generate dynamic text for the Y label
+     * @param {String} tabSelected - The currently selected tab (value or volume)
+     */
+    if (tabSelected == "value") 
+      return (
+        "Maritime trade in US dollars, 3-month moving average, year on year change (%)"
+      );
+    else
+      return (
+          "Maritime trade in constant prices, 3-month moving average, year on year change (%)"
+      );
+  };
+
   $(document).ready(function () {
     queryAndChartData("WLD");
   });
@@ -231,6 +249,10 @@
         console.log(series);
         console.log(lastObs["date"]);
 
+        $(".ytitle-WLD").html(
+          dynamicYLabel(tabSelected)
+        );
+
         $("#sentence-text-trade").html(
           dynamicText(lastObs, tabSelected, "trade")
         );
@@ -269,6 +291,10 @@
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
           tabSelected = $("a.nav-link.active").attr("id");
+
+          $(".ytitle-WLD").html(
+            dynamicYLabel(tabSelected)
+          );
 
           $("#sentence-text-trade").html(
             dynamicText(lastObs, tabSelected, "trade")

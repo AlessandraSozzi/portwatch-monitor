@@ -88,6 +88,14 @@ body {
 	padding-left: 50;
 }
 
+.ytitle-WLD {
+    color: #c0c0c0;
+    font-size: 0.8rem;
+	text-align: left;
+	padding-left: 50;
+	padding-top: 5;
+}
+
 .text-highlight {
     color: #fff;
     font-size: 1.1rem;

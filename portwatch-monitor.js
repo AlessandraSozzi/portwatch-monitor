@@ -493,13 +493,10 @@ var createGrowthRateChart = function (
     labels: {
       style: {
         color: "#c0c0c0",
-      },
+      }
     },
     title: {
-      text: labels["growth_rate"].yAxis,
-      style: {
-        color: "#c0c0c0",
-      },
+      text: '',
     },
     opposite: false,
   };
