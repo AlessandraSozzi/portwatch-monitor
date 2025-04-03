@@ -517,6 +517,7 @@ var createGrowthRateChart = function (
     },
     tickColor: "#c0c0c0",
     type: "datetime",
+    crossing: 0
   };
 
   options.series = [
