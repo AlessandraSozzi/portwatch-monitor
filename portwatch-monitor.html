@@ -82,6 +82,7 @@
         <span id="sentence-text-trade" class="sentence-text"></span>
       </div>
       <figure class="highcharts-figure">
+        <div><span id="title-WLD-trade"></span></div>
         <div id="container-WLD-trade"></div>
       </figure>
     </div>
@@ -91,6 +92,7 @@
           <span id="sentence-text-import" class="sentence-text"></span>
         </div>
         <figure class="highcharts-figure">
+          <div><span id="title-WLD-import"></span></div>
           <div id="container-WLD-import"></div>
         </figure>
       </div>
@@ -99,6 +101,7 @@
           <span id="sentence-text-export" class="sentence-text"></span>
         </div>
         <figure class="highcharts-figure">
+          <div><span id="title-WLD-export"></span></div>
           <div id="container-WLD-export"></div>
         </figure>
       </div>
@@ -163,7 +166,7 @@
     trend = lastValue > 0 ? "increased" : "decreased";
 
     return (
-      "Global maritime <b class='text-highlight'>" + strCapitalize(key),
+      "Global maritime <b class='text-highlight'>" + strCapitalize(key, separator="_") +
       "</b> over <b class='text-highlight'>" +
         lastMonth +
         "</b> is estimated to have <b class='text-highlight'>" +
@@ -225,51 +228,19 @@
           volume_GR: chartsExtent(series, "volume", "_GR"),
         };
 
-        var lastValue, trend;
-
         console.log(series);
         console.log(lastObs["date"]);
 
-        lastValue = Math.round(lastObs["trade_value_GR_MA"] * 10) / 10;
-        trend = lastValue > 0 ? "increased" : "decreased";
-        $("#table-WLD-trade").html(lastValue + "%");
-
         $("#sentence-text-trade").html(
-          "Global maritime <b class='text-highlight'>trade value</b> over <b class='text-highlight'>" +
-            lastMonth +
-            "</b> is estimated to have <b class='text-highlight'>" +
-            trend +
-            "</b> by <b class='text-highlight'>" +
-            lastValue +
-            " percent</b> compared to a year ago."
+          dynamicText(lastObs, tabSelected, "trade")
         );
-
-        lastValue = Math.round(lastObs["import_value_GR_MA"] * 10) / 10;
-        trend = lastValue > 0 ? "increased" : "decreased";
-        $("#table-WLD-imports").html(lastValue + "%");
 
         $("#sentence-text-import").html(
-          "Global maritime <b class='text-highlight'>import value</b> over <b class='text-highlight'>" +
-            lastMonth +
-            "</b> is estimated to have <b class='text-highlight'>" +
-            trend +
-            "</b> by <b class='text-highlight'>" +
-            lastValue +
-            " percent</b> compared to a year ago."
+          dynamicText(lastObs, tabSelected, "import")
         );
 
-        lastValue = Math.round(lastObs["export_value_GR_MA"] * 10) / 10;
-        trend = lastValue > 0 ? "increased" : "decreased";
-        $("#table-WLD-exports").html(lastValue + "%");
-
         $("#sentence-text-export").html(
-          "Global maritime <b class='text-highlight'>export value</b> over <b class='text-highlight'>" +
-            lastMonth +
-            "</b> is estimated to have <b class='text-highlight'>" +
-            trend +
-            "</b> by <b class='text-highlight'>" +
-            lastValue +
-            " percent</b> compared to a year ago."
+          dynamicText(lastObs, tabSelected, "export")
         );
 
         createGrowthRateChart(
@@ -297,58 +268,18 @@
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
-
           tabSelected = $("a.nav-link.active").attr("id");
 
-          lastValue =
-            Math.round(lastObs["trade_" + tabSelected + "_GR_MA"] * 10) / 10;
-          trend = lastValue > 0 ? "increased" : "decreased";
-          $("#table-WLD-trade").html(lastValue + "%");
-
           $("#sentence-text-trade").html(
-            "As of <b class='text-highlight'>end-" +
-              lastMonth +
-              "</b>, global maritime <b class='text-highlight'>trade " +
-              tabSelected +
-              "</b> over the last three months is estimated to have <b class='text-highlight'>" +
-              trend +
-              "</b> by <b class='text-highlight'>" +
-              lastValue +
-              " percent</b> compared to a year ago."
+            dynamicText(lastObs, tabSelected, "trade")
           );
-
-          lastValue =
-            Math.round(lastObs["import_" + tabSelected + "_GR_MA"] * 10) / 10;
-          trend = lastValue > 0 ? "increased" : "decreased";
-          $("#table-WLD-imports").html(lastValue + "%");
 
           $("#sentence-text-import").html(
-            "As of <b class='text-highlight'>end-" +
-              lastMonth +
-              "</b>, global maritime <b class='text-highlight'>import " +
-              tabSelected +
-              "</b> over the last three months is estimated to have <b class='text-highlight'>" +
-              trend +
-              "</b> by <b class='text-highlight'>" +
-              lastValue +
-              " percent</b> compared to a year ago."
+            dynamicText(lastObs, tabSelected, "import")
           );
 
-          lastValue =
-            Math.round(lastObs["export_" + tabSelected + "_GR_MA"] * 10) / 10;
-          trend = lastValue > 0 ? "increased" : "decreased";
-          $("#table-WLD-exports").html(lastValue + "%");
-
           $("#sentence-text-export").html(
-            "As of <b class='text-highlight'>end-" +
-              lastMonth +
-              "</b>, global maritime <b class='text-highlight'>export " +
-              tabSelected +
-              "</b> over the last three months is estimated to have <b class='text-highlight'>" +
-              trend +
-              "</b> by <b class='text-highlight'>" +
-              lastValue +
-              " percent</b> compared to a year ago."
+            dynamicText(lastObs, tabSelected, "export")
           );
 
           createGrowthRateChart(

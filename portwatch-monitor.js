@@ -435,7 +435,7 @@ var createGrowthRateChart = function (
     },
 
     legend: {
-      enabled: true,
+      enabled: false,
       itemHiddenStyle: {
         color: "#fff",
       },
@@ -464,6 +464,8 @@ var createGrowthRateChart = function (
       plotBands: [],
     },
 
+    title: '',
+
     exporting: {
       enabled: true,
       buttons: {
@@ -485,13 +487,6 @@ var createGrowthRateChart = function (
 
   var region = data[0].region;
   console.log(region + " " + strCapitalize(chartType, (separator = "_")));
-  options["title"] = {
-    text: region + " " + strCapitalize(chartType, (separator = "_")),
-    style: {
-      color: "#c0c0c0",
-      y: -10,
-    },
-  };
 
   options["yAxis"] = {
     gridLineColor: "#c0c0c0",
