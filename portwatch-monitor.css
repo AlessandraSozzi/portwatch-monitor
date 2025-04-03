@@ -88,6 +88,12 @@ body {
 	padding-left: 50;
 }
 
+.title-text {
+	color: #fff;
+	font-weight: 600 !important;
+	font-size: 1.3rem;
+}
+
 .ytitle-WLD {
     color: #c0c0c0;
     font-size: 0.8rem;

@@ -61,7 +61,7 @@
     <!--<span style="color:#c0c0c0">ADJUST VIEW</span>-->
   </div>
   <br />
-  <div style="margin-right: 50px; margin-left: 50px">
+  <div style="margin-right: auto; margin-left: auto; width: 80%;">
     <span class="source" style="float: left; text-align: center"
       >Note: The latest data point is subject to revision in subsequent months.
       Trade refers to maritime trade and covers only goods (not services) trade.
@@ -79,7 +79,7 @@
   <div class="card-body">
     <div class="row" class="ts" id="div-WLD-trade">
       <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
-        <div><span id="title-WLD-trade"></span></div>
+        <div><span id="title-WLD-trade" class="title-text"></span></div>
         <span id="sentence-text-trade" class="sentence-text" style="text-align: left;"></span>
         <span class="ytitle-WLD"></span>
       </div>
@@ -90,7 +90,7 @@
     <div class="row" class="ts">
       <div class="col">
         <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
-          <div><span id="title-WLD-import"></span></div>
+          <div><span id="title-WLD-import" class="title-text"></span></div>
           <span id="sentence-text-import" class="sentence-text"></span>
           <span class="ytitle-WLD"></span>
         </div>
@@ -100,7 +100,7 @@
       </div>
       <div class="col">
         <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
-          <div><span id="title-WLD-export"></span></div>
+          <div><span id="title-WLD-export" class="title-text"></span></div>
           <span id="sentence-text-export" class="sentence-text"></span>
           <span class="ytitle-WLD"></span>
         </div>
@@ -152,7 +152,7 @@
     return [Math.min(...allMin), Math.max(...allMax)];
   };
 
-  var dynamicText = function (lastObs, tabSelected, chart = "trade") {
+  var dynamicText = function (lastObs, tabSelected, chart) {
     /**
      * Helper function to generate dynamic text for the summary sentence
      * @param {Object} lastObs - The last observation object from the series
@@ -177,6 +177,20 @@
         "</b> by <b class='text-highlight'>" +
         lastValue +
         " percent</b> compared to a year ago."
+    );
+  };
+
+  var dynamicTitle = function (tabSelected, chart) {
+    /**
+     * Helper function to generate dynamic text for the Y label
+     * @param {String} tabSelected - The currently selected tab (value or volume)
+     * @param {String} chart - The type of chart (trade, import, export)
+     */
+     return (
+      "World " +
+      strCapitalize(tabSelected) +
+      " " +
+      strCapitalize(chart)
     );
   };
 
@@ -249,21 +263,17 @@
         console.log(series);
         console.log(lastObs["date"]);
 
-        $(".ytitle-WLD").html(
-          dynamicYLabel(tabSelected)
-        );
+        $("#title-WLD-trade").html(dynamicTitle(tabSelected, "trade"));
+        $("#title-WLD-import").html(dynamicTitle(tabSelected, "import"));
+        $("#title-WLD-export").html(dynamicTitle(tabSelected, "export"));
 
-        $("#sentence-text-trade").html(
-          dynamicText(lastObs, tabSelected, "trade")
-        );
+        $(".ytitle-WLD").html(dynamicYLabel(tabSelected));
 
-        $("#sentence-text-import").html(
-          dynamicText(lastObs, tabSelected, "import")
-        );
+        $("#sentence-text-trade").html(dynamicText(lastObs, tabSelected, "trade"));
 
-        $("#sentence-text-export").html(
-          dynamicText(lastObs, tabSelected, "export")
-        );
+        $("#sentence-text-import").html(dynamicText(lastObs, tabSelected, "import"));
+
+        $("#sentence-text-export").html(dynamicText(lastObs, tabSelected, "export"));
 
         createGrowthRateChart(
           series,
@@ -291,6 +301,10 @@
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
           tabSelected = $("a.nav-link.active").attr("id");
+
+          $("#title-WLD-trade").html(dynamicTitle(tabSelected, "trade"));
+          $("#title-WLD-import").html(dynamicTitle(tabSelected, "import"));
+          $("#title-WLD-export").html(dynamicTitle(tabSelected, "export"));
 
           $(".ytitle-WLD").html(
             dynamicYLabel(tabSelected)
