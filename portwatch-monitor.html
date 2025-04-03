@@ -63,10 +63,10 @@
   <br />
   <div style="margin-right: 50px; margin-left: 50px">
     <span class="source" style="float: left; text-align: center"
-      >Notes: Figures for the last month are preliminary and subject to revision
-      in subsequent months. Trade refers to maritime trade and covers only goods
-      (not services) trade. Exports and imports are both valued on a
-      free-on-board (fob) basis. For background on the methodology see
+      >Note: The latest data point is subject to revision in subsequent months.
+      Trade refers to maritime trade and covers only goods (not services) trade.
+      Exports and imports are both valued on a free-on-board (fob) basis. For
+      background on the methodology see
       <a href="#" target="_blank" style="color: #3b9ec5">here</a>. Country
       groups/regions are based on the IMF World Economic Outlook (<a
         href="https://www.imf.org/en/Publications/WEO/weo-database/2024/October/groups-and-aggregates"
@@ -127,15 +127,51 @@
 
   var showSummaryOn = true;
 
-  var chartsExtent = function(series, chartType, suffix='') {
+  var chartsExtent = function (series, chartType, suffix = "") {
+    /**
+     * Helper function to calculate the Y axis min/max for the charts
+     * @param {Array} series - Array of objects with the data
+     * @param {String} chartType - Type of chart (trade, import, export)
+     * @param {String} suffix - Suffix to append to the column names (e.g. _GR_MA)
+     */
+    var columns = [
+      "trade_" + chartType + suffix,
+      "import_" + chartType + suffix,
+      "export_" + chartType + suffix,
+    ];
 
-    var columns = ['trade_'+chartType+suffix, 'import_'+chartType+suffix, 'export_'+chartType+suffix] ;
+    allMin = columns.map((col) => seriesMin(series.map((s) => s[col])));
+    allMax = columns.map((col) => seriesMax(series.map((s) => s[col])));
 
-    allMin = columns.map(col => seriesMin(series.map(s => s[col])));
-    allMax = columns.map(col => seriesMax(series.map(s => s[col])));
-   
     return [Math.min(...allMin), Math.max(...allMax)];
-    
+  };
+
+  var dynamicText = function (lastObs, tabSelected, chart = "trade") {
+    /**
+     * Helper function to generate dynamic text for the summary sentence
+     * @param {Object} lastObs - The last observation object from the series
+     * @param {String} tabSelected - The currently selected tab (value or volume)
+     * @param {String} chart - The type of chart (trade, import, export)
+     */
+    lastMonth = new Date(lastObs["date"]).toLocaleDateString("en-us", {
+      year: "numeric",
+      month: "long",
+      timeZone: "UTC",
+    });
+    key = chart + "_" + tabSelected; // e.g. trade_value/volume, import_value/volume, export_value/volume
+    lastValue = Math.round(lastObs[key + "_GR_MA"] * 10) / 10;
+    trend = lastValue > 0 ? "increased" : "decreased";
+
+    return (
+      "Global maritime <b class='text-highlight'>" + strCapitalize(key),
+      "</b> over <b class='text-highlight'>" +
+        lastMonth +
+        "</b> is estimated to have <b class='text-highlight'>" +
+        trend +
+        "</b> by <b class='text-highlight'>" +
+        lastValue +
+        " percent</b> compared to a year ago."
+    );
   };
 
   $(document).ready(function () {
@@ -185,17 +221,9 @@
         });
         // Get max and min for Y axis for all charts
         const yExtents = {
-          "value_GR": chartsExtent(series, "value", "_GR"),
-          "volume_GR": chartsExtent(series, "volume", "_GR")
+          value_GR: chartsExtent(series, "value", "_GR"),
+          volume_GR: chartsExtent(series, "volume", "_GR"),
         };
-
-
-        // Fill Table
-        const tableDate = new Date(lastObs["date"]).toLocaleDateString(
-          "en-us",
-          { year: "numeric", month: "short", timeZone: "UTC" }
-        );
-        $("#table-date").html(tableDate);
 
         var lastValue, trend;
 
@@ -207,9 +235,9 @@
         $("#table-WLD-trade").html(lastValue + "%");
 
         $("#sentence-text-trade").html(
-          "As of <b class='text-highlight'>end-" +
+          "Global maritime <b class='text-highlight'>trade value</b> over <b class='text-highlight'>" +
             lastMonth +
-            "</b>, global maritime <b class='text-highlight'>trade value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            "</b> is estimated to have <b class='text-highlight'>" +
             trend +
             "</b> by <b class='text-highlight'>" +
             lastValue +
@@ -221,9 +249,9 @@
         $("#table-WLD-imports").html(lastValue + "%");
 
         $("#sentence-text-import").html(
-          "As of <b class='text-highlight'>end-" +
+          "Global maritime <b class='text-highlight'>import value</b> over <b class='text-highlight'>" +
             lastMonth +
-            "</b>, global maritime <b class='text-highlight'>import value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            "</b> is estimated to have <b class='text-highlight'>" +
             trend +
             "</b> by <b class='text-highlight'>" +
             lastValue +
@@ -235,43 +263,42 @@
         $("#table-WLD-exports").html(lastValue + "%");
 
         $("#sentence-text-export").html(
-          "As of <b class='text-highlight'>end-" +
+          "Global maritime <b class='text-highlight'>export value</b> over <b class='text-highlight'>" +
             lastMonth +
-            "</b>, global maritime <b class='text-highlight'>export value</b> over the last three months is estimated to have <b class='text-highlight'>" +
+            "</b> is estimated to have <b class='text-highlight'>" +
             trend +
             "</b> by <b class='text-highlight'>" +
             lastValue +
             " percent</b> compared to a year ago."
         );
 
-          createGrowthRateChart(
-            series,
-            "WLD",
-            "container-WLD-trade",
-            "trade_value",
-            yExtents["value_GR"]
-          );
-          createGrowthRateChart(
-            series,
-            "WLD",
-            "container-WLD-import",
-            "import_value",
-            yExtents["value_GR"]
-          );
-          createGrowthRateChart(
-            series,
-            "WLD",
-            "container-WLD-export",
-            "export_value",
-            yExtents["value_GR"]
-          );
+        createGrowthRateChart(
+          series,
+          "WLD",
+          "container-WLD-trade",
+          "trade_value",
+          yExtents["value_GR"]
+        );
+        createGrowthRateChart(
+          series,
+          "WLD",
+          "container-WLD-import",
+          "import_value",
+          yExtents["value_GR"]
+        );
+        createGrowthRateChart(
+          series,
+          "WLD",
+          "container-WLD-export",
+          "export_value",
+          yExtents["value_GR"]
+        );
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
 
           tabSelected = $("a.nav-link.active").attr("id");
-
 
           lastValue =
             Math.round(lastObs["trade_" + tabSelected + "_GR_MA"] * 10) / 10;
@@ -324,31 +351,29 @@
               " percent</b> compared to a year ago."
           );
 
-            createGrowthRateChart(
-              series,
-              "WLD",
-              "container-WLD-trade",
-              "trade_" + tabSelected,
-              yExtents[tabSelected+"_GR"]
-            );
-            createGrowthRateChart(
-              series,
-              "WLD",
-              "container-WLD-import",
-              "import_" + tabSelected,
-              yExtents[tabSelected+"_GR"]
-            );
-            createGrowthRateChart(
-              series,
-              "WLD",
-              "container-WLD-export",
-              "export_" + tabSelected,
-              yExtents[tabSelected+"_GR"]
-            );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-trade",
+            "trade_" + tabSelected,
+            yExtents[tabSelected + "_GR"]
+          );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-import",
+            "import_" + tabSelected,
+            yExtents[tabSelected + "_GR"]
+          );
+          createGrowthRateChart(
+            series,
+            "WLD",
+            "container-WLD-export",
+            "export_" + tabSelected,
+            yExtents[tabSelected + "_GR"]
+          );
         });
-
       });
     });
   };
-
 </script>
