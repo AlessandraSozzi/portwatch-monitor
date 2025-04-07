@@ -61,14 +61,15 @@
     <!--<span style="color:#c0c0c0">ADJUST VIEW</span>-->
   </div>
   <br />
-  <div style="margin-right: auto; margin-left: auto; width: 80%;">
-    <span class="source" style="text-align:justify"
-      >This page presents the results of an experimental nowcasting model of global maritime trade, leveraging satellite-based big data on vessel movements.
-      The model aims to provide early warning signs of turning points in global trade and economic activity.
-      Note: The latest data point is subject to revision in subsequent months.
-      Trade refers to maritime trade and covers only goods (not services) trade.
-      Exports and imports are both valued on a free-on-board (fob) basis. For
-      background on the methodology see
+  <div style="margin-right: auto; margin-left: auto; width: 80%">
+    <span class="source" style="text-align: justify"
+      >This page presents the results of an experimental nowcasting model of
+      global maritime trade, leveraging satellite-based big data on vessel
+      movements. The model aims to provide early warning signs of turning points
+      in global trade and economic activity. The latest data point is subject to
+      revision in subsequent months. Trade refers to maritime trade and covers
+      only goods (not services) trade. Exports and imports are both valued on a
+      free-on-board (fob) basis. For background on the methodology see
       <a href="#" target="_blank" style="color: #3b9ec5">here</a>. Country
       groups/regions are based on the IMF World Economic Outlook (<a
         href="https://www.imf.org/en/Publications/WEO/weo-database/2024/October/groups-and-aggregates"
@@ -82,7 +83,11 @@
     <div class="row" class="ts" id="div-WLD-trade">
       <div class="row" class="ts" style="padding-top: 20; padding-bottom: 20">
         <div><span id="title-WLD-trade" class="title-text"></span></div>
-        <span id="sentence-text-trade" class="sentence-text" style="text-align: left;"></span>
+        <span
+          id="sentence-text-trade"
+          class="sentence-text"
+          style="text-align: left"
+        ></span>
         <span class="ytitle-WLD"></span>
       </div>
       <figure class="highcharts-figure">
@@ -113,7 +118,9 @@
     </div>
   </div>
   <div style="margin-right: 12px; margin-left: 12px">
-    <span class="source" style="float: right; text-align: right; padding-bottom: 20;"
+    <span
+      class="source"
+      style="float: right; text-align: right; padding-bottom: 20"
       >Source: IMF PortWatch (<a
         href="https://portwatch.imf.org/"
         target="_blank"
@@ -181,14 +188,17 @@
     trend = lastValue > 0 ? "increased" : "decreased";
 
     return (
-      "Global maritime <b class='text-highlight'>" + strCapitalize(key, separator="_") +
+      "Global maritime <b class='text-highlight'>" +
+      strCapitalize(key, (separator = "_")) +
       "</b> over <b class='text-highlight'>" +
-        lastPeriodStart + "-" + lastPeriodEnd +
-        "</b> is estimated to have <b class='text-highlight'>" +
-        trend +
-        "</b> by <b class='text-highlight'>" +
-        lastValue +
-        " percent</b> compared to a year ago."
+      lastPeriodStart +
+      "-" +
+      lastPeriodEnd +
+      "</b> is estimated to have <b class='text-highlight'>" +
+      trend +
+      "</b> by <b class='text-highlight'>" +
+      lastValue +
+      " percent</b> compared to a year ago."
     );
   };
 
@@ -198,12 +208,7 @@
      * @param {String} tabSelected - The currently selected tab (value or volume)
      * @param {String} chart - The type of chart (trade, import, export)
      */
-     return (
-      "World " +
-      strCapitalize(chart) +
-      " " +
-      strCapitalize(tabSelected)
-    );
+    return "World " + strCapitalize(chart) + " " + strCapitalize(tabSelected);
   };
 
   var dynamicYLabel = function (tabSelected) {
@@ -211,14 +216,10 @@
      * Helper function to generate dynamic text for the Y label
      * @param {String} tabSelected - The currently selected tab (value or volume)
      */
-    if (tabSelected == "value") 
-      return (
-        "Maritime trade in US dollars, 3-month moving average, year on year change (%)"
-      );
+    if (tabSelected == "value")
+      return "Maritime trade in US dollars, 3-month moving average, year on year change (%)";
     else
-      return (
-          "Maritime trade in constant prices, 3-month moving average, year on year change (%)"
-      );
+      return "Maritime trade in constant prices, 3-month moving average, year on year change (%)";
   };
 
   $(document).ready(function () {
@@ -281,11 +282,17 @@
 
         $(".ytitle-WLD").html(dynamicYLabel(tabSelected));
 
-        $("#sentence-text-trade").html(dynamicText(lastObs, tabSelected, "trade"));
+        $("#sentence-text-trade").html(
+          dynamicText(lastObs, tabSelected, "trade")
+        );
 
-        $("#sentence-text-import").html(dynamicText(lastObs, tabSelected, "import"));
+        $("#sentence-text-import").html(
+          dynamicText(lastObs, tabSelected, "import")
+        );
 
-        $("#sentence-text-export").html(dynamicText(lastObs, tabSelected, "export"));
+        $("#sentence-text-export").html(
+          dynamicText(lastObs, tabSelected, "export")
+        );
 
         createGrowthRateChart(
           series,
@@ -318,9 +325,7 @@
           $("#title-WLD-import").html(dynamicTitle(tabSelected, "import"));
           $("#title-WLD-export").html(dynamicTitle(tabSelected, "export"));
 
-          $(".ytitle-WLD").html(
-            dynamicYLabel(tabSelected)
-          );
+          $(".ytitle-WLD").html(dynamicYLabel(tabSelected));
 
           $("#sentence-text-trade").html(
             dynamicText(lastObs, tabSelected, "trade")
