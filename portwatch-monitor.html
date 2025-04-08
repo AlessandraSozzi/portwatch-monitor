@@ -166,6 +166,7 @@
     lastPeriodEnd = new Date(lastObs["date"]);
     lastPeriodStart = new Date(lastObs["date"]);
     lastPeriodStart.setMonth(lastPeriodStart.getMonth() - 2);
+    console.log(lastPeriodStart, lastPeriodEnd);
 
     lastPeriodEnd = lastPeriodEnd.toLocaleDateString("en-us", {
       year: "numeric",
