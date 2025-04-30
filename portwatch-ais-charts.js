@@ -449,6 +449,14 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
   options["title"] = {
     text: data[0].country + ": " + "Port Calls by Container Ships, 2025",
   };
+  options["subtitle"] = {
+    text: "(Number of vessels, year on year % change)",
+    align: "left",
+    style: {
+      color: "#c0c0c0",
+    },
+    x: 25,
+  };
 
   if (chartType == "portcalls") {
     options.series = [
