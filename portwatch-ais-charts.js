@@ -88,7 +88,7 @@ var parsePort = function (features) {
 
   series.sort((a, b) => a.date - b.date);
 
-  //console.log(series);
+  console.log("Data From API", series);
   return series;
 };
 
@@ -441,7 +441,7 @@ var generateYoYseries = function (series) {
   series = series.map(function (feature, i) {
     feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
     feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
-    if (i > yoy) {
+    if (i >= yoy) {
       feature["portcalls_container_MA7_yoy"] =
         portcalls_container_MA7_yoy[i - yoy];
       feature["portcalls_container_MA15_yoy"] =
