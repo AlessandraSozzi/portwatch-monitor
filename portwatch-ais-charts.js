@@ -470,50 +470,10 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     crossing: 0,
   };
 
-  if (chartType == "portcalls") {
-    options.series = [
-      {
-        name: "Number of Cargo Ships",
-        data: data.map((x) => [x.date, x["portcalls_cargo"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#afc5dc",
-        showInLegend: true,
-      },
-      {
-        name: "Number of Tanker Ships",
-        data: data.map((x) => [x.date, x["portcalls_tanker"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#004c97",
-        showInLegend: true,
-      },
-    ];
-  } else {
-    options.series = [
-      {
-        name: labels[chartType].name,
-        data: data.map((x) => [x.date, x[chartType]]),
-        type: "column",
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#004c97",
-        showInLegend: true,
-      },
-    ];
-  }
-
   options.series = options.series.concat([
     {
       name: "7-day Moving Average",
-      data: data.map((x) => [x.date, x[chartType + "_MA"]]),
+      data: data.map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
@@ -529,7 +489,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       name: "Prior Year: 7-day Moving Average",
       data: data
         .slice(shift + 1)
-        .map((x) => [x.date, x[chartType + "_MA_shifted"]]),
+        .map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
