@@ -415,7 +415,7 @@ var generateYoYseries = function (series) {
   ma2 = 15;
   yoy = 365;
   Jan2025 = new Date("2025-01-01").getTime();
-  print("Jan2025: " + Jan2025);
+  console.log("Jan2025: " + Jan2025);
 
   portcalls_container_MA7 = movingAvg(
     series.map((x) => x.portcalls_container),
@@ -427,6 +427,7 @@ var generateYoYseries = function (series) {
     ma2,
     0
   );
+
   console.log("portcalls_container_MA7: " + portcalls_container_MA7);
   console.log("portcalls_container_MA15: " + portcalls_container_MA15);
   console.log(
