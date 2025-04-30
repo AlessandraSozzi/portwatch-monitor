@@ -100,8 +100,6 @@ var parseRegion = function (features) {
   });
 
   series.sort((a, b) => a.date - b.date);
-
-  console.log("Data From API", series);
   return series;
 };
 
@@ -467,6 +465,9 @@ var generateYoYseries = function (series) {
 
 var createAisYoYChart = function (data, chartType = "portcalls") {
   Jan2025 = new Date("2025-01-01").getTime();
+
+  console.log(data);
+
   options["title"] = {
     text: data[0].country + ": " + "Port Calls by Container Ships, 2025",
   };
