@@ -504,7 +504,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     },
   ]);
 
-  var chart = new Highcharts.stockChart("container", options);
+  var chart = new Highcharts.Chart("container", options);
 };
 
 /// TESTS
