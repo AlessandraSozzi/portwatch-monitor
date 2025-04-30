@@ -486,23 +486,21 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
         enabled: false, // auto
         lineWidth: 1,
       },
-      color: "#f3ab0a",
+      color: "#2F6EBA",
       tooltip: {
         valueDecimals: 0,
       },
       showInLegend: true,
     },
     {
-      name: "Prior Year: 7-day Moving Average",
-      data: data
-        .slice(shift + 1)
-        .map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
+      name: "15-day Moving Average",
+      data: data.map((x) => [x.date, x["portcalls_container_MA15_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
         lineWidth: 1,
       },
-      color: "#474747",
+      color: "#EA3324",
       tooltip: {
         valueDecimals: 0,
       },
