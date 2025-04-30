@@ -476,7 +476,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     plotLines: [
       {
         color: "rgba(255, 0, 0, 0.1)", // Red
-        from: new Date("2025-04-02").getTime(),
+        from: new Date("2025-04-02"),
         label: {
           inside: false,
           text: "April 2",
@@ -490,6 +490,12 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       },
     ],
   };
+  options["yAxis"] = {
+    title: {
+      text: "",
+    },
+    opposite: false,
+  };
 
   options.series = options.series.concat([
     {
@@ -498,7 +504,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       type: "line",
       marker: {
         enabled: false, // auto
-        lineWidth: 1,
+        lineWidth: 2,
       },
       color: "#2F6EBA",
       tooltip: {
@@ -512,7 +518,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       type: "line",
       marker: {
         enabled: false, // auto
-        lineWidth: 1,
+        lineWidth: 2,
       },
       color: "#EA3324",
       tooltip: {
