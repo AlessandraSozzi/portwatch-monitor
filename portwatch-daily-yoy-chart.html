@@ -94,8 +94,9 @@
 
       executeDynamicQueries(iso3).then((results) => {
         ais = results;
+        console.log(ais);
         const final = generateYoYseries(ais);
-        //console.log(events, final);
+        console.log(final);
 
         options["xAxis"]["plotLines"].push({
           color: "rgba(255, 0, 0, 0.1)", // Red
