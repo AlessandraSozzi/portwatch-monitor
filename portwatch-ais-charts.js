@@ -457,6 +457,18 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     },
     x: 25,
   };
+  options["xAxis"] = {
+    gridLineColor: "#c0c0c0",
+    lineColor: "#c0c0c0",
+    labels: {
+      style: {
+        color: "#c0c0c0",
+      },
+    },
+    tickColor: "#c0c0c0",
+    type: "datetime",
+    crossing: 0,
+  };
 
   if (chartType == "portcalls") {
     options.series = [
