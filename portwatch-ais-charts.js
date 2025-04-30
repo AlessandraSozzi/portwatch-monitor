@@ -150,47 +150,6 @@ var generateIndicators = function (series) {
   return series;
 };
 
-var generateYoYseries = function (series) {
-  series.sort((a, b) => a.date - b.date);
-  ma1 = 7;
-  ma2 = 15;
-  yoy = 365;
-  Jan2025 = new Date("2025-01-01").getTime();
-  print("Jan2025: " + Jan2025);
-  portcalls_container_MA7 = movingAvg(
-    series.map((x) => x.portcalls_container),
-    ma1,
-    0
-  );
-  portcalls_container_MA15 = movingAvg(
-    series.map((x) => x.portcalls_container),
-    ma2,
-    0
-  );
-  portcalls_container_MA7_yoy = growthRate(portcalls_container_MA7, yoy).slice(
-    yoy,
-    series.length
-  );
-
-  portcalls_container_MA15_yoy = growthRate(
-    portcalls_container_MA15,
-    yoy
-  ).slice(yoy, series.length);
-
-  series = series.map(function (feature, i) {
-    feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
-    feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
-    if (feature["date"] >= Jan2025) {
-      feature["portcalls_container_MA7_yoy"] = portcalls_container_MA7_yoy[i];
-      feature["portcalls_container_MA15_yoy"] = portcalls_container_MA15_yoy[i];
-    }
-    return feature;
-  });
-
-  //console.log(series);
-  return series;
-};
-
 var parseEvents = function (features) {
   var series = features.map((feature) => {
     datapoint = {
@@ -450,6 +409,49 @@ var createAisChart = function (data, chartType = "portcalls") {
   var chart = new Highcharts.stockChart("container", options);
 };
 
+var generateYoYseries = function (series) {
+  series.sort((a, b) => a.date - b.date);
+  ma1 = 7;
+  ma2 = 15;
+  yoy = 365;
+  Jan2025 = new Date("2025-01-01").getTime();
+  print("Jan2025: " + Jan2025);
+
+  portcalls_container_MA7 = movingAvg(
+    series.map((x) => x.portcalls_container),
+    ma1,
+    0
+  );
+  portcalls_container_MA15 = movingAvg(
+    series.map((x) => x.portcalls_container),
+    ma2,
+    0
+  );
+
+  portcalls_container_MA7_yoy = growthRate(portcalls_container_MA7, yoy).slice(
+    yoy,
+    series.length
+  );
+
+  portcalls_container_MA15_yoy = growthRate(
+    portcalls_container_MA15,
+    yoy
+  ).slice(yoy, series.length);
+
+  series = series.map(function (feature, i) {
+    feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
+    feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
+    if (feature["date"] >= Jan2025) {
+      feature["portcalls_container_MA7_yoy"] = portcalls_container_MA7_yoy[i];
+      feature["portcalls_container_MA15_yoy"] = portcalls_container_MA15_yoy[i];
+    }
+    return feature;
+  });
+
+  //console.log(series);
+  return series;
+};
+
 var createAisYoYChart = function (data, chartType = "portcalls") {
   options["title"] = {
     text: data[0].country + ": " + "Port Calls by Container Ships, 2025",
@@ -500,7 +502,6 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
         enabled: false, // auto
         lineWidth: 1,
       },
-      dashStyle: "Dash",
       color: "#474747",
       tooltip: {
         valueDecimals: 0,
