@@ -469,13 +469,6 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
   console.log("Jan1", Jan1);
   console.log("Apr2", Apr2);
 
-  console.log(
-    "Filtered data",
-    data
-      .filter((x) => x.date >= Jan1)
-      .map((x) => [x.date, x["portcalls_container_MA15_yoy"]])
-  );
-
   options["title"] = {
     text: data[0].country + ": " + "Port Calls by Container Ships, 2025",
   };
@@ -525,7 +518,9 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
   options.series = options.series.concat([
     {
       name: "7-day Moving Average",
-      data: data.map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
+      data: data
+        .filter((x) => x.date >= Jan1)
+        .map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
@@ -539,7 +534,9 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     },
     {
       name: "15-day Moving Average",
-      data: data.map((x) => [x.date, x["portcalls_container_MA15_yoy"]]),
+      data: data
+        .filter((x) => x.date >= Jan1)
+        .map((x) => [x.date, x["portcalls_container_MA15_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
