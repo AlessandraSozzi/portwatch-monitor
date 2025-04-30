@@ -441,10 +441,8 @@ var generateYoYseries = function (series) {
   series = series.map(function (feature, i) {
     feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
     feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
-    if (feature["date"] >= Jan2025) {
-      feature["portcalls_container_MA7_yoy"] = portcalls_container_MA7_yoy[i];
-      feature["portcalls_container_MA15_yoy"] = portcalls_container_MA15_yoy[i];
-    }
+    feature["portcalls_container_MA7_yoy"] = portcalls_container_MA7_yoy[i];
+    feature["portcalls_container_MA15_yoy"] = portcalls_container_MA15_yoy[i];
     return feature;
   });
 
