@@ -65,6 +65,7 @@ var parsePort = function (features) {
       country: feature.attributes.country,
       portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
       portcalls_cargo: parseInt(feature.attributes.portcalls_cargo),
+      portcalls_container: parseInt(feature.attributes.portcalls_container),
       portcalls: parseInt(feature.attributes.portcalls),
       import: parseFloat(feature.attributes.import),
       export: parseFloat(feature.attributes.export),
@@ -398,13 +399,6 @@ var createAisChart = function (data, chartType = "portcalls") {
 var createAisYoYChart = function (data, chartType = "portcalls") {
   options["title"] = {
     text: data[0].country + ": " + "Port Calls by Container Ships, 2025",
-  };
-
-  options["yAxis"] = {
-    title: {
-      text: labels[chartType].yAxis,
-    },
-    opposite: false,
   };
 
   if (chartType == "portcalls") {
