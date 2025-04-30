@@ -78,10 +78,23 @@ var parsePort = function (features) {
       country: feature.attributes.country,
       portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
       portcalls_cargo: parseInt(feature.attributes.portcalls_cargo),
-      portcalls_container: parseInt(feature.attributes.portcalls_container),
       portcalls: parseInt(feature.attributes.portcalls),
       import: parseFloat(feature.attributes.import),
       export: parseFloat(feature.attributes.export),
+    };
+    return datapoint;
+  });
+
+  series.sort((a, b) => a.date - b.date);
+  return series;
+};
+
+var parseRegion = function (features) {
+  var series = features.map((feature) => {
+    datapoint = {
+      date: Date.parse(feature.attributes.date),
+      country: feature.attributes.country,
+      portcalls_container: parseInt(feature.attributes.portcalls_container),
     };
     return datapoint;
   });
