@@ -93,6 +93,7 @@ var parseRegion = function (features) {
   var series = features.map((feature) => {
     datapoint = {
       date: Date.parse(feature.attributes.date),
+      ISO3: feature.attributes.ISO3,
       country: feature.attributes.country,
       portcalls_container: parseInt(feature.attributes.portcalls_container),
     };
