@@ -93,7 +93,7 @@
       }
 
       executeDynamicQueries(iso3).then((results) => {
-        ais = results;
+        ais = results.flat();
         console.log(ais);
         const final = generateYoYseries(ais);
         console.log(final);
