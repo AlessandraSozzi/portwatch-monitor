@@ -97,19 +97,16 @@
         const final = generateYoYseries(ais);
         //console.log(events, final);
 
-        options["xAxis"]["plotBands"].push({
+        options["xAxis"]["plotLines"].push({
           color: "rgba(255, 0, 0, 0.1)", // Red
-          borderColor: "#FF0000",
-          borderWidth: 0.1,
           from: event.fromdate,
-          to: event.todate,
           label: {
             inside: false,
-            text: event.eventname,
+            text: "April 2",
             rotation: 0,
             y: 15,
             style: {
-              color: "#FF0000",
+              color: "#000000",
               fontWeight: "bold",
             },
           },
