@@ -416,7 +416,6 @@ var generateYoYseries = function (series) {
   yoy = 365;
   Jan2025 = new Date("2025-01-01").getTime();
   console.log("Jan2025: " + Jan2025);
-  console.log(series);
 
   portcalls_container_MA7 = movingAvg(
     series.map((x) => x.portcalls_container),
@@ -428,16 +427,6 @@ var generateYoYseries = function (series) {
     ma2,
     0
   );
-
-  console.log("portcalls_container_MA7: " + portcalls_container_MA7);
-  console.log("portcalls_container_MA15: " + portcalls_container_MA15);
-  console.log(
-    "portcalls_container_MA7.length: " + portcalls_container_MA7.length
-  );
-  console.log(
-    "portcalls_container_MA15.length: " + portcalls_container_MA15.length
-  );
-  console.log("series.length: " + series.length);
 
   portcalls_container_MA7_yoy = growthRate(portcalls_container_MA7, yoy).slice(
     yoy,
@@ -452,8 +441,12 @@ var generateYoYseries = function (series) {
   series = series.map(function (feature, i) {
     feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
     feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
-    feature["portcalls_container_MA7_yoy"] = portcalls_container_MA7_yoy[i];
-    feature["portcalls_container_MA15_yoy"] = portcalls_container_MA15_yoy[i];
+    if (i > yoy) {
+      feature["portcalls_container_MA7_yoy"] =
+        portcalls_container_MA7_yoy[i - yoy];
+      feature["portcalls_container_MA15_yoy"] =
+        portcalls_container_MA15_yoy[i - yoy];
+    }
     return feature;
   });
 
