@@ -464,9 +464,17 @@ var generateYoYseries = function (series) {
 };
 
 var createAisYoYChart = function (data, chartType = "portcalls") {
-  Jan2025 = new Date("2025-01-01").getTime();
+  Jan1 = new Date("2025-01-01").getTime();
+  Apr2 = new Date("2025-04-02").getTime();
+  console.log("Jan1", Jan1);
+  console.log("Apr2", Apr2);
 
-  console.log(data);
+  console.log(
+    "Filtered data",
+    data
+      .filter((x) => x.date >= Jan1)
+      .map((x) => [x.date, x["portcalls_container_MA15_yoy"]])
+  );
 
   options["title"] = {
     text: data[0].country + ": " + "Port Calls by Container Ships, 2025",
@@ -493,7 +501,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     plotLines: [
       {
         color: "#333333", // Black
-        value: new Date("2025-04-02").getTime(),
+        value: Apr2,
         label: {
           inside: false,
           text: "April 2",
