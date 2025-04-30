@@ -475,6 +475,22 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     tickColor: "#c0c0c0",
     type: "datetime",
     crossing: 0,
+    plotLines: [
+      {
+        color: "rgba(255, 0, 0, 0.1)", // Red
+        from: new Date("2025-04-02").getTime(),
+        label: {
+          inside: false,
+          text: "April 2",
+          rotation: 0,
+          y: 15,
+          style: {
+            color: "#000000",
+            fontWeight: "bold",
+          },
+        },
+      },
+    ],
   };
 
   options.series = options.series.concat([
