@@ -427,6 +427,15 @@ var generateYoYseries = function (series) {
     ma2,
     0
   );
+  console.log("portcalls_container_MA7: " + portcalls_container_MA7);
+  console.log("portcalls_container_MA15: " + portcalls_container_MA15);
+  console.log(
+    "portcalls_container_MA7.length: " + portcalls_container_MA7.length
+  );
+  console.log(
+    "portcalls_container_MA15.length: " + portcalls_container_MA15.length
+  );
+  console.log("series.length: " + series.length);
 
   portcalls_container_MA7_yoy = growthRate(portcalls_container_MA7, yoy).slice(
     yoy,
