@@ -51,7 +51,7 @@
 
 <script>
   var portsUrl =
-    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data_WLD/FeatureServer/0";
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data_REG/FeatureServer/0";
 
   Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
 
@@ -75,8 +75,7 @@
       });
 
       const aisQuery = new Query({
-        //where: "ISO3='" + iso3 + "'",
-        where: "1=1",
+        where: "ISO3='" + iso3 + "'",
         outFields: "*",
         cacheHint: true,
         maxRecordCountFactor: 5,
@@ -94,7 +93,6 @@
 
       executeDynamicQueries(iso3).then((results) => {
         ais = results.flat();
-        console.log(ais);
         const final = generateYoYseries(ais);
         console.log(final);
         createAisYoYChart(final, "portcalls");
