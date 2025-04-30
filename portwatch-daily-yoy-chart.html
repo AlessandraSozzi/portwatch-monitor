@@ -97,22 +97,6 @@
         console.log(ais);
         const final = generateYoYseries(ais);
         console.log(final);
-
-        options["xAxis"]["plotLines"].push({
-          color: "rgba(255, 0, 0, 0.1)", // Red
-          from: event.fromdate,
-          label: {
-            inside: false,
-            text: "April 2",
-            rotation: 0,
-            y: 15,
-            style: {
-              color: "#000000",
-              fontWeight: "bold",
-            },
-          },
-        });
-
         createAisYoYChart(final, "portcalls");
       });
     });
