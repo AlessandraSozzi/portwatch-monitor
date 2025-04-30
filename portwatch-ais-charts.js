@@ -56,6 +56,19 @@ var movingAvg = function (array, countBefore, countAfter) {
   return result;
 };
 
+var growthRate = function (array, countBefore) {
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    if (i < countBefore) {
+      result.push(null);
+      continue;
+    }
+    const growth = (array[i] / array[i - countBefore] - 1) * 100;
+    result.push(growth);
+  }
+  return result;
+};
+
 var parsePort = function (features) {
   var series = features.map((feature) => {
     datapoint = {
@@ -129,6 +142,42 @@ var generateIndicators = function (series) {
       feature["import_MA_shifted"] = import_MA[i - shift];
       feature["export_MA_shifted"] = export_MA[i - shift];
       feature["portcalls_MA_shifted"] = portcalls_MA[i - shift];
+    }
+    return feature;
+  });
+
+  //console.log(series);
+  return series;
+};
+
+var generateYoYseries = function (series) {
+  series.sort((a, b) => a.date - b.date);
+  ma1 = 7;
+  ma2 = 15;
+  yoy = 365;
+  Jan2025 = new Date("2025-01-01").getTime();
+  print("Jan2025: " + Jan2025);
+  portcalls_container_MA7 = movingAvg(
+    series.map((x) => x.portcalls_container),
+    ma1,
+    0
+  );
+  portcalls_container_MA7_yoy = growthRate(
+    portcalls_container_MA7_yoy,
+    yoy
+  ).slice(yoy, series.length);
+
+  portcalls_container_MA15_yoy = growthRate(
+    portcalls_container_MA15_yoy,
+    yoy
+  ).slice(yoy, series.length);
+
+  series = series.map(function (feature, i) {
+    feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
+    feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
+    if (feature["date"] >= Jan2025) {
+      feature["portcalls_container_MA7_yoy"] = portcalls_container_MA7_yoy[i];
+      feature["portcalls_container_MA15_yoy"] = portcalls_container_MA15_yoy[i];
     }
     return feature;
   });
