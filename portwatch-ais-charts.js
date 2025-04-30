@@ -162,13 +162,18 @@ var generateYoYseries = function (series) {
     ma1,
     0
   );
-  portcalls_container_MA7_yoy = growthRate(
-    portcalls_container_MA7_yoy,
-    yoy
-  ).slice(yoy, series.length);
+  portcalls_container_MA15 = movingAvg(
+    series.map((x) => x.portcalls_container),
+    ma2,
+    0
+  );
+  portcalls_container_MA7_yoy = growthRate(portcalls_container_MA7, yoy).slice(
+    yoy,
+    series.length
+  );
 
   portcalls_container_MA15_yoy = growthRate(
-    portcalls_container_MA15_yoy,
+    portcalls_container_MA15,
     yoy
   ).slice(yoy, series.length);
 
