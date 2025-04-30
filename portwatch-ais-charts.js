@@ -515,12 +515,15 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     },
     opposite: false,
   };
+  options["rangeSelector"] = {
+    selected: 3,
+  };
 
   options.series = options.series.concat([
     {
       name: "7-day Moving Average",
       data: data
-        .filter((x) => x.date >= Jan1)
+        //.filter((x) => x.date >= Jan1)
         .map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
       type: "line",
       marker: {
@@ -536,7 +539,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     {
       name: "15-day Moving Average",
       data: data
-        .filter((x) => x.date >= Jan1)
+        //.filter((x) => x.date >= Jan1)
         .map((x) => [x.date, x["portcalls_container_MA15_yoy"]]),
       type: "line",
       marker: {
