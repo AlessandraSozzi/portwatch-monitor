@@ -491,7 +491,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     crossing: 0,
     plotLines: [
       {
-        color: "rgba(27, 26, 26, 0.1)", // Black
+        color: "#333333", // Black
         value: new Date("2025-04-02").getTime(),
         label: {
           inside: false,
