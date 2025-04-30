@@ -62,10 +62,10 @@
     iso3 = iso3 == null ? "WLD" : iso3;
     //console.log(portid);
 
-    queryAndChartData(portid);
+    queryAndChartData(iso3);
   });
 
-  var queryAndChartData = function (portid) {
+  var queryAndChartData = function (iso3) {
     require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
       FeatureLayer,
       Query
@@ -82,7 +82,7 @@
         maxRecordCountFactor: 5,
       });
 
-      async function executeDynamicQueries(portid) {
+      async function executeDynamicQueries(iso3) {
         const promises = [
           aisLayer.queryFeatures(aisQuery).then((result) => {
             return parsePort(result.features);
