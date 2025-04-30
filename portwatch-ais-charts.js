@@ -462,19 +462,19 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     text: "(Number of vessels, year on year % change)",
     align: "left",
     style: {
-      color: "#c0c0c0",
+      color: "#333333",
     },
     x: 25,
   };
   options["xAxis"] = {
-    gridLineColor: "#c0c0c0",
-    lineColor: "#c0c0c0",
+    gridLineColor: "#333333",
+    lineColor: "#333333",
     labels: {
       style: {
-        color: "#c0c0c0",
+        color: "#333333",
       },
     },
-    tickColor: "#c0c0c0",
+    tickColor: "#333333",
     type: "datetime",
     crossing: 0,
     plotLines: [
@@ -487,7 +487,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
           rotation: 0,
           y: 15,
           style: {
-            color: "#000000",
+            color: "#333333",
             fontWeight: "bold",
           },
         },
