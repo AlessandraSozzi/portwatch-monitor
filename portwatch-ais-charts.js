@@ -561,4 +561,10 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
 
 //console.log(labels);
 
-//console.log(movingAvg([1,2,3,1,1,1], 2));
+
+test_array = movingAvg([1116,1240,1273,1243,1337,1294,1210,1331,1245,1388,1294,1338,1293,1213, // 2024
+                        990, 1179,1235,1226,1188,1258,1264,1296,1289,1294,1268,1248,1311,1267
+
+], 7*2);
+console.log(test_array);
+console.log(growthRate(test_array, 7))
