@@ -425,7 +425,7 @@ var generateYoYseries = function (series) {
   series.sort((a, b) => a.date - b.date);
   ma1 = 7;
   ma2 = 15;
-  yoy = 365;
+  yoy = 52 * 7; //365;
 
   portcalls_container_MA7 = movingAvg(
     series.map((x) => x.portcalls_container),
