@@ -100,7 +100,7 @@ var parseRegion = function (features) {
         feature.attributes.portcalls_container_7MA_yoy_doy
       ),
       portcalls_container_15MA_yoy: parseFloat(
-        feature.attributes.portcalls_container_15_MA_yoy_doy
+        feature.attributes.portcalls_container_15MA_yoy_doy
       ),
     };
     return datapoint;
