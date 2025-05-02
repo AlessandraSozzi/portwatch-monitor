@@ -557,5 +557,5 @@ test_array = movingAvg(
   ],
   7 * 2
 );
-console.log(test_array);
-console.log(growthRate(test_array, 7));
+//console.log(test_array);
+//console.log(growthRate(test_array, 7));
