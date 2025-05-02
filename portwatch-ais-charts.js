@@ -96,6 +96,12 @@ var parseRegion = function (features) {
       ISO3: feature.attributes.ISO3,
       country: feature.attributes.country,
       portcalls_container: parseInt(feature.attributes.portcalls_container),
+      portcalls_container_7MA_yoy: parseFloat(
+        feature.attributes.portcalls_container_7MA_yoy
+      ),
+      portcalls_container_15_MA_yoy: parseFloat(
+        feature.attributes.portcalls_container_15_MA_yoy
+      ),
     };
     return datapoint;
   });
@@ -419,49 +425,6 @@ var createAisChart = function (data, chartType = "portcalls") {
   ]);
 
   var chart = new Highcharts.stockChart("container", options);
-};
-
-var generateYoYseries = function (series) {
-  series.sort((a, b) => a.date - b.date);
-  ma1 = 7;
-  ma2 = 15;
-  yoy = 52 * 7; //365;
-
-  portcalls_container_MA7 = movingAvg(
-    series.map((x) => x.portcalls_container),
-    ma1,
-    0
-  );
-  portcalls_container_MA15 = movingAvg(
-    series.map((x) => x.portcalls_container),
-    ma2,
-    0
-  );
-
-  portcalls_container_MA7_yoy = growthRate(portcalls_container_MA7, yoy).slice(
-    yoy,
-    series.length
-  );
-
-  portcalls_container_MA15_yoy = growthRate(
-    portcalls_container_MA15,
-    yoy
-  ).slice(yoy, series.length);
-
-  series = series.map(function (feature, i) {
-    feature["portcalls_container_MA7"] = portcalls_container_MA7[i];
-    feature["portcalls_container_MA15"] = portcalls_container_MA15[i];
-    if (i >= yoy) {
-      feature["portcalls_container_MA7_yoy"] =
-        portcalls_container_MA7_yoy[i - yoy];
-      feature["portcalls_container_MA15_yoy"] =
-        portcalls_container_MA15_yoy[i - yoy];
-    }
-    return feature;
-  });
-
-  //console.log(series);
-  return series;
 };
 
 var createAisYoYChart = function (data, chartType = "portcalls") {
