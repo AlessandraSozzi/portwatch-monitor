@@ -92,10 +92,8 @@
       }
 
       executeDynamicQueries(iso3).then((results) => {
-        ais = results.flat();
-        const final = generateYoYseries(ais);
-        console.log(final);
-        createAisYoYChart(final, "portcalls");
+        daily_agg = results.flat();
+        createAisYoYChart(daily_agg, "portcalls");
       });
     });
   };
