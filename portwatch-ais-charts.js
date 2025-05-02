@@ -532,7 +532,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       },
       color: "#2F6EBA",
       tooltip: {
-        valueDecimals: 0,
+        valueDecimals: 1,
       },
       showInLegend: true,
     },
@@ -548,7 +548,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       },
       color: "#EA3324",
       tooltip: {
-        valueDecimals: 0,
+        valueDecimals: 1,
       },
       showInLegend: true,
     },
@@ -561,10 +561,38 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
 
 //console.log(labels);
 
-
-test_array = movingAvg([1116,1240,1273,1243,1337,1294,1210,1331,1245,1388,1294,1338,1293,1213, // 2024
-                        990, 1179,1235,1226,1188,1258,1264,1296,1289,1294,1268,1248,1311,1267
-
-], 7*2);
+test_array = movingAvg(
+  [
+    1116,
+    1240,
+    1273,
+    1243,
+    1337,
+    1294,
+    1210,
+    1331,
+    1245,
+    1388,
+    1294,
+    1338,
+    1293,
+    1213, // 2024
+    990,
+    1179,
+    1235,
+    1226,
+    1188,
+    1258,
+    1264,
+    1296,
+    1289,
+    1294,
+    1268,
+    1248,
+    1311,
+    1267,
+  ],
+  7 * 2
+);
 console.log(test_array);
-console.log(growthRate(test_array, 7))
+console.log(growthRate(test_array, 7));
