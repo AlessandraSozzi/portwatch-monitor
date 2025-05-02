@@ -93,6 +93,7 @@
 
       executeDynamicQueries(iso3).then((results) => {
         daily_agg = results.flat();
+        console.log(daily_agg);
         createAisYoYChart(daily_agg, "portcalls");
       });
     });
