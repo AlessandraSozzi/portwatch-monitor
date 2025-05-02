@@ -99,7 +99,7 @@ var parseRegion = function (features) {
       portcalls_container_7MA_yoy: parseFloat(
         feature.attributes.portcalls_container_7MA_yoy_doy
       ),
-      portcalls_container_15_MA_yoy: parseFloat(
+      portcalls_container_15MA_yoy: parseFloat(
         feature.attributes.portcalls_container_15_MA_yoy_doy
       ),
     };
@@ -487,7 +487,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       name: "7-day Moving Average",
       data: data
         .filter((x) => x.date >= new Date("2020-01-01").getTime())
-        .map((x) => [x.date, x["portcalls_container_MA7_yoy"]]),
+        .map((x) => [x.date, x["portcalls_container_7MA_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
@@ -503,7 +503,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       name: "15-day Moving Average",
       data: data
         .filter((x) => x.date >= new Date("2020-01-01").getTime())
-        .map((x) => [x.date, x["portcalls_container_MA15_yoy"]]),
+        .map((x) => [x.date, x["portcalls_container_15MA_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
