@@ -96,12 +96,10 @@ var parseRegion = function (features) {
       ISO3: feature.attributes.ISO3,
       country: feature.attributes.country,
       portcalls_container: parseInt(feature.attributes.portcalls_container),
-      portcalls_container_7MA_yoy: parseFloat(
-        feature.attributes.portcalls_container_7MA_yoy_doy
-      ),
-      portcalls_container_15MA_yoy: parseFloat(
-        feature.attributes.portcalls_container_15MA_yoy_doy
-      ),
+      portcalls_container_7MA_yoy:
+        parseFloat(feature.attributes.portcalls_container_7MA_yoy_doy) * 100,
+      portcalls_container_15MA_yoy:
+        parseFloat(feature.attributes.portcalls_container_15MA_yoy_doy) * 100,
     };
     return datapoint;
   });
