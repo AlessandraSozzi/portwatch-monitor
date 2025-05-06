@@ -2,28 +2,36 @@
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/stock/modules/data.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+/>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://js.arcgis.com/4.28/"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
 <script src="portwatch-ais-charts.js"></script>
-<link rel="stylesheet" type="text/css" href="portwatch-ais-charts.css">
+<link rel="stylesheet" type="text/css" href="portwatch-ais-charts.css" />
 
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous"
+></script>
 <style>
- /*
+  /*
   .not-show {
    display: none; 
   }*/
-
 </style>
 
 <div class="card text-center">
@@ -41,112 +49,115 @@
     </ul>
   </div>
   <div class="card-body">
-      <figure class="highcharts-figure">
-          <div id="container"></div>
-          <div style="margin-right:12px; margin-left:12px">   
-            <span class="source" style="float:left;font-size:1vw;">Note: Latest data points are subject to revision.</span>               
-            <span class="source" style="float:right;text-align:right;font-size:1vw;">Sources: UN Global Platform; PortWatch.</span>  
-          </div>
-
-      </figure>
+    <figure class="highcharts-figure">
+      <div id="container"></div>
+      <div style="margin-right: 12px; margin-left: 12px">
+        <span class="source" style="float: left; font-size: 1vw"
+          >Note: Latest data points are subject to revision.</span
+        >
+        <span
+          class="source"
+          style="float: right; text-align: right; font-size: 1vw"
+          >Sources: UN Global Platform; PortWatch.</span
+        >
+      </div>
+    </figure>
   </div>
 </div>
 
 <script>
+  var portsUrl =
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data_TEST4/FeatureServer/0";
+  var eventsUrl =
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/disruptions_with_ports/FeatureServer/0";
 
-var portsUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data/FeatureServer/0"
-var eventsUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/disruptions_with_ports/FeatureServer/0"
+  Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
 
+  $(document).ready(function () {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var portid = urlParams.get("portid");
+    portid = portid == null ? "port0" : portid;
+    //console.log(portid);
 
-Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol; 
+    queryAndChartData(portid);
+  });
 
-$(document).ready(function() {
-
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  var portid = urlParams.get('portid');
-  portid = portid == null ? 'port0' : portid;
-  //console.log(portid);
-
-  queryAndChartData(portid); 
-
-});
-
-
-var queryAndChartData = function(portid) {
-
-  require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (FeatureLayer, Query) => {
-
+  var queryAndChartData = function (portid) {
+    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
+      FeatureLayer,
+      Query
+    ) => {
       const portLayer = new FeatureLayer({
-        url: portsUrl
+        url: portsUrl,
       });
 
       const eventLayer = new FeatureLayer({
-        url: eventsUrl
+        url: eventsUrl,
       });
 
       const portQuery = new Query({
-        where: "portid='"+portid+"'",
+        where: "portid='" + portid + "'",
         outFields: "*",
         cacheHint: true,
-        maxRecordCountFactor: 5
-      }); 
-      
+        maxRecordCountFactor: 5,
+      });
+
       const eventQuery = new Query({
-        where: "portid='"+portid+"'",
+        where: "portid='" + portid + "'",
         outFields: "*",
         cacheHint: true,
-        maxRecordCountFactor: 5
+        maxRecordCountFactor: 5,
       });
 
       async function executeDynamicQueries(portid) {
         const promises = [
-          portLayer.queryFeatures(portQuery).then((result) => { return parsePort(result.features) }),
-          eventLayer.queryFeatures(eventQuery).then((result) => { return parseEvents(result.features) })
+          portLayer.queryFeatures(portQuery).then((result) => {
+            return parsePort(result.features);
+          }),
+          eventLayer.queryFeatures(eventQuery).then((result) => {
+            return parseEvents(result.features);
+          }),
         ];
         const results = await Promise.all(promises);
         return results;
       }
 
       executeDynamicQueries(portid).then((results) => {
-
         [port, events] = results;
         const final = generateIndicators(port);
         //console.log(events, final);
 
         events.forEach((event) => {
-          options['xAxis']['plotBands'].push({
-            color: 'rgba(255, 0, 0, 0.1)', // Red
-            borderColor: '#FF0000',
+          options["xAxis"]["plotBands"].push({
+            color: "rgba(255, 0, 0, 0.1)", // Red
+            borderColor: "#FF0000",
             borderWidth: 0.1,
-            from: event.fromdate, 
-            to:  event.todate, 
+            from: event.fromdate,
+            to: event.todate,
             label: {
-              inside: false, 
+              inside: false,
               text: event.eventname,
               rotation: 0,
               y: 15,
               style: {
-                color: '#FF0000',
-                fontWeight: 'bold'
-              }
-            }
+                color: "#FF0000",
+                fontWeight: "bold",
+              },
+            },
           });
         });
 
-                  
-      createAisChart(final, "portcalls");
+        createAisChart(final, "portcalls");
 
-      $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-        $(this).children().addClass('active');
-        const selected = $(this).attr('id');
-        //console.log(selected);
-        createDisruptionAisChart(final, selected);
-      }); 
-                  
+        $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+          $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+          $(this).children().addClass("active");
+          const selected = $(this).attr("id");
+          //console.log(selected);
+          createDisruptionAisChart(final, selected);
+        });
+      });
     });
-  });
-}
-
+  };
 </script>
