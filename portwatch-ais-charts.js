@@ -72,7 +72,7 @@ var growthRate = function (array, countBefore) {
 var parsePort = function (features) {
   var series = features.map((feature) => {
     datapoint = {
-      date: featurefeature.attributes.date,
+      date: feature.attributes.date,
       portid: feature.attributes.portid,
       portname: feature.attributes.portname,
       country: feature.attributes.country,
