@@ -485,7 +485,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       name: "7-day Moving Average",
       data: data
         .filter((x) => x.date >= new Date("2020-01-01").getTime())
-        .map((x) => [x.date, x["portcalls_container_7MA_yoy"]]),
+        .map((x) => [x.date, x[chartType + "_container_7MA_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
@@ -501,7 +501,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       name: "15-day Moving Average",
       data: data
         .filter((x) => x.date >= new Date("2020-01-01").getTime())
-        .map((x) => [x.date, x["portcalls_container_15MA_yoy"]]),
+        .map((x) => [x.date, x[chartType + "_container_15MA_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
