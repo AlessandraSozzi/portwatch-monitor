@@ -111,7 +111,7 @@
         $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
         $(this).children().addClass("active");
         const selected = $(this).attr("id");
-        //console.log(selected);
+        console.log(selected);
         createAisYoYChart(daily_agg, selected);
       });
     });
