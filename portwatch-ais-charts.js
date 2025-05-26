@@ -487,7 +487,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     selected: 3,
   };
 
-  options.series = options.series.concat([
+  options.series = [
     {
       name: "7-day Moving Average",
       data: data
@@ -520,7 +520,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
       },
       showInLegend: true,
     },
-  ]);
+  ];
 
   var chart = new Highcharts.stockChart("container", options);
 };
