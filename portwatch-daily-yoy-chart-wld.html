@@ -106,6 +106,14 @@
         console.log(daily_agg);
         createAisYoYChart(daily_agg, "portcalls");
       });
+
+      $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+        $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+        $(this).children().addClass("active");
+        const selected = $(this).attr("id");
+        //console.log(selected);
+        createAisYoYChart(daily_agg, selected);
+      });
     });
   };
 </script>
