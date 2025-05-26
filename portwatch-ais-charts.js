@@ -435,8 +435,10 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
   console.log("Jan1", Jan1);
   console.log("Apr2", Apr2);
 
+  titleName = chartType == "portcalls" ? "Port Calls" : "Shipment";
+
   options["title"] = {
-    text: data[0].country + ": " + "Port Calls by Container Ships",
+    text: data[0].country + ": " + titleName + " by Container Ships",
   };
   options["subtitle"] = {
     text: "(Number of vessels, year on year % change)",
