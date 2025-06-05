@@ -41,6 +41,12 @@
         <li class="nav-item" id="portcalls">
           <a class="nav-link active" href="#">Port Calls</a>
         </li>
+        <li class="nav-item" id="import">
+          <a class="nav-link" href="#">Incoming Cargo</a>
+        </li>
+        <li class="nav-item" id="export">
+          <a class="nav-link" href="#">Outgoing Cargo</a>
+        </li>
         <li class="nav-item" id="shipment">
           <a class="nav-link" href="#">Shipment</a>
         </li>
@@ -104,6 +110,11 @@
       executeDynamicQueries(iso3).then((results) => {
         daily_agg = results.flat();
         console.log(daily_agg);
+        // hide import/export for world view
+        if (iso3 == "WLD") {
+          $("#import").hide();
+          $("#export").hide();
+        }
         createAisYoYChart(daily_agg, "portcalls");
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
