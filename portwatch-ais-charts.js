@@ -109,9 +109,9 @@ var parseRegion = function (features) {
       export_container_7MA_yoy:
         parseFloat(feature.attributes.export_container_7MA_yoy_doy) * 100,
       import_container_15MA_yoy:
-        parseFloat(feature.attributes.import_container_15MA_yoy_do) * 100,
+        parseFloat(feature.attributes.import_container_15MA_yoy_doy) * 100,
       export_container_15MA_yoy:
-        parseFloat(feature.attributes.export_container_15MA_yoy_do) * 100,
+        parseFloat(feature.attributes.export_container_15MA_yoy_doy) * 100,
     };
     return datapoint;
   });
