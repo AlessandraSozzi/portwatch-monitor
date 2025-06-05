@@ -114,6 +114,8 @@
         if (iso3 == "WLD") {
           $("#import").hide();
           $("#export").hide();
+        } else {
+          $("#shipment").hide();
         }
         createAisYoYChart(daily_agg, "portcalls");
 

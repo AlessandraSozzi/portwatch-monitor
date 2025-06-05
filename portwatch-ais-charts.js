@@ -447,10 +447,11 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
   console.log("Jan1", Jan1);
   console.log("Apr2", Apr2);
 
+  titleTypeName = chartType == "portcalls" ? "Port Calls" : "Shipment";
   titleTypeName =
-    chartType == "portcalls"
-      ? "Port Calls"
-      : capitalizeFirstLetter(chartType) + " Volume";
+    chartType == "import" ? "Incoming " + titleTypeName : titleTypeName;
+  titleTypeName =
+    chartType == "export" ? "Outgoing " + titleTypeName : titleTypeName;
   yTypeName = chartType == "portcalls" ? "Number of vessels" : "Metric tons";
 
   options["title"] = {
