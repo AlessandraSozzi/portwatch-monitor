@@ -505,22 +505,6 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
 
   options.series = [
     {
-      name: "7-day Moving Average",
-      data: data
-        .filter((x) => x.date >= new Date("2020-01-01").getTime())
-        .map((x) => [x.date, x[chartType + "_container_7MA_yoy"]]),
-      type: "line",
-      marker: {
-        enabled: false, // auto
-        lineWidth: 2,
-      },
-      color: "#2F6EBA",
-      tooltip: {
-        valueDecimals: 1,
-      },
-      showInLegend: true,
-    },
-    {
       name: "15-day Moving Average",
       data: data
         .filter((x) => x.date >= new Date("2020-01-01").getTime())
