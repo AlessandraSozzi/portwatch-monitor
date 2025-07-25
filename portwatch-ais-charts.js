@@ -104,10 +104,14 @@ var parseRegion = function (features) {
         parseFloat(feature.attributes.portcalls_container_7MA_yoy_doy) * 100,
       portcalls_container_15MA_yoy:
         parseFloat(feature.attributes.portcalls_container_15MA_yoy_do) * 100,
+      portcalls_container_30MA_yoy:
+        parseFloat(feature.attributes.portcalls_container_30MA_yoy_do) * 100,
       shipment_container_7MA_yoy:
         parseFloat(feature.attributes.shipment_7MA_yoy_doy) * 100,
       shipment_container_15MA_yoy:
         parseFloat(feature.attributes.shipment_15MA_yoy_doy) * 100,
+      shipment_container_30MA_yoy:
+        parseFloat(feature.attributes.shipment_30MA_yoy_doy) * 100,
       import_container_7MA_yoy:
         parseFloat(feature.attributes.import_container_7MA_yoy_doy) * 100,
       export_container_7MA_yoy:
@@ -116,6 +120,10 @@ var parseRegion = function (features) {
         parseFloat(feature.attributes.import_container_15MA_yoy_doy) * 100,
       export_container_15MA_yoy:
         parseFloat(feature.attributes.export_container_15MA_yoy_doy) * 100,
+      import_container_30MA_yoy:
+        parseFloat(feature.attributes.import_container_30MA_yoy_doy) * 100,
+      export_container_30MA_yoy:
+        parseFloat(feature.attributes.export_container_30MA_yoy_doy) * 100,
     };
     return datapoint;
   });
@@ -505,10 +513,10 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
 
   options.series = [
     {
-      name: "15-day Moving Average",
+      name: "30-day Moving Average",
       data: data
         .filter((x) => x.date >= new Date("2020-01-01").getTime())
-        .map((x) => [x.date, x[chartType + "_container_15MA_yoy"]]),
+        .map((x) => [x.date, x[chartType + "_container_30MA_yoy"]]),
       type: "line",
       marker: {
         enabled: false, // auto
