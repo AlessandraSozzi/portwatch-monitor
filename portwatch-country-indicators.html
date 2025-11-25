@@ -103,32 +103,34 @@
         maxRecordCountFactor: 5,
       });
 
-      const eventQuery = new Query({
+      /* const eventQuery = new Query({
         where: "ISO3='" + iso3 + "'",
         outFields: "*",
         cacheHint: true,
         maxRecordCountFactor: 5,
-      });
+      }); */
 
       async function executeDynamicQueries(iso3) {
         const promises = [
           portLayer.queryFeatures(portQuery).then((result) => {
             return parsePort(result.features);
           }),
-          eventLayer.queryFeatures(eventQuery).then((result) => {
+          /* eventLayer.queryFeatures(eventQuery).then((result) => {
             return parseEvents(result.features);
-          }),
+          }), */
         ];
         const results = await Promise.all(promises);
         return results;
       }
 
       executeDynamicQueries(iso3).then((results) => {
-        [country, events] = results;
+        [country
+        // , events
+      ] = results;
         const final = generateIndicators(country);
         //console.log(events, final);
 
-        events.forEach((event) => {
+        /* events.forEach((event) => {
           options["xAxis"]["plotBands"].push({
             color: "rgba(255, 0, 0, 0.1)", // Red
             borderColor: "#FF0000",
@@ -146,7 +148,7 @@
               },
             },
           });
-        });
+        }); */
 
         createAisChart(final, "portcalls");
 
