@@ -98,7 +98,7 @@
 
       const countryQuery = new Query({
         where: "ISO3='" + iso3 + "'",
-        outFields: "*",
+        outFields: ['date', 'country', 'ISO3', 'portcalls_tanker', 'portcalls_cargo', 'portcalls', 'import', 'export'],
         cacheHint: true,
         maxRecordCountFactor: 5,
       });
