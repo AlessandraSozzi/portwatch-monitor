@@ -237,7 +237,7 @@ var labels = {
   import: {
     yAxis: "Metric Tons",
     title: "Incoming Shipment",
-    name: "Import Shipment",
+    name: "Incoming Shipment",
   },
   export: {
     yAxis: "Metric Tons",
@@ -395,7 +395,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
 var createGrowthRateChart = function (
   data,
   chartType = "portcalls",
-  gr = 12
+  gr=12, ma=12
 ) {
 
   options["yAxis"] = {
@@ -421,10 +421,10 @@ var createGrowthRateChart = function (
 
   options.series = [
     {
-      name: "3-month MA",
+      name: "3-month MA Import " + chartType,
       data: data
         .slice(gr, data.length)
-        .map((x) => [x.date, x["import_" + chartType /* + "_GR_MA" */]]),
+        .map((x) => [x.date, x["import_" + chartType + "_GR_MA"]]),
       type: "spline",
       tooltip: {
         valueDecimals: 1,
@@ -437,10 +437,10 @@ var createGrowthRateChart = function (
       showInLegend: true,
     },
     {
-      name: "3-month MA",
+      name: "3-month MA Export " + chartType,
       data: data
         .slice(gr, data.length)
-        .map((x) => [x.date, x["export_" + chartType /* + "_GR_MA" */]]),
+        .map((x) => [x.date, x["export_" + chartType + "_GR_MA"]]),
       type: "spline",
       tooltip: {
         valueDecimals: 1,

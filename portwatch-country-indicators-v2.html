@@ -184,7 +184,11 @@
           $(this).children().addClass("active");
           const selected = $(this).attr("id");
           //console.log(selected);
-          createDisruptionAisChart(final, selected);
+          if (["portcalls", "import", "export"].includes(selected)) {
+            createDisruptionAisChart(final, selected);
+          } else {
+            createGrowthRateChart(final, selected);
+          }
         });
       });
     });
