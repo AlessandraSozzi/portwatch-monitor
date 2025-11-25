@@ -115,7 +115,6 @@ var generateNowcastSeries = function (features, ma=3, gr=12) {
   trade_volume_GR_MA = movingAvg(trade_volume_GR, ma, 0);
 
   series = series.map(function (feature, i) {
-    feature["portcalls_MA"] = portcalls_MA[i];
     feature["import_value_MA"] = import_value_MA[i];
     feature["export_value_MA"] = export_value_MA[i];
     feature["import_volume_MA"] = import_volume_MA[i];
@@ -123,7 +122,6 @@ var generateNowcastSeries = function (features, ma=3, gr=12) {
     feature["trade_value_MA"] = trade_value_MA[i];
     feature["trade_volume_MA"] = trade_volume_MA[i];
     if (i >= gr) {
-      feature["portcalls_GR"] = portcalls_GR[i - gr];
       feature["import_value_GR"] = import_value_GR[i - gr];
       feature["export_value_GR"] = export_value_GR[i - gr];
       feature["import_volume_GR"] = import_volume_GR[i - gr];
@@ -131,7 +129,6 @@ var generateNowcastSeries = function (features, ma=3, gr=12) {
       feature["trade_value_GR"] = trade_value_GR[i - gr];
       feature["trade_volume_GR"] = trade_volume_GR[i - gr];
       // Moving Average of growth rates
-      feature["portcalls_GR_MA"] = portcalls_GR_MA[i - gr];
       feature["import_value_GR_MA"] = import_value_GR_MA[i - gr];
       feature["export_value_GR_MA"] = export_value_GR_MA[i - gr];
       feature["import_volume_GR_MA"] = import_volume_GR_MA[i - gr];
