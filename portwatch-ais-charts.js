@@ -245,12 +245,12 @@ var labels = {
     name: "Outgoing Shipment",
   },
   value: {
-    yAxis: "Index [2019=100]",
+    yAxis: "Maritime trade in US dollars, 3-month moving average, year on year change (%)",
     title: "Trade Value",
     name: "Trade Value",
   },
   volume: {
-    yAxis: "Index [2019=100]",
+    yAxis: "Maritime trade in constant prices, 3-month moving average, year on year change (%)",
     title: "Trade Volume",
     name: "Trade Volume",
   }
@@ -401,7 +401,7 @@ var createGrowthRateChart = function (
   options["yAxis"] = {
     gridLineColor: "#c0c0c0",
     title: {
-      text: labels[chartType].yAxis,
+      text: "",
     },
     opposite: false,
   };
@@ -455,6 +455,19 @@ var createGrowthRateChart = function (
   ];
 
   //console.log(options);
+
+  options["title"] = {
+    text: labels[chartType].title,
+  };
+
+  options["subtitle"] = {
+    text: labels[chartType].yAxis,
+    align: "left",
+    style: {
+      color: "#c0c0c0",
+    },
+    x: 25,
+  };
 
   var chart = new Highcharts.Chart("container", options);
 
