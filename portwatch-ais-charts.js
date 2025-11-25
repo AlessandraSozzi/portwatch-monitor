@@ -388,6 +388,8 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
     text: "Aggregated " + labels[chartType].title,
   };
 
+  options["subtitle"] = null;
+
   var chart = new Highcharts.stockChart("container", options);
 };
 
@@ -463,9 +465,6 @@ var createGrowthRateChart = function (
   options["subtitle"] = {
     text: labels[chartType].yAxis,
     align: "left",
-    style: {
-      color: "#c0c0c0",
-    },
     x: 25,
   };
 
