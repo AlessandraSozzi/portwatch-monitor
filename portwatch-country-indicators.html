@@ -76,14 +76,14 @@
   $(document).ready(function () {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    var portid = urlParams.get("portid");
-    portid = portid == null ? "port0" : portid;
+    var iso3 = urlParams.get("iso3");
+    iso3 = iso3 == null ? "BRA" : iso3;
     //console.log(portid);
 
-    queryAndChartData(portid);
+    queryAndChartData(iso3);
   });
 
-  var queryAndChartData = function (portid) {
+  var queryAndChartData = function (iso3) {
     require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
       FeatureLayer,
       Query
@@ -97,14 +97,14 @@
       });
 
       const portQuery = new Query({
-        where: "portid='" + portid + "'",
+        where: "ISO3='" + iso3 + "'",
         outFields: "*",
         cacheHint: true,
         maxRecordCountFactor: 5,
       });
 
       const eventQuery = new Query({
-        where: "portid='" + portid + "'",
+        where: "ISO3='" + iso3 + "'",
         outFields: "*",
         cacheHint: true,
         maxRecordCountFactor: 5,
