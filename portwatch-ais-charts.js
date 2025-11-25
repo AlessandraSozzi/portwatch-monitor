@@ -246,12 +246,12 @@ var labels = {
   },
   value: {
     yAxis: "Maritime trade in US dollars, 3-month moving average, year on year change (%)",
-    title: "Trade Value",
+    title: "Nowcast Estimate of Trade Value",
     name: "Trade Value",
   },
   volume: {
     yAxis: "Maritime trade in constant prices, 3-month moving average, year on year change (%)",
-    title: "Trade Volume",
+    title: "Nowcast Estimate of Trade Volume",
     name: "Trade Volume",
   }
 };
