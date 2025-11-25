@@ -97,7 +97,7 @@ var parsePort = function (features) {
 var parseCountry = function (features) {
   var series = features.map((feature) => {
     datapoint = {
-      date: feature.attributes.date,
+      date: Date.parse(feature.attributes.date),
       country: feature.attributes.country,
       ISO3: feature.attributes.ISO3,
       portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
