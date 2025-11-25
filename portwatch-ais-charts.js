@@ -432,7 +432,7 @@ var createGrowthRateChart = function (
       marker: {
         enabled: false,
       },
-      color: "#f3a90a", //"#FFFFED",
+      color: "#d82214", //"#FFFFED",
       dashStyle: "LongDash",
       showInLegend: true,
     },
@@ -448,7 +448,7 @@ var createGrowthRateChart = function (
       marker: {
         enabled: false,
       },
-      color: "#f3a90a", //"#FFFFED",
+      color: "#004b94", //"#FFFFED",
       dashStyle: "LongDash",
       showInLegend: true,
     },
