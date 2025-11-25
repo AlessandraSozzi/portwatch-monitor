@@ -236,13 +236,13 @@ var labels = {
   },
   import: {
     yAxis: "Metric Tons",
-    title: "Import Volume",
-    name: "Import Volume",
+    title: "Incoming Shipment",
+    name: "Import Shipment",
   },
   export: {
     yAxis: "Metric Tons",
-    title: "Export Volume",
-    name: "Export Volume",
+    title: "Outgoing Shipment",
+    name: "Outgoing Shipment",
   },
 };
 
