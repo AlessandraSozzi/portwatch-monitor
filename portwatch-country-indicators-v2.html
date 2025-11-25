@@ -48,6 +48,12 @@
       <li class="nav-item" id="export">
         <a class="nav-link" href="#">Outgoing Shipment</a>
       </li>
+      <li class="nav-item" id="value">
+        <a class="nav-link" href="#">Value</a>
+      </li>
+      <li class="nav-item" id="volume">
+        <a class="nav-link" href="#">Volume</a>
+      </li>
     </ul>
   </div>
   <div class="card-body">
@@ -72,6 +78,8 @@
     "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data_REG/FeatureServer/0";
   var eventsUrl =
     "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/disruptions_with_ports/FeatureServer/0";
+  var nowcastUrl =
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0";
 
   Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
 
@@ -94,6 +102,10 @@
         url: countryUrl,
       });
 
+      const nowcastLayer = new FeatureLayer({
+        url: nowcastUrl,
+      });
+
       /* const eventLayer = new FeatureLayer({
         url: eventsUrl,
       }); */
@@ -101,6 +113,13 @@
       const countryQuery = new Query({
         where: "ISO3='" + iso3 + "'",
         outFields: ['date', 'country', 'ISO3', 'portcalls_tanker', 'portcalls_cargo', 'portcalls', 'import', 'export'],
+        cacheHint: true,
+        maxRecordCountFactor: 5,
+      });
+
+      const nowcastQuery = new Query({
+        where: "ISO3='" + iso3 + "'",
+        outFields: ['date', 'region', 'ISO3', 'trade_value', 'trade_volume', 'value_import_total', 'value_export_total', 'volume_import_total', 'volume_export_total'],
         cacheHint: true,
         maxRecordCountFactor: 5,
       });
@@ -117,6 +136,9 @@
           countryLayer.queryFeatures(countryQuery).then((result) => {
             return parseCountry(result.features);
           }),
+          nowcastLayer.queryFeatures(nowcastQuery).then((result) => {
+            return result.features;
+          })
           /* eventLayer.queryFeatures(eventQuery).then((result) => {
             return parseEvents(result.features);
           }), */
@@ -126,11 +148,13 @@
       }
 
       executeDynamicQueries(iso3).then((results) => {
-        [country
+        [country,
+         nowcast
         // , events
       ] = results;
         const final = generateIndicators(country);
-        console.log(final);
+        const nowcastData = generateNowcastSeries(nowcast)
+        console.log(nowcastData);
         //console.log(events, final);
 
         /* events.forEach((event) => {

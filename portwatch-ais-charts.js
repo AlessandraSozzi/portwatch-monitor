@@ -244,6 +244,16 @@ var labels = {
     title: "Outgoing Shipment",
     name: "Outgoing Shipment",
   },
+  value: {
+    yAxis: "Index [2019=100]",
+    title: "Trade Value",
+    name: "Trade Value",
+  },
+  volume: {
+    yAxis: "Index [2019=100]",
+    title: "Trade Volume",
+    name: "Trade Volume",
+  }
 };
 
 var options = {
@@ -380,6 +390,77 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
 
   var chart = new Highcharts.stockChart("container", options);
 };
+
+
+var createGrowthRateChart = function (
+  data,
+  chartType = "portcalls",
+  gr = 12
+) {
+
+  options["yAxis"] = {
+    gridLineColor: "#c0c0c0",
+    title: {
+      text: labels[chartType].yAxis,
+    },
+    opposite: false,
+  };
+
+  options["xAxis"] = {
+    gridLineColor: "#c0c0c0",
+    lineColor: "#c0c0c0",
+    labels: {
+      style: {
+        color: "#c0c0c0",
+      },
+    },
+    tickColor: "#c0c0c0",
+    type: "datetime",
+    crossing: 0
+  };
+
+  options.series = [
+    {
+      name: "3-month MA",
+      data: data
+        .slice(gr, data.length)
+        .map((x) => [x.date, x["import_" + chartType /* + "_GR_MA" */]]),
+      type: "spline",
+      tooltip: {
+        valueDecimals: 1,
+      },
+      marker: {
+        enabled: false,
+      },
+      color: "#f3a90a", //"#FFFFED",
+      dashStyle: "LongDash",
+      showInLegend: true,
+    },
+    {
+      name: "3-month MA",
+      data: data
+        .slice(gr, data.length)
+        .map((x) => [x.date, x["export_" + chartType /* + "_GR_MA" */]]),
+      type: "spline",
+      tooltip: {
+        valueDecimals: 1,
+      },
+      marker: {
+        enabled: false,
+      },
+      color: "#f3a90a", //"#FFFFED",
+      dashStyle: "LongDash",
+      showInLegend: true,
+    },
+  ];
+
+  //console.log(options);
+
+  var chart = new Highcharts.stockChart("container", options);
+
+  return options;
+};
+
 
 var createAisChart = function (data, chartType = "portcalls") {
   options["title"] = {
