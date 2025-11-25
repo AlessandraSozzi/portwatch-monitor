@@ -66,7 +66,7 @@
 </div>
 
 <script>
-  var portsUrl =
+  var countryUrl =
     "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data_REG/FeatureServer/0";
   var eventsUrl =
     "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/disruptions_with_ports/FeatureServer/0";
@@ -88,8 +88,8 @@
       FeatureLayer,
       Query
     ) => {
-      const portLayer = new FeatureLayer({
-        url: portsUrl,
+      const countryLayer = new FeatureLayer({
+        url: countryUrl,
       });
 
       /* const eventLayer = new FeatureLayer({
@@ -112,7 +112,7 @@
 
       async function executeDynamicQueries(iso3) {
         const promises = [
-          portLayer.queryFeatures(countryQuery).then((result) => {
+          countryLayer.queryFeatures(countryQuery).then((result) => {
             return parseCountry(result.features);
           }),
           /* eventLayer.queryFeatures(eventQuery).then((result) => {
