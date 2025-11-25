@@ -96,7 +96,7 @@
         url: eventsUrl,
       }); */
 
-      const portQuery = new Query({
+      const countryQuery = new Query({
         where: "ISO3='" + iso3 + "'",
         outFields: "*",
         cacheHint: true,
@@ -112,8 +112,8 @@
 
       async function executeDynamicQueries(iso3) {
         const promises = [
-          portLayer.queryFeatures(portQuery).then((result) => {
-            return parsePort(result.features);
+          portLayer.queryFeatures(countryQuery).then((result) => {
+            return parseCountry(result.features);
           }),
           /* eventLayer.queryFeatures(eventQuery).then((result) => {
             return parseEvents(result.features);
