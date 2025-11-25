@@ -110,7 +110,7 @@
         maxRecordCountFactor: 5,
       });
 
-      async function executeDynamicQueries(portid) {
+      async function executeDynamicQueries(iso3) {
         const promises = [
           portLayer.queryFeatures(portQuery).then((result) => {
             return parsePort(result.features);
@@ -123,9 +123,9 @@
         return results;
       }
 
-      executeDynamicQueries(portid).then((results) => {
-        [port, events] = results;
-        const final = generateIndicators(port);
+      executeDynamicQueries(iso3).then((results) => {
+        [country, events] = results;
+        const final = generateIndicators(country);
         //console.log(events, final);
 
         events.forEach((event) => {
