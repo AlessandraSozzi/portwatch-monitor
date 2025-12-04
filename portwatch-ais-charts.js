@@ -325,124 +325,64 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
     opposite: false,
   };
 
-  if (chartType == "portcalls") {
-    options.series = [
-      {
-        name: "Container",
-        data: data.map((x) => [x.date, x["portcalls_container"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#D72F27",
-        showInLegend: true,
-      },
-      {
-        name: "Dry Bulk",
-        data: data.map((x) => [x.date, x["portcalls_dry_bulk"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#FC8D58",
-        showInLegend: true,
-      },
-      {
-        name: "General Cargo",
-        data: data.map((x) => [x.date, x["portcalls_general_cargo"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#FDDF8F",
-        showInLegend: true,
-      },
-      {
-        name: "Roll-on/roll-off",
-        data: data.map((x) => [x.date, x["portcalls_roro"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#92BFDB",
-        showInLegend: true,
-      },
-      {
-        name: "Tanker",
-        data: data.map((x) => [x.date, x["portcalls_tanker"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#1A4D2E",
-        showInLegend: true,
-      },
-    ];
-  } else {
-    options.series = [
+  options.series = [
 
-      {
-        name: "Container",
-        data: data.map((x) => [x.date, x[chartType+"_container"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#D72F27",
-        showInLegend: true,
+    {
+      name: "Container",
+      data: data.map((x) => [x.date, x[chartType+"_container"]]),
+      type: "column",
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
       },
-      {
-        name: "Dry Bulk",
-        data: data.map((x) => [x.date, x[chartType+"_dry_bulk"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#FC8D58",
-        showInLegend: true,
+      color: "#D72F27",
+      showInLegend: true,
+    },
+    {
+      name: "Dry Bulk",
+      data: data.map((x) => [x.date, x[chartType+"_dry_bulk"]]),
+      type: "column",
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
       },
-      {
-        name: "General Cargo",
-        data: data.map((x) => [x.date, x[chartType+"_general_cargo"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#FDDF8F",
-        showInLegend: true,
+      color: "#FC8D58",
+      showInLegend: true,
+    },
+    {
+      name: "General Cargo",
+      data: data.map((x) => [x.date, x[chartType+"_general_cargo"]]),
+      type: "column",
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
       },
-      {
-        name: "Roll-on/roll-off",
-        data: data.map((x) => [x.date, x[chartType+"_roro"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#92BFDB",
-        showInLegend: true,
+      color: "#FDDF8F",
+      showInLegend: true,
+    },
+    {
+      name: "Roll-on/roll-off",
+      data: data.map((x) => [x.date, x[chartType+"_roro"]]),
+      type: "column",
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
       },
-      {
-        name: "Tanker",
-        data: data.map((x) => [x.date, x[chartType+"_tanker"]]),
-        type: "column",
-        stack: 1,
-        tooltip: {
-          valueDecimals: 0,
-        },
-        color: "#1A4D2E",
-        showInLegend: true,
+      color: "#92BFDB",
+      showInLegend: true,
+    },
+    {
+      name: "Tanker",
+      data: data.map((x) => [x.date, x[chartType+"_tanker"]]),
+      type: "column",
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
       },
-    ];
-  }
+      color: "#1A4D2E",
+      showInLegend: true,
+    },
+  ];
 
   options.series = options.series.concat([
     {
