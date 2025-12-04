@@ -357,7 +357,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
         tooltip: {
           valueDecimals: 0,
         },
-        color: "#9d6eb2",
+        color: "#E0F2F7",
         showInLegend: true,
       },
       {
