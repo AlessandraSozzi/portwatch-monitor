@@ -469,7 +469,6 @@ var createGrowthRateChart = function (
         enabled: false,
       },
       color: "#d82214", //"#FFFFED",
-      dashStyle: "LongDash",
       showInLegend: true,
     },
     {
@@ -485,7 +484,6 @@ var createGrowthRateChart = function (
         enabled: false,
       },
       color: "#004b94", //"#FFFFED",
-      dashStyle: "LongDash",
       showInLegend: true,
     },
   ];
