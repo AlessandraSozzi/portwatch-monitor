@@ -385,14 +385,60 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
     ];
   } else {
     options.series = [
+
       {
-        name: labels[chartType].name,
-        data: data.map((x) => [x.date, x[chartType]]),
+        name: "Container",
+        data: data.map((x) => [x.date, x[chartType+"_container"]]),
         type: "column",
+        stack: 1,
         tooltip: {
           valueDecimals: 0,
         },
-        color: "#004c97",
+        color: "#D72F27",
+        showInLegend: true,
+      },
+      {
+        name: "Dry Bulk",
+        data: data.map((x) => [x.date, x[chartType+"_dry_bulk"]]),
+        type: "column",
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: "#FC8D58",
+        showInLegend: true,
+      },
+      {
+        name: "General Cargo",
+        data: data.map((x) => [x.date, x[chartType+"_general_cargo"]]),
+        type: "column",
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: "#FDDF8F",
+        showInLegend: true,
+      },
+      {
+        name: "Roll-on/roll-off",
+        data: data.map((x) => [x.date, x[chartType+"_roro"]]),
+        type: "column",
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: "#92BFDB",
+        showInLegend: true,
+      },
+      {
+        name: "Tanker",
+        data: data.map((x) => [x.date, x[chartType+"_tanker"]]),
+        type: "column",
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: "#1A4D2E",
         showInLegend: true,
       },
     ];
