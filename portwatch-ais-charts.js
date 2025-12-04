@@ -342,7 +342,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
         name: "Dry Bulk",
         data: data.map((x) => [x.date, x["portcalls_dry_bulk"]]),
         type: "column",
-        stack: 1,
+        stack: 2,
         tooltip: {
           valueDecimals: 0,
         },
@@ -353,7 +353,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
         name: "General Cargo",
         data: data.map((x) => [x.date, x["portcalls_general_cargo"]]),
         type: "column",
-        stack: 1,
+        stack: 3,
         tooltip: {
           valueDecimals: 0,
         },
@@ -364,7 +364,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
         name: "Roll-on/roll-off",
         data: data.map((x) => [x.date, x["portcalls_roro"]]),
         type: "column",
-        stack: 1,
+        stack: 4,
         tooltip: {
           valueDecimals: 0,
         },
@@ -375,7 +375,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
         name: "Tanker",
         data: data.map((x) => [x.date, x["portcalls_tanker"]]),
         type: "column",
-        stack: 1,
+        stack: 5,
         tooltip: {
           valueDecimals: 0,
         },
