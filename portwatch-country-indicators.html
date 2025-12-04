@@ -100,7 +100,10 @@
 
       const countryQuery = new Query({
         where: "ISO3='" + iso3 + "'",
-        outFields: ['date', 'country', 'ISO3', 'portcalls_tanker', 'portcalls_cargo', 'portcalls', 'import', 'export'],
+        outFields: ['date', 'country', 'ISO3', 
+        'portcalls_container', 'portcalls_dry_bulk', 'portcalls_general_cargo', 'portcalls_roro', 'portcalls_tanker', 'portcalls', 
+        'import_container', 'import_dry_bulk', 'import_general_cargo', 'import_roro', 'import_tanker', 'import', 
+        'export_container', 'export_dry_bulk', 'export_general_cargo', 'export_roro', 'export_tanker', 'export'],
         cacheHint: true,
         maxRecordCountFactor: 5,
       });

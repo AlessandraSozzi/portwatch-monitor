@@ -100,10 +100,25 @@ var parseCountry = function (features) {
       date: Date.parse(feature.attributes.date),
       country: feature.attributes.country,
       ISO3: feature.attributes.ISO3,
+      portcalls_container: parseInt(feature.attributes.portcalls_container),
+      portcalls_dry_bulk: parseInt(feature.attributes.portcalls_dry_bulk),
+      portcalls_general_cargo: parseInt(feature.attributes.portcalls_general_cargo),
+      portcalls_roro: parseInt(feature.attributes.portcalls_roro),
       portcalls_tanker: parseInt(feature.attributes.portcalls_tanker),
-      portcalls_cargo: parseInt(feature.attributes.portcalls_cargo),
       portcalls: parseInt(feature.attributes.portcalls),
+
+      import_container: parseInt(feature.attributes.import_container),
+      import_dry_bulk: parseInt(feature.attributes.import_dry_bulk),
+      import_general_cargo: parseInt(feature.attributes.import_general_cargo),
+      import_roro: parseInt(feature.attributes.import_roro),
+      import_tanker: parseInt(feature.attributes.import_tanker),
       import: parseFloat(feature.attributes.import),
+
+      export_container: parseInt(feature.attributes.export_container),
+      export_dry_bulk: parseInt(feature.attributes.export_dry_bulk),
+      export_general_cargo: parseInt(feature.attributes.export_general_cargo),
+      export_roro: parseInt(feature.attributes.export_roro),
+      export_tanker: parseInt(feature.attributes.export_tanker),
       export: parseFloat(feature.attributes.export),
     };
     return datapoint;
