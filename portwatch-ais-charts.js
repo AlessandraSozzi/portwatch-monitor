@@ -433,7 +433,6 @@ var createGrowthRateChart = function (
 ) {
 
   const chartTypeVar = chartType.substring(0, 6);
-  console.log(chartTypeVar);
 
   options["yAxis"] = {
     gridLineColor: "#c0c0c0",
@@ -461,7 +460,7 @@ var createGrowthRateChart = function (
       name: capitalizeFirstLetter(chartTypeVar) + " Value (US Dollars)",
       data: data
         .slice(gr, data.length)
-        .map((x) => [x.date, x[chartTypeVar + "value_GR_MA"]]),
+        .map((x) => [x.date, x[chartTypeVar + "_value_GR_MA"]]),
       type: "spline",
       tooltip: {
         valueDecimals: 1,
