@@ -260,14 +260,12 @@ var labels = {
     name: "Outgoing Shipment",
   },
   importN: {
-    yAxis: "Maritime trade in US dollars, 3-month moving average, year on year change (%)",
+    yAxis: "3-month moving average, year on year change (%)",
     title: "Nowcast Estimate of Import Value and Volume",
-    name: "Trade Value",
   },
   exportN: {
-    yAxis: "Maritime trade in constant prices, 3-month moving average, year on year change (%)",
+    yAxis: "3-month moving average, year on year change (%)",
     title: "Nowcast Estimate of Export Value and Volume",
-    name: "Trade Volume",
   }
 };
 
@@ -456,7 +454,7 @@ var createGrowthRateChart = function (
 
   options.series = [
     {
-      name: "3-month MA Import " + chartType,
+      name: chartType + " Value (US Dollars)",
       data: data
         .slice(gr, data.length)
         .map((x) => [x.date, x["import_" + chartType + "_GR_MA"]]),
@@ -471,7 +469,7 @@ var createGrowthRateChart = function (
       showInLegend: true,
     },
     {
-      name: "3-month MA Export " + chartType,
+      name: chartType + " Volume (in Constant Prices)",
       data: data
         .slice(gr, data.length)
         .map((x) => [x.date, x["export_" + chartType + "_GR_MA"]]),
