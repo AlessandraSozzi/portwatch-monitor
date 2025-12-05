@@ -313,6 +313,21 @@ var options = {
   },
 
   series: [],
+
+  responsive: {
+    rules: [{
+      condition: {
+        maxWidth: 500
+      },
+      chartOptions: {
+        legend: {
+          align: 'center',
+          verticalAlign: 'bottom',
+          layout: 'horizontal'
+        }
+      }
+    }]
+  }
 };
 
 var createDisruptionAisChart = function (data, chartType = "portcalls") {
