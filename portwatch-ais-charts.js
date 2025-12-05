@@ -259,14 +259,14 @@ var labels = {
     title: "Outgoing Shipment",
     name: "Outgoing Shipment",
   },
-  value: {
+  importN: {
     yAxis: "Maritime trade in US dollars, 3-month moving average, year on year change (%)",
-    title: "Nowcast Estimate of Trade Value",
+    title: "Nowcast Estimate of Import Value and Volume",
     name: "Trade Value",
   },
-  volume: {
+  exportN: {
     yAxis: "Maritime trade in constant prices, 3-month moving average, year on year change (%)",
-    title: "Nowcast Estimate of Trade Volume",
+    title: "Nowcast Estimate of Export Value and Volume",
     name: "Trade Volume",
   }
 };
@@ -431,7 +431,6 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
 var createGrowthRateChart = function (
   data,
   chartType = "portcalls",
-  gr=12, ma=12
 ) {
 
   options["yAxis"] = {
