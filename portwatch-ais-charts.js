@@ -432,7 +432,8 @@ var createGrowthRateChart = function (
   gr=12
 ) {
 
-  chartTypeVar = chartType.substring(0, 7);
+  const chartTypeVar = chartType.substring(0, 7);
+  console.log(chartTypeVar);
 
   options["yAxis"] = {
     gridLineColor: "#c0c0c0",
