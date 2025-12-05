@@ -432,7 +432,7 @@ var createGrowthRateChart = function (
   gr=12
 ) {
 
-  const chartTypeVar = chartType.substring(0, 7);
+  const chartTypeVar = chartType.substring(0, 6);
   console.log(chartTypeVar);
 
   options["yAxis"] = {
