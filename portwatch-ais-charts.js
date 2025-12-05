@@ -429,6 +429,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
 var createGrowthRateChart = function (
   data,
   chartType = "portcalls",
+  gr=12
 ) {
 
   chartTypeVar = chartType.substring(0, 7);
