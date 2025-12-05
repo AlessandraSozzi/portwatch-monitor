@@ -431,6 +431,8 @@ var createGrowthRateChart = function (
   chartType = "portcalls",
 ) {
 
+  chartTypeVar = chartType.substring(0, 7);
+
   options["yAxis"] = {
     gridLineColor: "#c0c0c0",
     title: {
@@ -454,10 +456,10 @@ var createGrowthRateChart = function (
 
   options.series = [
     {
-      name: chartType + " Value (US Dollars)",
+      name: capitalizeFirstLetter(chartTypeVar) + " Value (US Dollars)",
       data: data
         .slice(gr, data.length)
-        .map((x) => [x.date, x["import_" + chartType + "_GR_MA"]]),
+        .map((x) => [x.date, x["total_" + chartTypeVar + "value_GR_MA"]]),
       type: "spline",
       tooltip: {
         valueDecimals: 1,
@@ -469,10 +471,10 @@ var createGrowthRateChart = function (
       showInLegend: true,
     },
     {
-      name: chartType + " Volume (in Constant Prices)",
+      name: capitalizeFirstLetter(chartTypeVar) + " Volume (in Constant Prices)",
       data: data
         .slice(gr, data.length)
-        .map((x) => [x.date, x["export_" + chartType + "_GR_MA"]]),
+        .map((x) => [x.date, x["total_" + chartTypeVar + "_volume_GR_MA"]]),
       type: "spline",
       tooltip: {
         valueDecimals: 1,
