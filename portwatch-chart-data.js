@@ -43,24 +43,13 @@ var generateNowcastSeries = function (features, ma=3, gr=12) {
       export_volume: parseFloat(feature.attributes.volume_export_total),
       import_value: parseFloat(feature.attributes.value_import_total),
       export_value: parseFloat(feature.attributes.value_export_total),
-      trade_value: parseFloat(feature.attributes.trade_value),
-      trade_volume: parseFloat(feature.attributes.trade_volume),
     };
     return datapoint;
   });
 
   series.sort((a, b) => a.date - b.date);
 
-  trade_value_MA = movingAvg(
-    series.map((x) => x.trade_value),
-    ma,
-    0
-  );
-  trade_volume_MA = movingAvg(
-    series.map((x) => x.trade_volume),
-    ma,
-    0
-  );
+  
   import_value_MA = movingAvg(
     series.map((x) => x.import_value),
     ma,
@@ -98,43 +87,27 @@ var generateNowcastSeries = function (features, ma=3, gr=12) {
     series.map((x) => x.export_volume),
     gr
   ).slice(gr, series.length);
-  trade_value_GR = growthRate(
-    series.map((x) => x.trade_value),
-    gr
-  ).slice(gr, series.length);
-  trade_volume_GR = growthRate(
-    series.map((x) => x.trade_volume),
-    gr
-  ).slice(gr, series.length);
 
   import_value_GR_MA = movingAvg(import_value_GR, ma, 0);
   export_value_GR_MA = movingAvg(export_value_GR, ma, 0);
   import_volume_GR_MA = movingAvg(import_volume_GR, ma, 0);
   export_volume_GR_MA = movingAvg(export_volume_GR, ma, 0);
-  trade_value_GR_MA = movingAvg(trade_value_GR, ma, 0);
-  trade_volume_GR_MA = movingAvg(trade_volume_GR, ma, 0);
 
   series = series.map(function (feature, i) {
     feature["import_value_MA"] = import_value_MA[i];
     feature["export_value_MA"] = export_value_MA[i];
     feature["import_volume_MA"] = import_volume_MA[i];
     feature["export_volume_MA"] = export_volume_MA[i];
-    feature["trade_value_MA"] = trade_value_MA[i];
-    feature["trade_volume_MA"] = trade_volume_MA[i];
     if (i >= gr) {
       feature["import_value_GR"] = import_value_GR[i - gr];
       feature["export_value_GR"] = export_value_GR[i - gr];
       feature["import_volume_GR"] = import_volume_GR[i - gr];
       feature["export_volume_GR"] = export_volume_GR[i - gr];
-      feature["trade_value_GR"] = trade_value_GR[i - gr];
-      feature["trade_volume_GR"] = trade_volume_GR[i - gr];
       // Moving Average of growth rates
       feature["import_value_GR_MA"] = import_value_GR_MA[i - gr];
       feature["export_value_GR_MA"] = export_value_GR_MA[i - gr];
       feature["import_volume_GR_MA"] = import_volume_GR_MA[i - gr];
       feature["export_volume_GR_MA"] = export_volume_GR_MA[i - gr];
-      feature["trade_value_GR_MA"] = trade_value_GR_MA[i - gr];
-      feature["trade_volume_GR_MA"] = trade_volume_GR_MA[i - gr];
     }
     return feature;
   });

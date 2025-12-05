@@ -48,11 +48,11 @@
       <li class="nav-item" id="export">
         <a class="nav-link" href="#">Outgoing Shipment</a>
       </li>
-      <li class="nav-item" id="value">
-        <a class="nav-link" href="#">Trade Value</a>
+      <li class="nav-item" id="import-n">
+        <a class="nav-link" href="#">Nowcast Import</a>
       </li>
-      <li class="nav-item" id="volume">
-        <a class="nav-link" href="#">Trade Volume</a>
+      <li class="nav-item" id="export-n">
+        <a class="nav-link" href="#">Nowcast Export</a>
       </li>
     </ul>
   </div>
@@ -122,7 +122,7 @@
 
       const nowcastQuery = new Query({
         where: "ISO3='" + iso3 + "'",
-        outFields: ['date', 'region', 'ISO3', 'trade_value', 'trade_volume', 'value_import_total', 'value_export_total', 'volume_import_total', 'volume_export_total'],
+        outFields: ['date', 'region', 'ISO3', 'value_import_total', 'value_export_total', 'volume_import_total', 'volume_export_total'],
         cacheHint: true,
         maxRecordCountFactor: 5,
       });
