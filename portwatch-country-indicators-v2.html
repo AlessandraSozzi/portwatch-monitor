@@ -155,7 +155,7 @@
          nowcast
         // , events
       ] = results;
-        const final = generateIndicators(country);
+        const final = generateIndicators(country, ma_days=30);
         const nowcastData = generateNowcastSeries(nowcast)
         console.log(nowcastData);
         //console.log(events, final);
