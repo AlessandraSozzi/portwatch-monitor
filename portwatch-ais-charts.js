@@ -191,22 +191,22 @@ var groupPorts = function (data) {
   return Object.values(reduced);
 };
 
-var generateIndicators = function (series) {
+var generateIndicators = function (series, ma_days=7) {
   series.sort((a, b) => a.date - b.date);
 
   import_MA = movingAvg(
     series.map((x) => x.import),
-    ma,
+    ma_days,
     0
   );
   export_MA = movingAvg(
     series.map((x) => x.export),
-    ma,
+    ma_days,
     0
   );
   portcalls_MA = movingAvg(
     series.map((x) => x.portcalls),
-    ma,
+    ma_days,
     0
   );
 
