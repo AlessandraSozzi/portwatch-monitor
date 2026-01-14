@@ -180,7 +180,7 @@
           });
         }); */
 
-        createDisruptionAisChart(final, "portcalls");
+        createDisruptionAisChart(final, "portcalls", ma_days=30);
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
@@ -190,7 +190,7 @@
           if (["portcalls", "import", "export"].includes(selected)) {
             createDisruptionAisChart(final, selected, ma_days=30);
           } else {
-            createGrowthRateChart(nowcastData, selected, ma_days=30);
+            createGrowthRateChart(nowcastData, selected);
           }
         });
       });
