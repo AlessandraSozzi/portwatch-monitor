@@ -330,7 +330,7 @@ var options = {
   }
 };
 
-var createDisruptionAisChart = function (data, chartType = "portcalls") {
+var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=7) {
   options["yAxis"] = {
     title: {
       text: labels[chartType].yAxis,
@@ -399,7 +399,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
 
   options.series = options.series.concat([
     {
-      name: "7-day Moving Average",
+      name: toString(ma_days)+"-day Moving Average",
       data: data.map((x) => [x.date, x[chartType + "_MA"]]),
       type: "line",
       marker: {
@@ -413,7 +413,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls") {
       showInLegend: true,
     },
     {
-      name: "Prior Year: 7-day Moving Average",
+      name: "Prior Year: "+toString(ma_days)+"-day Moving Average",
       data: data
         .slice(shift + 1)
         .map((x) => [x.date, x[chartType + "_MA_shifted"]]),
