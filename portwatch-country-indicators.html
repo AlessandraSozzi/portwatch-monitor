@@ -156,14 +156,14 @@
           });
         }); */
 
-        createDisruptionAisChart(final, "portcalls");
+        createDisruptionAisChart(final, "portcalls", ma_days=30);
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
           const selected = $(this).attr("id");
           //console.log(selected);
-          createDisruptionAisChart(final, selected);
+          createDisruptionAisChart(final, selected, ma_days=30);
         });
       });
     });
