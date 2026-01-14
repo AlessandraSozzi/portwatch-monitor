@@ -188,9 +188,9 @@
           const selected = $(this).attr("id");
           //console.log(selected);
           if (["portcalls", "import", "export"].includes(selected)) {
-            createDisruptionAisChart(final, selected);
+            createDisruptionAisChart(final, selected, ma_days=30);
           } else {
-            createGrowthRateChart(nowcastData, selected);
+            createGrowthRateChart(nowcastData, selected, ma_days=30);
           }
         });
       });
