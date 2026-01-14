@@ -399,7 +399,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
 
   options.series = options.series.concat([
     {
-      name: ma_days.toString()+"-day Moving Average",
+      name: ma_days+"-day Moving Average",
       data: data.map((x) => [x.date, x[chartType + "_MA"]]),
       type: "line",
       marker: {
@@ -413,7 +413,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       showInLegend: true,
     },
     {
-      name: "Prior Year: "+ma_days.toString()+"-day Moving Average",
+      name: "Prior Year: "+ma_days+"-day Moving Average",
       data: data
         .slice(shift + 1)
         .map((x) => [x.date, x[chartType + "_MA_shifted"]]),
