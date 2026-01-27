@@ -137,6 +137,7 @@
       async function executeDynamicQueries(iso3) {
         const promises = [
           countryLayer.queryFeatures(countryQuery).then((result) => {
+            console.log(result.features);
             return parseCountry(result.features);
           }),
           nowcastLayer.queryFeatures(nowcastQuery).then((result) => {
