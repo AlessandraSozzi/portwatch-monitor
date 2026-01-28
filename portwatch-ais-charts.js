@@ -164,8 +164,11 @@ var groupPorts = function (data) {
     if (!acc[item.date]) {
       acc[item.date] = {
         date: item.date,
+        portcalls_container: 0,
+        portcalls_dry_bulk: 0,
+        portcalls_general_cargo: 0,
+        portcalls_roro: 0,
         portcalls_tanker: 0,
-        portcalls_cargo: 0,
         portcalls: 0,
         import: 0,
         export: 0,
