@@ -80,12 +80,13 @@
   var nowcastUrl =
     "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0";
 
+  const ma_days = 30; // Use 30-day MA for this chart
+
   Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
 
   $(document).ready(function () {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const ma_days = 30; // Use 30-day MA for this chart
     var iso3 = urlParams.get("iso3");
     var version = urlParams.get("version");
     
