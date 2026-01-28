@@ -181,6 +181,28 @@ var parsePort = function (features) {
 };
 
 
+var parseChokepoint = function (features) {
+  var series = features.map((feature) => {
+    datapoint = {
+      date: feature.attributes.date,
+      portid: feature.attributes.portid,
+      portname: feature.attributes.portname,
+      n_container: parseInt(feature.attributes.n_container),
+      n_dry_bulk: parseInt(feature.attributes.n_dry_bulk),
+      n_general_cargo: parseInt(feature.attributes. n_general_cargo),
+      n_roro: parseInt(feature.attributes.n_roro),
+      n_tanker: parseInt(feature.attributes.n_tanker),
+      n_total: parseInt(feature.attributes.n_total),
+      capacity: parseFloat(feature.attributes.capacity),
+    };
+    return datapoint;
+  });
+
+  series.sort((a, b) => a.date - b.date);
+  return series;
+};
+
+
 var parseCountry = function (features) {
   var series = features.map((feature) => {
     datapoint = {
@@ -299,6 +321,34 @@ var generateIndicators = function (series, ma_days=7) {
       feature["import_MA_shifted"] = import_MA[i - shift];
       feature["export_MA_shifted"] = export_MA[i - shift];
       feature["portcalls_MA_shifted"] = portcalls_MA[i - shift];
+    }
+    return feature;
+  });
+
+  //console.log(series);
+  return series;
+};
+
+var generateChokepointIndicators = function (series, ma_days=7) {
+  series.sort((a, b) => a.date - b.date);
+
+  capacity_MA = movingAvg(
+    series.map((x) => x.capacity),
+    ma_days,
+    0
+  );
+  n_total_MA = movingAvg(
+    series.map((x) => x.n_total),
+    ma_days,
+    0
+  );
+
+  series = series.map(function (feature, i) {
+    feature["capacity_MA"] = capacity_MA[i];
+    feature["n_total_MA"] = n_total_MA[i];
+    if (i > shift) {
+      feature["capacity_MA_shifted"] = capacity_MA[i - shift];
+      feature["n_total_MA_shifted"] = n_total_MA[i - shift];
     }
     return feature;
   });

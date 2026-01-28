@@ -210,6 +210,8 @@ function createChart(data, name, portname) {
 
 }
 
+var portsUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0"
+
 
 $(document).ready(function() {
 
@@ -218,121 +220,54 @@ $(document).ready(function() {
     const portid = urlParams.get('portid');
     console.log(portid);
 
-
-    var features = [];
-    var seriesCounter = 0;
-    var nChunks;
     
+    queryAndChartData(portid);
+});
 
 
-
-    var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0/query?"
-
-
-function success(data) {
-  
-  features = features.concat(data.features);
-
-  // As chunks of data are loaded asynchronously, we don't know what order it
-  // will arrive. So keep a counter and create the chart when all the data is loaded.
-  seriesCounter += 1;
-
-    if (seriesCounter === nChunks) {
-
-      const portname = features[0].attributes.portname;
-
-      var series = features.map(function(feature) {
-        datapoint = {
-          date: feature.attributes.date, 
-          cargo: parseInt(feature.attributes.n_cargo),
-          tanker: parseInt(feature.attributes.n_tanker),
-          portcalls: parseInt(feature.attributes.n_total),
-          capacity: parseFloat(feature.attributes.capacity),
-        }
-                          
-        return datapoint;
-      });
-      series.sort((a, b) => a.date - b.date);
-
-      var capacity7MA = movingAvg(series.map(x => x.capacity), 7, 0);
-      var portcalls7MA = movingAvg(series.map(x => x.portcalls), 7, 0);
-
-
-
-      series = series.map(function(feature, i) {
-
-        feature['capacity7MA'] = capacity7MA[i];
-        feature['portcalls7MA'] = portcalls7MA[i];
-        if (i > shift) {
-          feature['capacity7MAshifted'] = capacity7MA[i-shift];
-          feature['portcalls7MAshifted'] = portcalls7MA [i-shift];
-        }
-
-        return feature;
-      });
-      
-      console.log(series);
-
-      createChart(series, "portcalls", portname);
-
-      $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
-        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
-        $(this).children().addClass('active');
-        const selected = $(this).attr('id');
-        console.log(selected);
-        createChart(series, selected, portname);
-      }); 
-    }
-
-}
-
-
-function getArcGISdata(data) {
-  
-  objectIds = data['objectIds'].sort(function(a, b){return a - b});
-  console.log(objectIds);
-  
-  const chunkSize = 1000;
-  nChunks = Math.ceil(objectIds.length/chunkSize);
-
-  for (let i = 0; i < objectIds.length; i += chunkSize) {
-      const chunk = objectIds.slice(i, i + chunkSize);
-      const firstObjectId = chunk[0];
-      const lastObjectId = chunk[chunk.length-1];
-      console.log(firstObjectId, lastObjectId);
-
-      const queryUrl = baseUrl+"where=portid%3D%27"+portid+"%27"+"%20AND%20objectID%20>%3D%20"+firstObjectId+"%20AND%20objectID%20<%3D%20"+lastObjectId+"&outFields=portid,portname,date,n_cargo,n_tanker,n_total,capacity&cacheHint=true&returnGeometry=false&outSR=&f=json";
-
-      Highcharts.getJSON(
-        queryUrl,
-        success
-      );
-
-  }
-
-}
-
-
-
-
-Highcharts.getJSON(
-  baseUrl+"where=portid%3D%27"+portid+"%27&outFields=*&returnIdsOnly=true&cacheHint=true&outSR=4326&f=json",
-  getArcGISdata
-);
 
     
-}); 
+var queryAndChartData = function (portid) {
+    require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
+      FeatureLayer,
+      Query
+    ) => {
+      const portLayer = new FeatureLayer({
+        url: portsUrl,
+      });
+      const portQuery = new Query({
+        where: "portid='" + portid + "'",
+        outFields: "*",
+        cacheHint: true,
+        maxRecordCountFactor: 5,
+      });
 
+      async function executeDynamicQueries(portid) {
+        const promises = [
+          portLayer.queryFeatures(portQuery).then((result) => {
+            return parseChokepoint(result.features);
+          })
+        ];
+        const results = await Promise.all(promises);
+        return results;
+      }
 
-function movingAvg(array, countBefore, countAfter) {
-  if (countAfter == undefined) countAfter = 0;
-  const result = [];
-  for (let i = 0; i < array.length; i++) {
-    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
-    const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
-    result.push(avg);
-  }
-  return result;
-}
+      executeDynamicQueries(portid).then((results) => {
+        [chokepoint] = results;
+        const final = generateChokepointIndicators(chokepoint);
+
+        createDisruptionAisChart(final, "portcalls");
+
+        $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+          $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+          $(this).children().addClass("active");
+          const selected = $(this).attr("id");
+          console.log(selected);
+          createDisruptionAisChart(final, selected);
+        });
+      });
+    });
+  };
+
 
 </script>
