@@ -174,8 +174,11 @@ var groupPorts = function (data) {
         export: 0,
       };
     }
+    acc[item.date]["portcalls_container"] += item.portcalls_container;
+    acc[item.date]["portcalls_dry_bulk"] += item.portcalls_dry_bulk;
+    acc[item.date]["portcalls_general_cargo"] += item.portcalls_general_cargo;
+    acc[item.date]["portcalls_roro"] += item.portcalls_roro;
     acc[item.date]["portcalls_tanker"] += item.portcalls_tanker;
-    acc[item.date]["portcalls_cargo"] += item.portcalls_cargo;
     acc[item.date]["portcalls"] += item.portcalls;
     acc[item.date]["import"] += item.import;
     acc[item.date]["export"] += item.export;
