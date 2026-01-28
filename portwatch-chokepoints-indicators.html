@@ -1,0 +1,374 @@
+<!-- /* Author CSF */ -->
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+<!-- <link rel="stylesheet" type="text/css" href="Highcharts-IMF.css"/> -->
+
+<style>
+
+  #container {
+        min-width: 600px;
+        margin: 0 auto;
+    }
+
+  .highcharts-background {
+    fill: #fff; }
+
+  .highcharts-plot-background {
+    fill: #fff; }
+
+  body {
+    background-color: #0a1a30; }
+
+  .card-header {
+    background-color: #0a1a30;
+    border-bottom: none;
+  }
+
+  .card.text-center {
+    border: none;
+  }
+
+  .nav-link {
+    color: #52bdec;
+  }
+
+  #source {
+    font-size: small;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+
+
+</style>
+
+
+<div class="card text-center">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item" id="portcalls">
+          <a class="nav-link active" href="#">Transit Calls</a>
+        </li>
+        <li class="nav-item" id="capacity">
+          <a class="nav-link" href="#">Transit Trade Volume</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+        <figure class="highcharts-figure">
+            <div id="container"></div>
+            <div style="margin-right:12px">                 
+              <p id="source" style="text-align:right;font-size:1vw;">Sources: UN Global Platform; PortWatch.</p> 
+            </div>
+        </figure>
+    </div>
+  </div>
+
+
+
+
+<script>
+
+Highcharts.SVGRenderer.prototype.symbols.download = function (x, y, w, h) {
+    const path = [
+        // Arrow stem
+        'M', x + w * 0.5, y,
+        'L', x + w * 0.5, y + h * 0.7,
+        // Arrow head
+        'M', x + w * 0.3, y + h * 0.5,
+        'L', x + w * 0.5, y + h * 0.7,
+        'L', x + w * 0.7, y + h * 0.5,
+        // Box
+        'M', x, y + h * 0.9,
+        'L', x, y + h,
+        'L', x + w, y + h,
+        'L', x + w, y + h * 0.9
+    ];
+    return path;
+};
+
+const shift = 365; // Changed from 52*7: 52*7days - to keep comparing mondays with mondays, tuesdays with tuesdays, etc
+
+var options = {
+    
+    chart: {
+      backgroundColor: '#fff',
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    legend: {
+      enabled: true
+
+    },
+
+    plotOptions: {
+      series: {
+          dataGrouping: {
+            enabled: false
+          },
+          showInNavigator: true
+      },
+      column: {
+        stacking: 'normal'
+      }
+    },
+
+    rangeSelector: {
+        selected: 1 // By default 3 months is selected
+    },
+
+    xAxis: {
+        plotBands: []
+    },
+
+    exporting: {
+        enabled: true,
+        buttons: {
+            contextButton: {
+                symbol: 'download',
+                text: 'Export Data'
+            }
+        }
+    },
+
+
+    series: []
+};
+
+var seriesOptions = {
+  portcalls: {
+    yAxis: "Number of Ships",
+    title: "Daily Transit Calls",
+    name: "Number of Ships"
+  },
+  capacity: {
+    yAxis: "Metric Tons",
+    title: "Transit Trade Volume",
+    name: 'Daily Transit Trade Volume'
+  }
+}
+
+function createChart(data, name, portname) {
+
+  console.log(portname);
+
+
+  options['yAxis'] = {
+    title: {
+      text: seriesOptions[name].yAxis
+    },
+    opposite: false
+  }
+
+  if (name == "portcalls") {
+
+    options.series = [
+      { name: "Number of Cargo Ships",
+        data: data.map(x => [x.date, x['cargo']]),
+        type: 'column',
+        stack: 1,
+        tooltip: {
+          valueDecimals: 0,
+        },
+        color: '#afc5dc',
+        showInLegend: true},
+    { name: "Number of Tanker Ships",
+      data: data.map(x => [x.date, x['tanker']]),
+      type: 'column',
+      stack: 1,
+      tooltip: {
+        valueDecimals: 0,
+      },
+      color: '#004c97',
+      showInLegend: true}];
+
+  } else {
+    options.series = [{ name: seriesOptions[name].name,
+                        data: data.map(x => [x.date, x[name]]),
+                        type: 'column',
+                        tooltip: {
+                          valueDecimals: 0,
+                        },
+                        color: '#004c97',
+                        showInLegend: true}];
+  }
+
+
+  options.series = options.series.concat([
+  { name: '7-day Moving Average',
+    data: data.map(x => [x.date, x[name+"7MA"]]),
+    type: 'line',
+    marker: {
+      enabled: false, // auto
+      lineWidth: 1,
+    },
+    color: '#f3ab0a',
+    tooltip: {
+          valueDecimals: 0,
+      },
+    showInLegend: true          
+  },
+  { name: 'Prior Year: 7-day Moving Average',
+    data: data.slice(shift+1).map(x => [x.date, x[name+"7MAshifted"]]),
+    type: 'line',
+    marker: {
+      enabled: false, // auto
+      lineWidth: 1,
+    },
+    dashStyle: 'Dash',
+    color: '#474747',
+    tooltip: {
+          valueDecimals: 0,
+      },
+    showInLegend: true          
+  }]);
+
+  options['title'] = {
+    text: portname + ": " + seriesOptions[name].title
+  };
+
+  console.log(options.series);
+
+  var chart = new Highcharts.stockChart('container', options);
+
+}
+
+
+$(document).ready(function() {
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const portid = urlParams.get('portid');
+    console.log(portid);
+
+
+    var features = [];
+    var seriesCounter = 0;
+    var nChunks;
+    
+
+
+
+    var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0/query?"
+
+
+function success(data) {
+  
+  features = features.concat(data.features);
+
+  // As chunks of data are loaded asynchronously, we don't know what order it
+  // will arrive. So keep a counter and create the chart when all the data is loaded.
+  seriesCounter += 1;
+
+    if (seriesCounter === nChunks) {
+
+      const portname = features[0].attributes.portname;
+
+      var series = features.map(function(feature) {
+        datapoint = {
+          date: feature.attributes.date, 
+          cargo: parseInt(feature.attributes.n_cargo),
+          tanker: parseInt(feature.attributes.n_tanker),
+          portcalls: parseInt(feature.attributes.n_total),
+          capacity: parseFloat(feature.attributes.capacity),
+        }
+                          
+        return datapoint;
+      });
+      series.sort((a, b) => a.date - b.date);
+
+      var capacity7MA = movingAvg(series.map(x => x.capacity), 7, 0);
+      var portcalls7MA = movingAvg(series.map(x => x.portcalls), 7, 0);
+
+
+
+      series = series.map(function(feature, i) {
+
+        feature['capacity7MA'] = capacity7MA[i];
+        feature['portcalls7MA'] = portcalls7MA[i];
+        if (i > shift) {
+          feature['capacity7MAshifted'] = capacity7MA[i-shift];
+          feature['portcalls7MAshifted'] = portcalls7MA [i-shift];
+        }
+
+        return feature;
+      });
+      
+      console.log(series);
+
+      createChart(series, "portcalls", portname);
+
+      $('.nav.nav-tabs.card-header-tabs > li').on('click', function(e) {
+        $('.nav.nav-tabs.card-header-tabs > li > a').removeClass('active');
+        $(this).children().addClass('active');
+        const selected = $(this).attr('id');
+        console.log(selected);
+        createChart(series, selected, portname);
+      }); 
+    }
+
+}
+
+
+function getArcGISdata(data) {
+  
+  objectIds = data['objectIds'].sort(function(a, b){return a - b});
+  console.log(objectIds);
+  
+  const chunkSize = 1000;
+  nChunks = Math.ceil(objectIds.length/chunkSize);
+
+  for (let i = 0; i < objectIds.length; i += chunkSize) {
+      const chunk = objectIds.slice(i, i + chunkSize);
+      const firstObjectId = chunk[0];
+      const lastObjectId = chunk[chunk.length-1];
+      console.log(firstObjectId, lastObjectId);
+
+      const queryUrl = baseUrl+"where=portid%3D%27"+portid+"%27"+"%20AND%20objectID%20>%3D%20"+firstObjectId+"%20AND%20objectID%20<%3D%20"+lastObjectId+"&outFields=portid,portname,date,n_cargo,n_tanker,n_total,capacity&cacheHint=true&returnGeometry=false&outSR=&f=json";
+
+      Highcharts.getJSON(
+        queryUrl,
+        success
+      );
+
+  }
+
+}
+
+
+
+
+Highcharts.getJSON(
+  baseUrl+"where=portid%3D%27"+portid+"%27&outFields=*&returnIdsOnly=true&cacheHint=true&outSR=4326&f=json",
+  getArcGISdata
+);
+
+    
+}); 
+
+
+function movingAvg(array, countBefore, countAfter) {
+  if (countAfter == undefined) countAfter = 0;
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    const subArr = array.slice(Math.max(i - countBefore + 1, 0), Math.min(i + countAfter + 1, array.length));
+    const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
+    result.push(avg);
+  }
+  return result;
+}
+
+</script>
