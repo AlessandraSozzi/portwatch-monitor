@@ -1,0 +1,203 @@
+<!-- /* Author CSF */ -->
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sankey.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+<!-- <link rel="stylesheet" type="text/css" href="Highcharts-IMF.css"/> -->
+
+<style>
+
+  body {
+    margin: 0px 20px 0px 20px ;
+  }
+
+  #container {
+        width: 100%;
+        height: 500px;
+    }
+
+
+  .highcharts-background {
+    fill: #0a1a30; }
+
+  .highcharts-plot-background {
+    fill: #0a1a30; }
+
+  body {
+    background-color: #0a1a30; }
+
+  .card-header {
+    background-color: #0a1a30;
+    border-bottom: none;
+  }
+
+  .card.text-center {
+    border: none;
+  }
+
+  .card-body {
+    background-color: #0a1a30;
+    margin: none;
+  }
+
+  .nav-link {
+    color: #52bdec;
+  }
+
+.row {
+  height: 30px;
+}
+
+.column {
+  float: left;
+}
+
+.left, .right {
+  width: 25%;
+}
+
+.middle {
+  width: 50%;
+}
+
+
+
+</style>
+
+
+<div class="card text-center">
+    <div class="card-body">
+        <figure class="highcharts-figure">
+          <div class="row">
+            <div class="column left" style="color:#fff;">
+              <p>Previous port visited:</p>
+            </div>
+            <div class="column middle" style="color:#fff;">
+              <h6>Disrupted port</h6>
+            </div>
+            <div class="column right" style="color:#fff;">
+              <p>Next port visited:</p>
+            </div>
+          </div>
+            <div id="container"></div>
+            <div style="margin-right:10px">
+            </div>
+        </figure>
+    </div>
+  </div>
+
+
+
+
+<script>
+
+var options = {
+    chart: {
+      backgroundColor: '#fff',
+    },
+    title: {
+     text: ''
+    },
+    credits: {
+        enabled: false
+    },
+    series: []
+};
+
+function success(data) {
+
+  console.log(data);
+
+  series = [{
+      keys: ['from', 'to', 'weight', 'from_name', 'to_name'],
+      data: [],
+      nodes: [],
+      //colorKey: 'target',
+      type: 'sankey'
+  }];
+
+  mapper = {};
+  colorkeys = {};
+  ckey = 0;
+  
+  series[0]['data'] = data.features.map(function(feature) {    
+        console.log(feature.attributes['source']);
+        
+        mapper[feature.attributes['source']] = feature.attributes['from_'];
+        mapper[feature.attributes['target']] = feature.attributes['to_'];
+        if (!(feature.attributes['from_'] in colorkeys)) 
+          colorkeys[feature.attributes['from_']] = ckey++;
+        if (!(feature.attributes['to_'] in colorkeys))
+          colorkeys[feature.attributes['to_']] = ckey++;
+
+
+        return [feature.attributes['source'], 
+                feature.attributes['target'],   
+                parseFloat(feature.attributes['perc_disaster_capacity']),
+                feature.attributes['from_'],
+                feature.attributes['to_']]
+  });
+
+  console.log(mapper);
+  console.log(colorkeys);
+
+  for (const [key, value] of Object.entries(mapper)) {
+    console.log(key, value);
+    series[0].nodes.push({
+      id: parseInt(key),
+      name: value,
+      colorIndex: colorkeys[value]
+    });
+  }
+
+  console.log(series);
+
+
+
+
+
+  options['series'] = series;
+
+  options['tooltip'] = {
+    formatter: function() {
+        return 'From <b>' + this.point.from_name + 
+                '</b> to <b>' + this.point.to_name + 
+                '</b>: '+ this.point.weight.toFixed(2) + '%';
+    }
+}
+
+
+  var chart = new Highcharts.Chart('container', options);
+
+}
+
+
+$(document).ready(function() {
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const eventid = urlParams.get('eventid');
+console.log(eventid);
+
+
+var features = [];
+var baseUrl = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/sankey_data/FeatureServer/0/query?"
+
+Highcharts.getJSON(
+  baseUrl+"where=eventid%3D%27"+eventid+"%27&outFields=*&outSR=4326&cacheHint=true&f=json",
+  success
+);
+
+});
+
+
+</script>
