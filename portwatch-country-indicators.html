@@ -161,9 +161,9 @@
         } else {
           [country] = results;
         }
-        const final = generateIndicators(country, ma_days=ma_days);
+        const final = generateIndicators(country, ma_days);
 
-        createDisruptionAisChart(final, "portcalls", ma_days=ma_days);
+        createDisruptionAisChart(final, "portcalls", ma_days);
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
@@ -171,7 +171,7 @@
           const selected = $(this).attr("id");
           console.log(selected);
           if (["portcalls", "import", "export"].includes(selected)) {
-            createDisruptionAisChart(final, selected, ma_days=ma_days);
+            createDisruptionAisChart(final, selected, ma_days);
           } else {
             createGrowthRateChart(nowcastData, selected);
           }
