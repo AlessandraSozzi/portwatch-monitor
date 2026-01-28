@@ -33,7 +33,7 @@
 <div class="card text-center">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item" id="portcalls">
+        <li class="nav-item" id="n">
           <a class="nav-link active" href="#">Transit Calls</a>
         </li>
         <li class="nav-item" id="capacity">
@@ -102,7 +102,7 @@ var queryAndChartData = function (portid) {
         [chokepoint] = results;
         const final = generateChokepointIndicators(chokepoint);
 
-        createDisruptionAisChart(final, "portcalls");
+        createDisruptionAisChart(final, "n");
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");

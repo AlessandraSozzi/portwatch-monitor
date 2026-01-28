@@ -192,7 +192,7 @@ var parseChokepoint = function (features) {
       n_general_cargo: parseInt(feature.attributes. n_general_cargo),
       n_roro: parseInt(feature.attributes.n_roro),
       n_tanker: parseInt(feature.attributes.n_tanker),
-      n_total: parseInt(feature.attributes.n_total),
+      n: parseInt(feature.attributes.n_total),
       capacity: parseFloat(feature.attributes.capacity),
     };
     return datapoint;
@@ -337,18 +337,18 @@ var generateChokepointIndicators = function (series, ma_days=7) {
     ma_days,
     0
   );
-  n_total_MA = movingAvg(
-    series.map((x) => x.n_total),
+  n_MA = movingAvg(
+    series.map((x) => x.n),
     ma_days,
     0
   );
 
   series = series.map(function (feature, i) {
     feature["capacity_MA"] = capacity_MA[i];
-    feature["n_total_MA"] = n_total_MA[i];
+    feature["n_MA"] = n_MA[i];
     if (i > shift) {
       feature["capacity_MA_shifted"] = capacity_MA[i - shift];
-      feature["n_total_MA_shifted"] = n_total_MA[i - shift];
+      feature["n_MA_shifted"] = n_MA[i - shift];
     }
     return feature;
   });
@@ -397,7 +397,15 @@ var labels = {
   exportN: {
     yAxis: "3-month moving average, year on year change (%)",
     title: "Nowcast Estimate of Export Value and Volume",
-  }
+  },
+  n: {
+    yAxis: "Number of Ships",
+    title: "Arrivals of Ships",
+  },
+  capacity: {
+    yAxis: "Metric Tons",
+    name: "Transit Trade Volume",
+  },
 };
 
 var options = {
