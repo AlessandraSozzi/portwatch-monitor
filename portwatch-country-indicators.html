@@ -47,6 +47,12 @@
       <li class="nav-item" id="export">
         <a class="nav-link" href="#">Outgoing Shipment</a>
       </li>
+      <li class="nav-item nowcast-tab" id="importN" style="display: none;">
+        <a class="nav-link" href="#">Import Nowcast</a>
+      </li>
+      <li class="nav-item nowcast-tab" id="exportN" style="display: none;">
+        <a class="nav-link" href="#">Export Nowcast</a>
+      </li>
     </ul>
   </div>
   <div class="card-body">
@@ -77,26 +83,36 @@
   $(document).ready(function () {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const ma_days = 30; // Use 30-day MA for this chart
     var iso3 = urlParams.get("iso3");
+    var version = urlParams.get("version");
+    
     iso3 = iso3 == null ? "BRA" : iso3;
-    //console.log(portid);
+    version = version == null ? "simple" : version;
 
-    queryAndChartData(iso3);
+    // Show/hide nowcast tabs based on version
+    if (version === "extended") {
+      $(".nowcast-tab").show();
+    }
+
+    queryAndChartData(iso3, version);
   });
 
-  var queryAndChartData = function (iso3) {
+  var queryAndChartData = function (iso3, version) {
     require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
       FeatureLayer,
       Query
     ) => {
+
+      // Define Layers Connections
       const countryLayer = new FeatureLayer({
         url: countryUrl,
       });
+      const nowcastLayer = new FeatureLayer({
+        url: nowcastUrl,
+      });
 
-      /* const eventLayer = new FeatureLayer({
-        url: eventsUrl,
-      }); */
-
+      // Define Data Queries
       const countryQuery = new Query({
         where: "ISO3='" + iso3 + "'",
         outFields: ['date', 'country', 'ISO3', 
@@ -106,63 +122,56 @@
         cacheHint: true,
         maxRecordCountFactor: 5,
       });
-
-      /* const eventQuery = new Query({
+      const nowcastQuery = new Query({
         where: "ISO3='" + iso3 + "'",
-        outFields: "*",
+        outFields: ['date', 'region', 'ISO3', 'value_import_total', 'value_export_total', 'volume_import_total', 'volume_export_total'],
         cacheHint: true,
         maxRecordCountFactor: 5,
-      }); */
+      });
 
-      async function executeDynamicQueries(iso3) {
+      async function executeDynamicQueries(iso3, version) {
         const promises = [
           countryLayer.queryFeatures(countryQuery).then((result) => {
             return parseCountry(result.features);
-          }),
-          /* eventLayer.queryFeatures(eventQuery).then((result) => {
-            return parseEvents(result.features);
-          }), */
+          })
         ];
+
+        // Only fetch nowcast data if extended version
+        if (version === "extended") {
+          promises.push(
+            nowcastLayer.queryFeatures(nowcastQuery).then((result) => {
+              return result.features;
+            })
+          );
+        }
+        
         const results = await Promise.all(promises);
         return results;
       }
 
-      executeDynamicQueries(iso3).then((results) => {
-        [country
-        // , events
-      ] = results;
-        const final = generateIndicators(country, ma_days=30);
-        console.log(final);
-        //console.log(events, final);
+      executeDynamicQueries(iso3, version).then((results) => {
+        let country, nowcast, nowcastData;
+        
+        if (version === "extended") {
+          [country, nowcast] = results;
+          nowcastData = generateNowcastSeries(nowcast);
+        } else {
+          [country] = results;
+        }
+        const final = generateIndicators(country, ma_days=ma_days);
 
-        /* events.forEach((event) => {
-          options["xAxis"]["plotBands"].push({
-            color: "rgba(255, 0, 0, 0.1)", // Red
-            borderColor: "#FF0000",
-            borderWidth: 0.1,
-            from: event.fromdate,
-            to: event.todate,
-            label: {
-              inside: false,
-              text: event.eventname,
-              rotation: 0,
-              y: 15,
-              style: {
-                color: "#FF0000",
-                fontWeight: "bold",
-              },
-            },
-          });
-        }); */
-
-        createDisruptionAisChart(final, "portcalls", ma_days=30);
+        createDisruptionAisChart(final, "portcalls", ma_days=ma_days);
 
         $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
           $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
           $(this).children().addClass("active");
           const selected = $(this).attr("id");
-          //console.log(selected);
-          createDisruptionAisChart(final, selected, ma_days=30);
+          console.log(selected);
+          if (["portcalls", "import", "export"].includes(selected)) {
+            createDisruptionAisChart(final, selected, ma_days=ma_days);
+          } else {
+            createGrowthRateChart(nowcastData, selected);
+          }
         });
       });
     });
