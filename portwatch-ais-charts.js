@@ -568,7 +568,7 @@ var createAisYoYChart = function (data, chartType = "portcalls") {
     opposite: false,
   };
   options["rangeSelector"] = {
-    selected: 3,
+    selected: 2,
   };
 
   options.series = [
