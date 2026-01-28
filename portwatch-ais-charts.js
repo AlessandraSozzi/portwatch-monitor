@@ -142,20 +142,8 @@ var parseRegion = function (features) {
         parseFloat(feature.attributes.portcalls_container_15MA_yoy_doy) * 100,
       portcalls_container_30MA_yoy:
         parseFloat(feature.attributes.portcalls_container_30MA_yoy_doy) * 100,
-      shipment_container_7MA_yoy:
-        parseFloat(feature.attributes.shipment_7MA_yoy_doy) * 100,
-      shipment_container_15MA_yoy:
-        parseFloat(feature.attributes.shipment_15MA_yoy_doy) * 100,
       shipment_container_30MA_yoy:
         parseFloat(feature.attributes.shipment_30MA_yoy_doy) * 100,
-      import_container_7MA_yoy:
-        parseFloat(feature.attributes.import_container_7MA_yoy_doy) * 100,
-      export_container_7MA_yoy:
-        parseFloat(feature.attributes.export_container_7MA_yoy_doy) * 100,
-      import_container_15MA_yoy:
-        parseFloat(feature.attributes.import_container_15MA_yoy_doy) * 100,
-      export_container_15MA_yoy:
-        parseFloat(feature.attributes.export_container_15MA_yoy_doy) * 100,
       import_container_30MA_yoy:
         parseFloat(feature.attributes.import_container_30MA_yoy_doy) * 100,
       export_container_30MA_yoy:
