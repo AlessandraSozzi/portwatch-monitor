@@ -33,9 +33,23 @@
    display: none; 
   }*/
 </style>
-
 <div class="card text-center">
-  <div class="card-body">
+  <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item" id="portcalls">
+          <a class="nav-link active" href="#">Port Calls</a>
+        </li>
+        <li class="nav-item regional-tab" id="import" style="display: none;">
+          <a class="nav-link" href="#">Incoming Shipment</a>
+        </li>
+        <li class="nav-item regional-tab" id="export" style="display: none;">
+          <a class="nav-link" href="#">Outgoing Shipment</a>
+        </li>
+        <li class="nav-item" id="shipment">
+          <a class="nav-link" href="#">Shipment</a>
+        </li>
+      </ul>
+    </div>
     <figure class="highcharts-figure">
       <div id="container"></div>
       <div style="margin-right: 12px; margin-left: 12px">
@@ -47,8 +61,6 @@
       </div>
     </figure>
   </div>
-</div>
-
 <script>
   var portsUrl =
     "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Trade_Data_REG/FeatureServer/0";
@@ -61,6 +73,12 @@
     var iso3 = urlParams.get("iso3");
     iso3 = iso3 == null ? "WLD" : iso3;
     //console.log(portid);
+
+    // hide import/export for world view
+    if (iso3 != "WLD") {
+          $(".regional-tab").show();
+          $("#shipment").hide();
+    }
 
     queryAndChartData(iso3);
   });
@@ -94,7 +112,16 @@
       executeDynamicQueries(iso3).then((results) => {
         daily_agg = results.flat();
         console.log(daily_agg);
+
         createAisYoYChart(daily_agg, "portcalls");
+
+        $(".nav.nav-tabs.card-header-tabs > li").on("click", function (e) {
+          $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+          $(this).children().addClass("active");
+          const selected = $(this).attr("id");
+          console.log("Changed:", selected);
+          createAisYoYChart(daily_agg, selected);
+        });
       });
     });
   };
