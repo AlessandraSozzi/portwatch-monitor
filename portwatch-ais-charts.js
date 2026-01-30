@@ -421,6 +421,15 @@ var options = {
     enabled: true,
   },
 
+  tooltip: {
+    format: '<span style="font-size: 0.8em">{key}</span><br/>' +
+        '{#each points}' +
+        '<span style="color:{color}">\u25CF</span> ' +
+        '{series.name}: <b>{y}</b><br/>' +
+        '{/each}',
+    shared: true
+},
+
   plotOptions: {
     series: {
       dataGrouping: {
