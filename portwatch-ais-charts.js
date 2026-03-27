@@ -216,6 +216,7 @@ var parseChokepoint = function (features) {
   });
 
   series.sort((a, b) => a.date - b.date);
+  console.log(series);
   return series;
 };
 
