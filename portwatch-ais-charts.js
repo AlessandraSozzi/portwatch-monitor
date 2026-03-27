@@ -205,6 +205,11 @@ var parseChokepoint = function (features) {
       n_roro: parseInt(feature.attributes.n_roro),
       n_tanker: parseInt(feature.attributes.n_tanker),
       n: parseInt(feature.attributes.n_total),
+      capacity_container: parseFloat(feature.attributes.capacity_container),
+      capacity_dry_bulk: parseFloat(feature.attributes.capacity_dry_bulk),
+      capacity_general_cargo: parseFloat(feature.attributes.capacity_general_cargo),
+      capacity_roro: parseFloat(feature.attributes.capacity_roro),
+      capacity_tanker: parseFloat(feature.attributes.capacity_tanker),
       capacity: parseFloat(feature.attributes.capacity),
     };
     return datapoint;
