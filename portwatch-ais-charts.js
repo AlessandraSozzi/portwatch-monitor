@@ -438,16 +438,12 @@ var options = {
     enabled: true,
   },
 
-  /*tooltip: {
+  tooltip: {
     split: true,
     distance: 30,
-    padding: 5,
-    valueDecimals: 0
-  },*/
-
-  tooltip: {
-        shared: true,
-        valueDecimals: 0
+    padding: 3,
+    valueDecimals: 0,
+    outside: true
   },
 
   plotOptions: {
