@@ -439,7 +439,10 @@ var options = {
   },
 
   tooltip: {
-        shared: true
+    split: true,
+    distance: 30,
+    padding: 5,
+    valueDecimals: 0
   },
 
   plotOptions: {
@@ -505,9 +508,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       data: data.map((x) => [x.date, x[chartType+"_container"]]),
       type: "column",
       stack: 1,
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       color: "#D72F27",
       showInLegend: true,
     },
@@ -516,9 +519,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       data: data.map((x) => [x.date, x[chartType+"_dry_bulk"]]),
       type: "column",
       stack: 1,
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       color: "#FC8D58",
       showInLegend: true,
     },
@@ -527,9 +530,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       data: data.map((x) => [x.date, x[chartType+"_general_cargo"]]),
       type: "column",
       stack: 1,
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       color: "#FDDF8F",
       showInLegend: true,
     },
@@ -538,9 +541,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       data: data.map((x) => [x.date, x[chartType+"_roro"]]),
       type: "column",
       stack: 1,
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       color: "#92BFDB",
       showInLegend: true,
     },
@@ -549,9 +552,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       data: data.map((x) => [x.date, x[chartType+"_tanker"]]),
       type: "column",
       stack: 1,
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       color: "#1A4D2E",
       showInLegend: true,
     },
@@ -567,9 +570,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
         lineWidth: 1,
       },
       color: "#f3ab0a",
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       showInLegend: true,
     },
     {
@@ -584,9 +587,9 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
       },
       dashStyle: "Dash",
       color: "#474747",
-      tooltip: {
+      /*tooltip: {
         valueDecimals: 0,
-      },
+      },*/
       showInLegend: true,
     },
   ]);
