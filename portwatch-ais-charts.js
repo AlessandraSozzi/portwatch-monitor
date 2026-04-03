@@ -438,6 +438,10 @@ var options = {
     enabled: true,
   },
 
+  tooltip: {
+        shared: true
+  },
+
   plotOptions: {
     series: {
       dataGrouping: {
