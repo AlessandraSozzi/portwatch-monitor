@@ -446,7 +446,8 @@ var options = {
   },*/
 
   tooltip: {
-        shared: true
+        shared: true,
+        valueDecimals: 0
   },
 
   plotOptions: {
