@@ -196,7 +196,7 @@ var parsePort = function (features) {
 var parseChokepoint = function (features) {
   var series = features.map((feature) => {
     datapoint = {
-      date: feature.attributes.date,
+      date: Date.parse(feature.attributes.date),
       portid: feature.attributes.portid,
       portname: feature.attributes.portname,
       n_container: parseInt(feature.attributes.n_container),
