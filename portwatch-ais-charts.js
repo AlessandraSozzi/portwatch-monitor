@@ -201,7 +201,7 @@ var parseChokepoint = function (features) {
       portname: feature.attributes.portname,
       n_container: parseInt(feature.attributes.n_container),
       n_dry_bulk: parseInt(feature.attributes.n_dry_bulk),
-      n_general_cargo: parseInt(feature.attributes. n_general_cargo),
+      n_general_cargo: parseInt(feature.attributes.n_general_cargo),
       n_roro: parseInt(feature.attributes.n_roro),
       n_tanker: parseInt(feature.attributes.n_tanker),
       n: parseInt(feature.attributes.n_total),
@@ -214,6 +214,13 @@ var parseChokepoint = function (features) {
     };
     return datapoint;
   });
+
+  // Remove duplicates by date (keep last record for each date)
+  const uniqueSeries = {};
+  series.forEach((item) => {
+    uniqueSeries[item.date] = item;
+  });
+  series = Object.values(uniqueSeries);
 
   series.sort((a, b) => a.date - b.date);
   return series;
@@ -494,7 +501,16 @@ var options = {
   }
 };
 
+var globalChart; // Store chart reference
+
 var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=7) {
+  // Destroy existing chart before creating a new one
+  if (globalChart) {
+    globalChart.destroy();
+  }
+
+
+
   options["yAxis"] = {
     title: {
       text: labels[chartType].yAxis,
@@ -579,7 +595,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
     {
       name: "Prior Year: "+ma_days+"-day Moving Average",
       data: data
-        .slice(shift + 1)
+        .slice(shift)
         .map((x) => [x.date, x[chartType + "_MA_shifted"]]),
       type: "line",
       marker: {
@@ -601,7 +617,7 @@ var createDisruptionAisChart = function (data, chartType = "portcalls", ma_days=
 
   options["subtitle"] = null;
 
-  var chart = new Highcharts.stockChart("container", options);
+  globalChart = new Highcharts.stockChart("container", options);
 };
 
 
