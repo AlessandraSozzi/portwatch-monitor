@@ -100,7 +100,9 @@ var queryAndChartData = function (portid) {
 
       executeDynamicQueries(portid).then((results) => {
         [chokepoint] = results;
+        console.log(chokepoint);
         const final = generateChokepointIndicators(chokepoint);
+        console.log(final);
 
         createDisruptionAisChart(final, "n");
 
