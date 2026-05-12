@@ -84,7 +84,7 @@ var queryAndChartData = function (portid) {
       const portQuery = new Query({
         where: "portid='" + portid + "'",
         outFields: "*",
-        cacheHint: true,
+        // cacheHint: true,
         maxRecordCountFactor: 5,
       });
 
