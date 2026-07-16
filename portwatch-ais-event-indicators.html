@@ -147,9 +147,28 @@ var queryAndChartData = function(eventid) {
                   }
 
                   executeDynamicQueries(affectedports).then((ports) => {
-                      var portsnote = [];
-                      ports.forEach(portData => portsnote.push(portData[0].portname + " (" + portData[0].country + ")"));
-                      $('#ports').text("Ports included: "+ portsnote.sort().join("; ") + ".")
+                      const portsnote = [];
+
+                      ports.forEach(portData => {
+                          if (portData.length > 0) {
+                              portsnote.push(
+                                  portData[0].portname + " (" + portData[0].country + ")"
+                              );
+                          }
+                      });
+
+                      const sortedPorts = portsnote.sort();
+                      const displayedPorts = sortedPorts.slice(0, 5);
+                      const remainingCount = sortedPorts.length - displayedPorts.length;
+
+                      let footnote = "Ports included: " + displayedPorts.join("; ");
+
+                      if (remainingCount > 0) {
+                          footnote += `; and ${remainingCount} additional port${remainingCount === 1 ? "" : "s"}`;
+                      }
+
+                      $('#ports').text(footnote + ".");
+
                       return ports.flat();
                   })
                   .then((data) => {
