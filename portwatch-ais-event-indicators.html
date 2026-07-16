@@ -158,7 +158,7 @@ var queryAndChartData = function(eventid) {
                       });
 
                       const sortedPorts = portsnote.sort();
-                      const displayedPorts = sortedPorts.slice(0, 5);
+                      const displayedPorts = sortedPorts.slice(0, 10);
                       const remainingCount = sortedPorts.length - displayedPorts.length;
 
                       let footnote = "Ports included: " + displayedPorts.join("; ");
