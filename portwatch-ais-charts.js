@@ -293,8 +293,21 @@ var groupPorts = function (data) {
         portcalls_roro: 0,
         portcalls_tanker: 0,
         portcalls: 0,
+        //import: 0,
+        //export: 0,
+
+        import_container: 0,
+        import_dry_bulk: 0,
+        import_general_cargo: 0,
+        import_roro: 0,
+        import_tanker: 0,
         import: 0,
-        export: 0,
+        export_container: 0,
+        export_dry_bulk: 0,
+        export_general_cargo: 0,
+        export_roro: 0,
+        export_tanker: 0,
+        export: 0
       };
     }
     acc[item.date]["portcalls_container"] += item.portcalls_container;
@@ -305,6 +318,17 @@ var groupPorts = function (data) {
     acc[item.date]["portcalls"] += item.portcalls;
     acc[item.date]["import"] += item.import;
     acc[item.date]["export"] += item.export;
+    acc[item.date]["import_container"] += item.import_container;
+    acc[item.date]["import_dry_bulk"] += item.import_dry_bulk;
+    acc[item.date]["import_general_cargo"] += item.import_general_cargo;
+    acc[item.date]["import_roro"] += item.import_roro;
+    acc[item.date]["import_tanker"] += item.import_tanker;
+    
+    acc[item.date]["export_container"] += item.export_container;
+    acc[item.date]["export_dry_bulk"] += item.export_dry_bulk;
+    acc[item.date]["export_general_cargo"] += item.export_general_cargo;
+    acc[item.date]["export_roro"] += item.export_roro;
+    acc[item.date]["export_tanker"] += item.export_tanker;
     return acc;
   }, {});
 
