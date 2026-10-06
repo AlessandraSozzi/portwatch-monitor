@@ -36,7 +36,7 @@ const ECONOMIES = [
   { iso3: "KOR", name: "Korea" },
   { iso3: "SAU", name: "Saudi Arabia" },
   { iso3: "ZAF", name: "South Africa" },
-  { iso3: "TUR", name: "Turkiye" },
+  { iso3: "TUR", name: "Türkiye" },
   { iso3: "USA", name: "United States" },
 ];
 
