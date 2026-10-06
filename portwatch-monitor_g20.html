@@ -1,0 +1,360 @@
+<!-- /* Author CSF */ -->
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://js.arcgis.com/4.28/"></script>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script src="portwatch-monitor_g20.js"></script>
+<link rel="stylesheet" type="text/css" href="portwatch-monitor_g20.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"
+></script>
+
+<div
+  style="
+    text-align: right;
+    padding-right: 20px;
+    padding-top: 10px;
+    color: #c0c0c0;
+    font-size: 1vw;
+  "
+>
+  <p>
+    <img
+      src="https://imf-dataviz.maps.arcgis.com/sharing/rest/content/items/19b92a4413c34407878791299acde8d7/resources/clock_pw.png"
+      style="padding-right: 5px"
+    />
+    <span>Updated: </span><span id="latest"></span>
+  </p>
+</div>
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" id="world">WORLD</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="eu">EUROPEAN UNION</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="economies">ECONOMIES</a>
+      </li>
+    </ul>
+  </div>
+  <br />
+  <div style="margin-right: auto; margin-left: auto; width: 80%">
+    <span class="source" style="text-align: justify"
+      >This is not an official estimate of the IMF. Rather, this page presents
+      an experimental nowcasting model of maritime trade, leveraging real-time
+      satellite data on vessel movements. The model aims to provide a timely
+      indicator of merchandise trade. Exports and imports are both valued on a
+      free-on-board (fob) basis. For the European Union and individual
+      economies, only series approved for publication are shown. The estimates
+      are updated on a monthly basis with a lag of 7 working days and are
+      subject to weekly revisions. For background on the methodology, please
+      see
+      <a
+        href="https://www.imf.org/en/Publications/WP/Issues/2025/05/16/Nowcasting-Global-Trade-from-Space-566957"
+        target="_blank"
+        style="color: #3b9ec5"
+        >here</a
+      >. For limitations of the data and approach, please see
+      <a
+        href="https://portwatch.imf.org/pages/faqs"
+        target="_blank"
+        style="color: #3b9ec5"
+        >here</a
+      >.
+    </span>
+  </div>
+
+  <!-- WORLD -->
+  <div class="card-body tab-panel" id="panel-world">
+    <div class="status-text" id="status-world">Loading&hellip;</div>
+    <div class="row">
+      <div class="col-12 chart-block">
+        <div><span id="title-world-trade" class="title-text"></span></div>
+        <div id="sentence-world-trade" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-world-trade"></div>
+        </figure>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 chart-block">
+        <div><span id="title-world-import" class="title-text"></span></div>
+        <div id="sentence-world-import" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-world-import"></div>
+        </figure>
+      </div>
+      <div class="col-lg-6 chart-block">
+        <div><span id="title-world-export" class="title-text"></span></div>
+        <div id="sentence-world-export" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-world-export"></div>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- EUROPEAN UNION -->
+  <div class="card-body tab-panel" id="panel-eu" style="display: none">
+    <div class="status-text" id="status-eu">Loading&hellip;</div>
+    <div class="row">
+      <div class="col-lg-6 chart-block">
+        <div><span id="title-eu-import" class="title-text"></span></div>
+        <div id="sentence-eu-import" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-eu-import"></div>
+        </figure>
+        <div id="nodata-eu-import" class="nodata-text"></div>
+      </div>
+      <div class="col-lg-6 chart-block">
+        <div><span id="title-eu-export" class="title-text"></span></div>
+        <div id="sentence-eu-export" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-eu-export"></div>
+        </figure>
+        <div id="nodata-eu-export" class="nodata-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECONOMIES -->
+  <div class="card-body tab-panel" id="panel-economies" style="display: none">
+    <div class="economy-picker">
+      <label for="economy-select" class="economy-label">ECONOMY</label>
+      <select id="economy-select" class="form-select"></select>
+    </div>
+    <div class="status-text" id="status-economies">Loading&hellip;</div>
+    <div class="row">
+      <div class="col-lg-6 chart-block">
+        <div><span id="title-economies-import" class="title-text"></span></div>
+        <div id="sentence-economies-import" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-economies-import"></div>
+        </figure>
+        <div id="nodata-economies-import" class="nodata-text"></div>
+      </div>
+      <div class="col-lg-6 chart-block">
+        <div><span id="title-economies-export" class="title-text"></span></div>
+        <div id="sentence-economies-export" class="sentence-text"></div>
+        <div class="ytitle"></div>
+        <figure class="highcharts-figure">
+          <div id="container-economies-export"></div>
+        </figure>
+        <div id="nodata-economies-export" class="nodata-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-right: 12px; margin-left: 12px">
+    <span
+      class="source"
+      style="float: right; text-align: right; padding-bottom: 20px"
+      >Source: Arslanalp S., S. M. Choi, P. Kamali, R. Koepke, M. McKetty, M.
+      Ruta, M. Saraiva, A. Sozzi, and J. Verschuur (2025), "Nowcasting Global
+      Trade from Space," IMF Working Paper 25/93.</span
+    >
+  </div>
+  <br />
+  <br />
+  <br />
+</div>
+
+<script>
+  var baseUrl =
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0";
+
+  Highcharts.SVGRenderer.prototype.symbols.download = downloadSymbol;
+
+  // Tab configuration: which series to query and which flows to chart.
+  // approvedKey is the key of APPROVED (null = all measures).
+  var TABS = {
+    world: {
+      flows: ["trade", "import", "export"],
+      iso3: () => "WLD",
+      approvedKey: () => null,
+      isWorld: true,
+    },
+    eu: {
+      flows: ["import", "export"],
+      iso3: () => ISO_MAP.EU,
+      approvedKey: () => "EU",
+      isWorld: false,
+    },
+    economies: {
+      flows: ["import", "export"],
+      iso3: () => $("#economy-select").val(),
+      approvedKey: () => $("#economy-select").val(),
+      isWorld: false,
+    },
+  };
+
+  var seriesCache = {}; // Promises of parsed series by ISO3
+
+  var fetchSeries = function (iso3) {
+    /**
+     * Query the feature layer for one ISO3 code; results are cached.
+     * @param {String} iso3 - ISO3 code of the feature layer (e.g. WLD, 998, USA)
+     */
+    if (!(iso3 in seriesCache)) {
+      seriesCache[iso3] = new Promise(function (resolve, reject) {
+        require(["esri/layers/FeatureLayer", "esri/rest/support/Query"], (
+          FeatureLayer,
+          Query
+        ) => {
+          const layer = new FeatureLayer({
+            url: baseUrl,
+          });
+
+          const query = new Query({
+            where: "ISO3='" + iso3 + "'",
+            returnGeometry: false,
+            outFields: "*",
+            maxRecordCountFactor: 5,
+            cacheHint: true,
+          });
+
+          layer
+            .queryFeatures(query)
+            .then((result) => resolve(generateData(result.features)))
+            .catch(reject);
+        });
+      }).catch(function (err) {
+        delete seriesCache[iso3]; // Allow a retry on the next render
+        throw err;
+      });
+    }
+    return seriesCache[iso3];
+  };
+
+  var activeTab = function () {
+    return $("a.nav-link.active").attr("id");
+  };
+
+  var renderTab = function (tabId) {
+    /**
+     * Render the titles, sentences and charts of a tab
+     * @param {String} tabId - Tab ID (world, eu, economies)
+     */
+    var tab = TABS[tabId];
+    var iso3 = tab.iso3();
+    var code = tab.approvedKey();
+
+    $("#status-" + tabId).html("Loading&hellip;").show();
+
+    fetchSeries(iso3)
+      .then(function (series) {
+        // Skip if the user moved to another tab or economy meanwhile
+        if (activeTab() !== tabId || tab.iso3() !== iso3) return;
+
+        $("#status-" + tabId).hide();
+
+        var name = series[0].region;
+        var flowMeasures = {};
+        tab.flows.forEach((flow) => {
+          flowMeasures[flow] = getApprovedMeasures(code, flow);
+        });
+        var ylim = chartsExtent(series, flowMeasures);
+
+        tab.flows.forEach(function (flow) {
+          var id = tabId + "-" + flow;
+          var measures = flowMeasures[flow];
+          var block = $("#container-" + id).closest(".chart-block");
+
+          $("#title-" + id).html(dynamicTitle(name, flow));
+
+          if (measures.length > 0) {
+            block.find(".ytitle").html(dynamicYLabel(measures));
+            block.find(".ytitle, .highcharts-figure").show();
+            $("#nodata-" + id).hide();
+            $("#sentence-" + id).html(
+              dynamicText(series, name, flow, measures, tab.isWorld)
+            );
+            createGrowthRateChart(
+              series,
+              "container-" + id,
+              flow,
+              measures,
+              ylim
+            );
+          } else {
+            destroyChart("container-" + id);
+            block.find(".ytitle, .highcharts-figure").hide();
+            $("#sentence-" + id).html("");
+            $("#nodata-" + id)
+              .text("No approved " + flow + " series for " + name + ".")
+              .show();
+          }
+        });
+      })
+      .catch(function (err) {
+        console.error(err);
+        $("#status-" + tabId)
+          .text("Data could not be loaded. Please try again later.")
+          .show();
+      });
+  };
+
+  $(document).ready(function () {
+    ECONOMIES.forEach((e) => {
+      $("#economy-select").append(
+        $("<option>").val(e.iso3).text(e.name)
+      );
+    });
+    $("#economy-select").val(DEFAULT_ECONOMY);
+
+    $(".nav.nav-tabs.card-header-tabs > li > a").on("click", function (e) {
+      e.preventDefault();
+      $(".nav.nav-tabs.card-header-tabs > li > a").removeClass("active");
+      $(this).addClass("active");
+
+      var tabId = $(this).attr("id");
+      $(".tab-panel").hide();
+      // Render after the panel is visible so Highcharts gets the right width
+      $("#panel-" + tabId).show();
+      renderTab(tabId);
+    });
+
+    $("#economy-select").on("change", function () {
+      renderTab("economies");
+    });
+
+    renderTab("world");
+  });
+
+  $.get(
+    "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Monthly_TradeNow/FeatureServer/0?f=json",
+    function (data) {
+      const lastEditDate = new Date(
+        data.editingInfo.dataLastEditDate
+      ).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+      });
+      $("#latest").html(lastEditDate);
+    }
+  );
+</script>

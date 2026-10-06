@@ -1,0 +1,158 @@
+body {
+    background-color: #0a1a30;
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+}
+
+#container {
+    min-width: 600px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: #0a1a30;  
+}
+
+.card-header {
+    background-color: #0a1a30;
+    border-bottom: none;
+}
+
+.card.text-center {
+    border: none;
+}
+
+.nav-link {
+    color: #fff;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #0a1a30; 
+    border-color: transparent;
+    border-bottom: 3px solid #f3a90a;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent; 
+    color: #f3a90a;
+    font-weight: 500;
+}
+
+.nav-link.active:hover { 
+    border-bottom: 3px solid #f3a90a;
+    color: #f3a90a;
+    font-weight: 500;
+}
+
+
+.source {
+    font-size: small;
+    color: #c0c0c0;
+    font-size: 0.9vw; 
+}
+
+.highcharts-root {
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+}
+
+.highcharts-background {
+    fill: #0a1a30; 
+}
+
+.highcharts-plot-background {
+    fill: #0a1a30; 
+}
+
+.highcharts-title {
+    font-weight: 600 !important;
+}
+
+.highcharts-grid-line {
+    stroke: #c0c0c0;
+    stroke-opacity: 0.4;
+}
+.highcharts-tooltip-box {
+    fill: #0a1a30;
+}
+
+.highcharts-button-box {
+    fill: #0a1a30;
+}
+
+.sentence-text {
+    color: #c0c0c0;
+    font-size: 0.9rem;
+	text-align: left;
+	padding-left: 50px;
+	padding-top: 5px;
+}
+
+.text-highlight {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.title-text {
+	color: #fff;
+	font-weight: 600 !important;
+	font-size: 1.3rem;
+	padding-bottom: 15px;
+}
+
+.ytitle {
+    color: #c0c0c0;
+    font-size: 0.8rem;
+    text-align: left;
+    padding-left: 50px;
+    padding-top: 5px;
+}
+
+.chart-block {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.status-text,
+.nodata-text {
+    color: #c0c0c0;
+    font-size: 0.9rem;
+    padding: 20px;
+}
+
+.nodata-text {
+    display: none;
+    border: 1px dashed rgba(192, 192, 192, 0.4);
+    margin: 20px 50px;
+}
+
+.economy-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+
+.economy-label {
+    color: #c0c0c0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.economy-picker .form-select {
+    width: 250px;
+    background-color: #0a1a30;
+    color: #fff;
+    border: 1px solid #c0c0c0;
+    border-radius: 0;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23c0c0c0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.economy-picker .form-select:focus {
+    border-color: #f3a90a;
+    box-shadow: none;
+}
