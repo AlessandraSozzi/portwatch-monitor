@@ -31,6 +31,7 @@ const ECONOMIES = [
   { iso3: "BRA", name: "Brazil" },
   { iso3: "CAN", name: "Canada" },
   { iso3: "CHN", name: "China" },
+  { iso3: "GBR", name: "United Kingdom" },
   { iso3: "IND", name: "India" },
   { iso3: "IDN", name: "Indonesia" },
   { iso3: "JPN", name: "Japan" },
