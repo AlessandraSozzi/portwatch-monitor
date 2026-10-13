@@ -46,10 +46,7 @@
         <a class="nav-link active" href="#" id="world">WORLD</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" id="eu">EUROPEAN UNION</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" id="economies">ECONOMIES</a>
+        <a class="nav-link" href="#" id="economies">G20 ECONOMIES</a>
       </li>
     </ul>
   </div>
@@ -113,31 +110,6 @@
     </div>
   </div>
 
-  <!-- EUROPEAN UNION -->
-  <div class="card-body tab-panel" id="panel-eu" style="display: none">
-    <div class="status-text" id="status-eu">Loading&hellip;</div>
-    <div class="row">
-      <div class="col-lg-6 chart-block">
-        <div><span id="title-eu-import" class="title-text"></span></div>
-        <div id="sentence-eu-import" class="sentence-text"></div>
-        <div class="ytitle"></div>
-        <figure class="highcharts-figure">
-          <div id="container-eu-import"></div>
-        </figure>
-        <div id="nodata-eu-import" class="nodata-text"></div>
-      </div>
-      <div class="col-lg-6 chart-block">
-        <div><span id="title-eu-export" class="title-text"></span></div>
-        <div id="sentence-eu-export" class="sentence-text"></div>
-        <div class="ytitle"></div>
-        <figure class="highcharts-figure">
-          <div id="container-eu-export"></div>
-        </figure>
-        <div id="nodata-eu-export" class="nodata-text"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- ECONOMIES -->
   <div class="card-body tab-panel" id="panel-economies" style="display: none">
     <div class="economy-picker">
@@ -153,7 +125,6 @@
         <figure class="highcharts-figure">
           <div id="container-economies-import"></div>
         </figure>
-        <div id="nodata-economies-import" class="nodata-text"></div>
       </div>
       <div class="col-lg-6 chart-block">
         <div><span id="title-economies-export" class="title-text"></span></div>
@@ -162,12 +133,11 @@
         <figure class="highcharts-figure">
           <div id="container-economies-export"></div>
         </figure>
-        <div id="nodata-economies-export" class="nodata-text"></div>
       </div>
     </div>
   </div>
 
-  <div style="margin-right: 12px; margin-left: 12px">
+  <!-- <div style="margin-right: 12px; margin-left: 12px">
     <span
       class="source"
       style="float: right; text-align: right; padding-bottom: 20px"
@@ -175,7 +145,7 @@
       Ruta, M. Saraiva, A. Sozzi, and J. Verschuur (2025), "Nowcasting Global
       Trade from Space," IMF Working Paper 25/93.</span
     >
-  </div>
+  </div> -->
   <br />
   <br />
   <br />
@@ -196,15 +166,9 @@
       approvedKey: () => null,
       isWorld: true,
     },
-    eu: {
-      flows: ["import", "export"],
-      iso3: () => ISO_MAP.EU,
-      approvedKey: () => "EU",
-      isWorld: false,
-    },
     economies: {
       flows: ["import", "export"],
-      iso3: () => $("#economy-select").val(),
+      iso3: () => ISO_MAP[$("#economy-select").val()] || $("#economy-select").val(),
       approvedKey: () => $("#economy-select").val(),
       isWorld: false,
     },
@@ -255,7 +219,7 @@
   var renderTab = function (tabId) {
     /**
      * Render the titles, sentences and charts of a tab
-     * @param {String} tabId - Tab ID (world, eu, economies)
+     * @param {String} tabId - Tab ID (world, economies)
      */
     var tab = TABS[tabId];
     var iso3 = tab.iso3();
@@ -277,6 +241,20 @@
         });
         var ylim = chartsExtent(series, flowMeasures);
 
+        // Show only available charts. Center a single chart in the row.
+        if (tabId === "economies") {
+          var visibleFlows = tab.flows.filter(
+            (flow) => flowMeasures[flow].length > 0
+          );
+          tab.flows.forEach(function (flow) {
+            var block = $("#container-" + tabId + "-" + flow).closest(".chart-block");
+            var isVisible = visibleFlows.includes(flow);
+            block.toggle(isVisible);
+            block.toggleClass("col-lg-6", visibleFlows.length !== 1);
+            block.toggleClass("col-lg-8 mx-auto", visibleFlows.length === 1);
+          });
+        }
+
         tab.flows.forEach(function (flow) {
           var id = tabId + "-" + flow;
           var measures = flowMeasures[flow];
@@ -287,7 +265,6 @@
           if (measures.length > 0) {
             block.find(".ytitle").html(dynamicYLabel(measures));
             block.find(".ytitle, .highcharts-figure").show();
-            $("#nodata-" + id).hide();
             $("#sentence-" + id).html(
               dynamicText(series, name, flow, measures, tab.isWorld)
             );
@@ -302,9 +279,6 @@
             destroyChart("container-" + id);
             block.find(".ytitle, .highcharts-figure").hide();
             $("#sentence-" + id).html("");
-            $("#nodata-" + id)
-              .text("No approved " + flow + " series for " + name + ".")
-              .show();
           }
         });
       })
